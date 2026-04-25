@@ -16,9 +16,10 @@ dependencies {
     testImplementation "io.rest-assured:json-schema-validator:6.0.0"
     testImplementation "net.datafaker:datafaker:2.5.4"
     testImplementation "tools.jackson.core:jackson-databind:3.1.2"
+    testImplementation "org.assertj:assertj-core:3.27.7"
 
-// !!! don't work without it !!!
-    testRuntimeOnly("org.junit.platform:junit-platform-launcher:1.14.3")
+// !!! don't work without it (Gradle 8.14.3 + Java 21) !!!
+    testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
 
 }
 

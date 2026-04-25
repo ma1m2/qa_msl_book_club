@@ -1,11 +1,10 @@
 package msl.qa.tests;
 
 import io.restassured.http.ContentType;
-import msl.qa.models.ExistingUser400RespModel;
-import msl.qa.models.RegistrationReqModel;
-import msl.qa.models.RegistrationRespModel;
+import msl.qa.models.registration.ExistingUser400RespModel;
+import msl.qa.models.registration.RegistrationReqModel;
+import msl.qa.models.registration.RegistrationRespModel;
 import net.datafaker.Faker;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -13,7 +12,7 @@ import static io.restassured.RestAssured.given;
 import static org.hamcrest.Matchers.containsString;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.notNullValue;
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class RegistrationTests {
   String url = "https://book-club.qa.guru/api/v1/users/register/";

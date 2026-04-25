@@ -1,4 +1,4 @@
-package msl.qa.models;
+package msl.qa.models.registration;
 
 public record RegistrationReqModel(
         String username,
