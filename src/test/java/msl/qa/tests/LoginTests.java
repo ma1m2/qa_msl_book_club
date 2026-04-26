@@ -12,24 +12,27 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.Matchers.notNullValue;
 
 public class LoginTests extends TestBase{
-  String url = "/api/v1/auth/token/";
+  String url = "/auth/token/";
+  String basePath = "/api/v1";
   String username = "qamsl";
   String password = "1234";
-  LoginReqModel data = new LoginReqModel(username, password);
+  LoginReqModel loginData = new LoginReqModel(username, password);
   LoginReqModel wrongPassword = new LoginReqModel(username, "12345");
 
   @Test
   public void successfulLoginTest() {
     LoginRespModel loginResp = given()
+
             .log().all()
-            .body(data)
+            .body(loginData)
             .contentType(ContentType.JSON)
+            .basePath(basePath)
             .when()
             .post(url)
             .then()
             .log().all()
             .statusCode(200)
-            .body(matchesJsonSchemaInClasspath("schemas/login_response_schemas.json"))
+            .body(matchesJsonSchemaInClasspath("schemas/login/login_response_schemas.json"))
             .body("access", notNullValue())
             .body("refresh", notNullValue())
             .extract().as(LoginRespModel.class);
@@ -45,15 +48,17 @@ public class LoginTests extends TestBase{
   @Test
   public void wrongCredentialsLoginTest() {
     WrongCredlsLoginRespModel wrongCredlsLoginResp = given()
+
             .log().all()
             .body(wrongPassword)
             .contentType(ContentType.JSON)
+            .basePath(basePath)
             .when()
             .post(url)
             .then()
             .log().all()
             .statusCode(401)
-            .body(matchesJsonSchemaInClasspath("schemas/wrong_credls_login_response_schemas.json"))
+            .body(matchesJsonSchemaInClasspath("schemas/login/wrong_credls_login_response_schemas.json"))
             .body("detail", notNullValue())
             .extract().as(WrongCredlsLoginRespModel.class);
 
