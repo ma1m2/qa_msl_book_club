@@ -1,22 +1,26 @@
-package msl.qa.tests;
+package msl.qa.tests.without_spec;
 
 import io.restassured.http.ContentType;
 import msl.qa.models.registration.ExistingUser400RespModel;
 import msl.qa.models.registration.RegistrationReqModel;
 import msl.qa.models.registration.RegistrationRespModel;
+import msl.qa.tests.TestBase;
 import net.datafaker.Faker;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import static io.restassured.RestAssured.given;
 import static io.restassured.module.jsv.JsonSchemaValidator.matchesJsonSchemaInClasspath;
+import static msl.qa.tests.TestData.ENTER_VALID_USERNAME;
+import static msl.qa.tests.TestData.EXISTING_USER_ERROR;
+import static msl.qa.tests.TestData.IP_REGEXP;
+import static msl.qa.tests.TestData.UNSUPPORTED_MEDIA_TYPE;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.Matchers.containsString;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.notNullValue;
-import static org.assertj.core.api.Assertions.assertThat;
-import static msl.qa.tests.TestData.*;
 
-public class RegistrationTests extends TestBase{
+public class RegistrationWithoutSpecTests extends TestBase {
   String url = "/users/register/";
   String basePath = "/api/v1";
   String username;

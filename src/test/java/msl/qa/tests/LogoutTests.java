@@ -9,15 +9,13 @@ import static msl.qa.spec.login.LoginSpec.loginReqSpec;
 import static msl.qa.spec.login.LoginSpec.successLoginRespSpec;
 import static msl.qa.spec.logout.LogoutSpec.logoutReqSpec;
 import static msl.qa.spec.logout.LogoutSpec.successLogoutRespSpec;
-
+import static msl.qa.tests.TestData.*;
 
 public class LogoutTests extends TestBase{
 
   String urlLogin = "/auth/token/";
   String urlLogout = "/auth/logout/";
-  String username = "qamsl";
-  String password = "1234";
-  LoginReqModel loginData = new LoginReqModel(username, password);
+  LoginReqModel loginData = new LoginReqModel(USERNAME, PASSWORD);
   LogoutReqModel logoutData;
 
   @Test

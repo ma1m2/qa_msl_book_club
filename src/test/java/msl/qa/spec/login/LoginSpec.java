@@ -30,4 +30,18 @@ public class LoginSpec extends BaseSpec {
           .expectBody("detail", notNullValue())
           .build();
 
+  public static ResponseSpecification emptyPasswordLoginRespSpec = new ResponseSpecBuilder()
+          .log(LogDetail.ALL)
+          .expectStatusCode(400)
+          .expectBody(matchesJsonSchemaInClasspath("schemas/login/empty_password_login_response_schemas.json"))
+          .expectBody("password", notNullValue())
+          .build();
+
+  public static ResponseSpecification emptyUserLoginRespSpec = new ResponseSpecBuilder()
+          .log(LogDetail.ALL)
+          .expectStatusCode(400)
+          .expectBody(matchesJsonSchemaInClasspath("schemas/login/empty_user_login_response_schemas.json"))
+          .expectBody("username", notNullValue())
+          .build();
+
 }

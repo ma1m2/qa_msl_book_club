@@ -1,18 +1,20 @@
-package msl.qa.tests;
+package msl.qa.tests.without_spec;
 
+import io.restassured.http.ContentType;
 import msl.qa.models.login.LoginReqModel;
 import msl.qa.models.login.LoginRespModel;
 import msl.qa.models.login.WrongCredlsLoginRespModel;
+import msl.qa.tests.TestBase;
 import org.junit.jupiter.api.Test;
 
 import static io.restassured.RestAssured.given;
-import static msl.qa.spec.login.LoginSpec.loginReqSpec;
-import static msl.qa.spec.login.LoginSpec.successLoginRespSpec;
-import static msl.qa.spec.login.LoginSpec.wrongCredlsLoginRespSpec;
+import static io.restassured.module.jsv.JsonSchemaValidator.matchesJsonSchemaInClasspath;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.hamcrest.Matchers.notNullValue;
 
-public class LoginWithSpecTests extends TestBase{
+public class LoginWithoutSpecTests extends TestBase {
   String url = "/auth/token/";
+  String basePath = "/api/v1";
   String username = "qamsl";
   String password = "1234";
   LoginReqModel loginData = new LoginReqModel(username, password);
@@ -20,12 +22,20 @@ public class LoginWithSpecTests extends TestBase{
 
   @Test
   public void successfulLoginTest() {
-    LoginRespModel loginResp = given(loginReqSpec)
+    LoginRespModel loginResp = given()
+
+            .log().all()
             .body(loginData)
+            .contentType(ContentType.JSON)
+            .basePath(basePath)
             .when()
             .post(url)
             .then()
-            .spec(successLoginRespSpec)
+            .log().all()
+            .statusCode(200)
+            .body(matchesJsonSchemaInClasspath("schemas/login/login_response_schemas.json"))
+            .body("access", notNullValue())
+            .body("refresh", notNullValue())
             .extract().as(LoginRespModel.class);
 
     String expectedTokenStart = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9";
@@ -37,13 +47,20 @@ public class LoginWithSpecTests extends TestBase{
   }
 
   @Test
-  public void wrongCredlsLoginTest() {
-    WrongCredlsLoginRespModel wrongCredlsLoginResp = given(loginReqSpec)
+  public void wrongCredentialsLoginTest() {
+    WrongCredlsLoginRespModel wrongCredlsLoginResp = given()
+
+            .log().all()
             .body(wrongPassword)
+            .contentType(ContentType.JSON)
+            .basePath(basePath)
             .when()
             .post(url)
             .then()
-            .spec(wrongCredlsLoginRespSpec)
+            .log().all()
+            .statusCode(401)
+            .body(matchesJsonSchemaInClasspath("schemas/login/wrong_credls_login_response_schemas.json"))
+            .body("detail", notNullValue())
             .extract().as(WrongCredlsLoginRespModel.class);
 
     String expectedDetail = "Invalid username or password.";
