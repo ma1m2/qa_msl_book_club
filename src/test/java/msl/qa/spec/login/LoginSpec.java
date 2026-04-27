@@ -5,18 +5,15 @@ import io.restassured.filter.log.LogDetail;
 import io.restassured.http.ContentType;
 import io.restassured.specification.RequestSpecification;
 import io.restassured.specification.ResponseSpecification;
+import msl.qa.spec.BaseSpec;
 
 import static io.restassured.RestAssured.with;
 import static io.restassured.module.jsv.JsonSchemaValidator.matchesJsonSchemaInClasspath;
 import static org.hamcrest.Matchers.notNullValue;
 
-public class LoginSpec {
-  public static String basePath = "/api/v1";
+public class LoginSpec extends BaseSpec {
 
-  public static RequestSpecification loginReqSpec = with()
-          .log().all()
-          .contentType(ContentType.JSON)
-          .basePath(basePath);
+  public static RequestSpecification loginReqSpec = reqSpec;
 
   public static ResponseSpecification successLoginRespSpec = new ResponseSpecBuilder()
           .log(LogDetail.ALL)
@@ -32,4 +29,5 @@ public class LoginSpec {
           .expectBody(matchesJsonSchemaInClasspath("schemas/login/wrong_credls_login_response_schemas.json"))
           .expectBody("detail", notNullValue())
           .build();
+
 }
