@@ -6,7 +6,7 @@ import io.restassured.specification.RequestSpecification;
 import static io.restassured.RestAssured.with;
 
 public class BaseSpec {
-  public static String basePath = "/api/v1";
+  public final static String basePath = "/api/v1";
 
   public static RequestSpecification reqSpec = with()
           .log().all()

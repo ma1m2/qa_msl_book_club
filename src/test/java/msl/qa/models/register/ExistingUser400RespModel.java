@@ -1,4 +1,4 @@
-package msl.qa.models.registration;
+package msl.qa.models.register;
 
 import java.util.List;
 

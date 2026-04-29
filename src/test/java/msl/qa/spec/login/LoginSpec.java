@@ -2,16 +2,14 @@ package msl.qa.spec.login;
 
 import io.restassured.builder.ResponseSpecBuilder;
 import io.restassured.filter.log.LogDetail;
-import io.restassured.http.ContentType;
 import io.restassured.specification.RequestSpecification;
 import io.restassured.specification.ResponseSpecification;
-import msl.qa.spec.BaseSpec;
 
-import static io.restassured.RestAssured.with;
 import static io.restassured.module.jsv.JsonSchemaValidator.matchesJsonSchemaInClasspath;
+import static msl.qa.spec.BaseSpec.reqSpec;
 import static org.hamcrest.Matchers.notNullValue;
 
-public class LoginSpec extends BaseSpec {
+public class LoginSpec {
 
   public static RequestSpecification loginReqSpec = reqSpec;
 

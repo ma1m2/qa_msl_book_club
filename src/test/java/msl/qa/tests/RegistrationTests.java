@@ -1,24 +1,21 @@
 package msl.qa.tests;
 
-import io.restassured.http.ContentType;
-import msl.qa.models.registration.ExistingUser400RespModel;
-import msl.qa.models.registration.RegistrationReqModel;
-import msl.qa.models.registration.RegistrationRespModel;
+import msl.qa.models.register.DetailRespModel;
+import msl.qa.models.register.ExistingUser400RespModel;
+import msl.qa.models.register.RegistrationReqModel;
+import msl.qa.models.register.RegistrationRespModel;
 import net.datafaker.Faker;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import static io.restassured.RestAssured.given;
-import static io.restassured.module.jsv.JsonSchemaValidator.matchesJsonSchemaInClasspath;
-import static org.hamcrest.Matchers.containsString;
-import static org.hamcrest.Matchers.is;
-import static org.hamcrest.Matchers.notNullValue;
-import static org.assertj.core.api.Assertions.assertThat;
+import static msl.qa.spec.register.RegistrationSpec.*;
 import static msl.qa.tests.TestData.*;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.hamcrest.Matchers.containsString;
 
 public class RegistrationTests extends TestBase{
   String url = "/users/register/";
-  String basePath = "/api/v1";
   String username;
   String password;
   RegistrationReqModel registrationData;
@@ -27,27 +24,19 @@ public class RegistrationTests extends TestBase{
   public void prepareTestData() {
     Faker faker = new Faker();
     username = faker.name().firstName();
-    password = faker.name().firstName();
+    password = "1234";
     registrationData = new RegistrationReqModel(username, password);
   }
 
   @Test
   public void successfulRegistrationTest() {
 
-    RegistrationRespModel respModel = given()
-            .log().all()
+    RegistrationRespModel respModel = given(registerReqSpec)
             .body(registrationData)
-            .contentType(ContentType.JSON)
-            .basePath(basePath)
             .when()
             .post(url)
             .then()
-            .log().all()
-            .statusCode(201)
-            .body(matchesJsonSchemaInClasspath("schemas/register/register_response_schemas.json"))
-            .body("id", notNullValue())
-            .body("username", notNullValue())
-            .body("remoteAddr", notNullValue())
+            .spec(registerRespSpec)
             .extract().as(RegistrationRespModel.class);
 
     assertThat(respModel.username()).isEqualTo(username);
@@ -63,31 +52,20 @@ public class RegistrationTests extends TestBase{
   public void existingUser400RegistrationTest() {
     RegistrationReqModel data = new RegistrationReqModel(username, password);
 
-    given()
-            .log().all()
+    given(registerReqSpec)
             .body(data)
-            .contentType(ContentType.JSON)
-            .basePath(basePath)
             .when()
             .post(url)
             .then()
             .log().all()
-            .statusCode(201)
-            .body(matchesJsonSchemaInClasspath("schemas/register/register_response_schemas.json"))
-            .body("username", is(username))
-            .body("id", notNullValue());
+            .spec(registerRespSpec);
 
-    ExistingUser400RespModel resp = given()
-            .log().all()
+    ExistingUser400RespModel resp = given(registerReqSpec)
             .body(data)
-            .contentType(ContentType.JSON)
-            .basePath(basePath)
             .when()
             .post(url)
             .then()
-            .log().all()
-            .statusCode(400)
-            .body(matchesJsonSchemaInClasspath("schemas/register/existin_user_response_schemas.json"))
+            .spec(existingUserRespSpec)
             .extract().as(ExistingUser400RespModel.class);
 
     String actualdError = resp.username().getFirst();
@@ -100,50 +78,40 @@ public class RegistrationTests extends TestBase{
     String username = faker.name().firstName() + "#";
     RegistrationReqModel data = new RegistrationReqModel(username, password);
 
-    given()
-            .log().all()
+    given(registerReqSpec)
             .body(data)
-            .contentType(ContentType.JSON)
-            .basePath(basePath)
             .when()
             .post(url)
             .then()
-            .log().all()
-            .statusCode(400)
-            .body(matchesJsonSchemaInClasspath("schemas/register/invalid_user_response_schemas.json"))
+            .spec(invalidUserNameRespSpec)
             .body("username[0]", containsString(ENTER_VALID_USERNAME));
   }
 
   @Test
-  public void error500RegistrationTest() {
+  public void wrongUrl500RegistrationTest() {
     String wrongUrl = "https://book-club.qa.guru/api/v1/users/register";
     RegistrationReqModel data = new RegistrationReqModel(username, password);
 
-    given()
-            .log().all()
+    given(registerReqSpec)
             .body(data)
-            .contentType("application/json")
-            .basePath(basePath)
             .when()
             .post(wrongUrl)
             .then()
-            .log().all()
-            .statusCode(500);
+            .spec(wrongUrlRespSpec);
   }
 
   @Test
-  public void wrongContentType415RegistrationTest() {
+  public void noContentType415RegistrationTest() {
     RegistrationReqModel data = new RegistrationReqModel(username, password);
 
-    given()
-            .log().all()
+    DetailRespModel detailRespModel = given(noContentTypeReqSpec)
             .body(data)
-            .basePath(basePath)
             .when()
             .post(url)
             .then()
-            .log().all()
-            .statusCode(415)
-            .body("detail", containsString(UNSUPPORTED_MEDIA_TYPE));
+            .spec(noContentTypeRespSpec)
+            .extract().as(DetailRespModel.class);
+
+    assertThat(detailRespModel.detail()).contains(UNSUPPORTED_MEDIA_TYPE);
   }
 }

@@ -1,4 +1,4 @@
-package msl.qa.models.registration;
+package msl.qa.models.register;
 
 public record RegistrationRespModel(
         Integer id,

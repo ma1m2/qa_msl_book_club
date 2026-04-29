@@ -1,9 +1,9 @@
 package msl.qa.tests.without_spec;
 
 import io.restassured.http.ContentType;
-import msl.qa.models.registration.ExistingUser400RespModel;
-import msl.qa.models.registration.RegistrationReqModel;
-import msl.qa.models.registration.RegistrationRespModel;
+import msl.qa.models.register.ExistingUser400RespModel;
+import msl.qa.models.register.RegistrationReqModel;
+import msl.qa.models.register.RegistrationRespModel;
 import msl.qa.tests.TestBase;
 import net.datafaker.Faker;
 import org.junit.jupiter.api.BeforeEach;
