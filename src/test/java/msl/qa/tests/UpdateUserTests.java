@@ -12,6 +12,7 @@ import net.datafaker.Faker;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import static io.qameta.allure.Allure.step;
 import static io.restassured.RestAssured.given;
 import static msl.qa.spec.login.LoginSpec.*;
 import static msl.qa.spec.register.RegistrationSpec.*;
@@ -47,103 +48,116 @@ public class UpdateUserTests extends TestBase {
 
   @Test
   public void updateUserPutTest() {
-    //create new user
     registrationData = new RegistrationReqModel(username, password);
-    RegistrationRespModel respModel = given(registerReqSpec)
-            .body(registrationData)
-            .when()
-            .post(urlRegister)
-            .then()
-            .spec(registerRespSpec)
-            .extract().as(RegistrationRespModel.class);
-    //authorise new user
+
+    RegistrationRespModel respModel = step("Create new user", () ->
+      given(registerReqSpec)
+              .body(registrationData)
+              .when()
+              .post(urlRegister)
+              .then()
+              .spec(registerRespSpec)
+              .extract().as(RegistrationRespModel.class));
+
     loginData = new LoginReqModel(username, PASSWORD);
-    LoginRespModel loginResp = given(loginReqSpec)
-            .body(loginData)
-            .when()
-            .post(urlLogin)
-            .then()
-            .spec(successLoginRespSpec)
-            .extract().as(LoginRespModel.class);
+
+    LoginRespModel loginResp = step("Authorise new user", () ->
+      given(loginReqSpec)
+              .body(loginData)
+              .when()
+              .post(urlLogin)
+              .then()
+              .spec(successLoginRespSpec)
+              .extract().as(LoginRespModel.class));
+
     String token = loginResp.access();
     System.out.println("### token: " + token);
-    //update user with token
+
+    step("Update user with PUT method", () -> {
     updateUserData = new UpdateUserReqModel(username,firstName,lastName,email);
-    UpdateRespModel updatedUser = given(userReqSpec)
-            .header("Authorization", "Bearer " + token)
-            .body(patchUpdateUserData)
-            .when()
-            .put(urlUpdate)
-            .then()
-            .spec(updateRespSpec)
-            .extract().as(UpdateRespModel.class);
+      UpdateRespModel updatedUser = given(userReqSpec)
+              .header("Authorization", "Bearer " + token)
+              .body(updateUserData)
+              .when()
+              .put(urlUpdate)
+              .then()
+              .spec(updateRespSpec)
+              .extract().as(UpdateRespModel.class);
 
-    assertThat(updatedUser.firstName()).isEqualTo(firstName);
-    assertThat(updatedUser.id()).isEqualTo(respModel.id());
-
+      assertThat(updatedUser.firstName()).isEqualTo(firstName);
+      assertThat(updatedUser.id()).isEqualTo(respModel.id());
+    });
   }
 
   @Test
   public void updateUserPatchTest() {
-    //create new user
     registrationData = new RegistrationReqModel(username, password);
-    RegistrationRespModel respModel = given(registerReqSpec)
-            .body(registrationData)
-            .when()
-            .post(urlRegister)
-            .then()
-            .spec(registerRespSpec)
-            .extract().as(RegistrationRespModel.class);
-    //authorise new user
+
+    RegistrationRespModel respModel = step("Create new user", () ->
+      given(registerReqSpec)
+              .body(registrationData)
+              .when()
+              .post(urlRegister)
+              .then()
+              .spec(registerRespSpec)
+              .extract().as(RegistrationRespModel.class));
+
     loginData = new LoginReqModel(username, PASSWORD);
-    LoginRespModel loginResp = given(loginReqSpec)
+
+    LoginRespModel loginResp = step("Authorise new user", () ->
+            given(loginReqSpec)
             .body(loginData)
             .when()
             .post(urlLogin)
             .then()
             .spec(successLoginRespSpec)
-            .extract().as(LoginRespModel.class);
+            .extract().as(LoginRespModel.class));
+
     String token = loginResp.access();
     System.out.println("### token: " + token);
-    //update user with token
-    patchUpdateUserData = new PatchUserReqModel(null,updatedFirstName,null,null);
-    PatchUserReqModel updatedUser = given(userReqSpec)
-            .header("Authorization", "Bearer " + token)
-            .body(patchUpdateUserData)
-            .when()
-            .patch(urlUpdate)
-            .then()
-            .spec(updateRespSpec)
-            .extract().as(PatchUserReqModel.class);
 
-    assertThat(updatedUser.firstName()).isEqualTo(updatedFirstName);
+    step("Update user with PATCH method", () -> {
+      patchUpdateUserData = new PatchUserReqModel(null,updatedFirstName,null,null);
+      PatchUserReqModel updatedUser = given(userReqSpec)
+              .header("Authorization", "Bearer " + token)
+              .body(patchUpdateUserData)
+              .when()
+              .patch(urlUpdate)
+              .then()
+              .spec(updateRespSpec)
+              .extract().as(PatchUserReqModel.class);
+
+      assertThat(updatedUser.firstName()).isEqualTo(updatedFirstName);
+    });
   }
 
   @Test
   public void updateUnauthorizedUserPutTest() {
-    //create new user
+
     registrationData = new RegistrationReqModel(username, password);
-    RegistrationRespModel respModel = given(registerReqSpec)
-            .body(registrationData)
-            .when()
-            .post(urlRegister)
-            .then()
-            .spec(registerRespSpec)
-            .extract().as(RegistrationRespModel.class);
-    //authorise new user
+
+    step("Create new user", () -> given(registerReqSpec)
+              .body(registrationData)
+              .when()
+              .post(urlRegister)
+              .then()
+              .spec(registerRespSpec));
+
     loginData = new LoginReqModel(username, PASSWORD);
-    LoginRespModel loginResp = given(loginReqSpec)
+
+    step("Authorise new user", () -> given(loginReqSpec)
             .body(loginData)
             .when()
             .post(urlLogin)
             .then()
-            .spec(successLoginRespSpec)
-            .extract().as(LoginRespModel.class);
-    //update user without token
+            .spec(successLoginRespSpec));
+
     updateUserData = new UpdateUserReqModel(username,firstName,lastName,email);
+
+    step("Update new user with PUT method without token", () -> {
     UnauthorisedUserRespModel updatedUser = given(userReqSpec)
             .header("Authorization", "Bearer ")
-            .body(patchUpdateUserData)
+            .body(updateUserData)
             .when()
             .put(urlUpdate)
             .then()
@@ -152,6 +166,6 @@ public class UpdateUserTests extends TestBase {
 
     assertThat(updatedUser.detail()).isEqualTo(AUTHORIZATION_HEADER_DETAIL);
     assertThat(updatedUser.code()).isEqualTo(BAD_HEADER_CODE);
-
+    });
   }
 }
