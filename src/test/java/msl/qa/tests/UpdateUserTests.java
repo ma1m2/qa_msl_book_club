@@ -4,6 +4,7 @@ import msl.qa.models.login.LoginReqModel;
 import msl.qa.models.login.LoginRespModel;
 import msl.qa.models.register.RegistrationReqModel;
 import msl.qa.models.register.RegistrationRespModel;
+import msl.qa.models.user.PatchUserReqModel;
 import msl.qa.models.user.UnauthorisedUserRespModel;
 import msl.qa.models.user.UpdateRespModel;
 import msl.qa.models.user.UpdateUserReqModel;
@@ -25,10 +26,12 @@ public class UpdateUserTests extends TestBase {
   String username;
   String password;
   String firstName;
+  String updatedFirstName;
   String lastName;
   String email;
   RegistrationReqModel registrationData;
   UpdateUserReqModel updateUserData;
+  PatchUserReqModel patchUpdateUserData;
   LoginReqModel loginData;
 
   @BeforeEach
@@ -37,6 +40,7 @@ public class UpdateUserTests extends TestBase {
     username = faker.name().firstName() + "sssss";
     password = PASSWORD;
     firstName = faker.name().firstName();
+    updatedFirstName = faker.name().firstName();
     lastName = faker.name().lastName();
     email = faker.internet().emailAddress();
   }
@@ -67,7 +71,7 @@ public class UpdateUserTests extends TestBase {
     updateUserData = new UpdateUserReqModel(username,firstName,lastName,email);
     UpdateRespModel updatedUser = given(userReqSpec)
             .header("Authorization", "Bearer " + token)
-            .body(updateUserData)
+            .body(patchUpdateUserData)
             .when()
             .put(urlUpdate)
             .then()
@@ -102,18 +106,17 @@ public class UpdateUserTests extends TestBase {
     String token = loginResp.access();
     System.out.println("### token: " + token);
     //update user with token
-    updateUserData = new UpdateUserReqModel(username,firstName,lastName,email);
-    UpdateRespModel updatedUser = given(userReqSpec)
+    patchUpdateUserData = new PatchUserReqModel(null,updatedFirstName,null,null);
+    PatchUserReqModel updatedUser = given(userReqSpec)
             .header("Authorization", "Bearer " + token)
-            .body(updateUserData)
+            .body(patchUpdateUserData)
             .when()
             .patch(urlUpdate)
             .then()
             .spec(updateRespSpec)
-            .extract().as(UpdateRespModel.class);
+            .extract().as(PatchUserReqModel.class);
 
-    assertThat(updatedUser.firstName()).isEqualTo(firstName);
-    assertThat(updatedUser.id()).isEqualTo(respModel.id());
+    assertThat(updatedUser.firstName()).isEqualTo(updatedFirstName);
   }
 
   @Test
@@ -140,7 +143,7 @@ public class UpdateUserTests extends TestBase {
     updateUserData = new UpdateUserReqModel(username,firstName,lastName,email);
     UnauthorisedUserRespModel updatedUser = given(userReqSpec)
             .header("Authorization", "Bearer ")
-            .body(updateUserData)
+            .body(patchUpdateUserData)
             .when()
             .put(urlUpdate)
             .then()
