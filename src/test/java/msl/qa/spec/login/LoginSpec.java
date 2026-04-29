@@ -16,7 +16,7 @@ public class LoginSpec {
   public static ResponseSpecification successLoginRespSpec = new ResponseSpecBuilder()
           .log(LogDetail.ALL)
           .expectStatusCode(200)
-          .expectBody(matchesJsonSchemaInClasspath("schemas/login/login_response_schemas.json"))
+          .expectBody(matchesJsonSchemaInClasspath("schemas/login/login_response_schema.json"))
           .expectBody("access", notNullValue())
           .expectBody("refresh", notNullValue())
           .build();
@@ -24,21 +24,21 @@ public class LoginSpec {
   public static ResponseSpecification wrongCredlsLoginRespSpec = new ResponseSpecBuilder()
           .log(LogDetail.ALL)
           .expectStatusCode(401)
-          .expectBody(matchesJsonSchemaInClasspath("schemas/login/wrong_credls_login_response_schemas.json"))
+          .expectBody(matchesJsonSchemaInClasspath("schemas/login/wrong_credls_login_response_schema.json"))
           .expectBody("detail", notNullValue())
           .build();
 
   public static ResponseSpecification emptyPasswordLoginRespSpec = new ResponseSpecBuilder()
           .log(LogDetail.ALL)
           .expectStatusCode(400)
-          .expectBody(matchesJsonSchemaInClasspath("schemas/login/empty_password_login_response_schemas.json"))
+          .expectBody(matchesJsonSchemaInClasspath("schemas/login/empty_password_login_response_schema.json"))
           .expectBody("password", notNullValue())
           .build();
 
   public static ResponseSpecification emptyUserLoginRespSpec = new ResponseSpecBuilder()
           .log(LogDetail.ALL)
           .expectStatusCode(400)
-          .expectBody(matchesJsonSchemaInClasspath("schemas/login/empty_user_login_response_schemas.json"))
+          .expectBody(matchesJsonSchemaInClasspath("schemas/login/empty_user_login_response_schema.json"))
           .expectBody("username", notNullValue())
           .build();
 

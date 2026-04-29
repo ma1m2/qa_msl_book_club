@@ -19,4 +19,8 @@ public class TestData {
   public static final String IP_REGEXP = "^((25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\.){3}(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$";
   public static final String ENTER_VALID_USERNAME = "Enter a valid username.";
   public static final String UNSUPPORTED_MEDIA_TYPE = "Unsupported media type";
+
+  //-------------UPDATE-------------------
+  public static final String AUTHORIZATION_HEADER_DETAIL = "Authorization header must contain two space-delimited values";
+  public static final String BAD_HEADER_CODE = "bad_authorization_header";
 }

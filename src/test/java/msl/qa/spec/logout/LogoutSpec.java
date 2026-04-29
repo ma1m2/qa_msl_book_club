@@ -23,7 +23,7 @@ public class LogoutSpec {
   public static ResponseSpecification wrongTokenLogoutRespSpec = new ResponseSpecBuilder()
           .log(LogDetail.ALL)
           .expectStatusCode(401)
-          .expectBody(matchesJsonSchemaInClasspath("schemas/logout/wrong_token_logout_response_schemas.json"))
+          .expectBody(matchesJsonSchemaInClasspath("schemas/logout/wrong_token_logout_response_schema.json"))
           .expectBody("detail", notNullValue())
           .expectBody("code", notNullValue())
           .build();

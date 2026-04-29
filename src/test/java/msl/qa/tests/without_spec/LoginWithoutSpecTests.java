@@ -33,7 +33,7 @@ public class LoginWithoutSpecTests extends TestBase {
             .then()
             .log().all()
             .statusCode(200)
-            .body(matchesJsonSchemaInClasspath("schemas/login/login_response_schemas.json"))
+            .body(matchesJsonSchemaInClasspath("schemas/login/login_response_schema.json"))
             .body("access", notNullValue())
             .body("refresh", notNullValue())
             .extract().as(LoginRespModel.class);
@@ -59,7 +59,7 @@ public class LoginWithoutSpecTests extends TestBase {
             .then()
             .log().all()
             .statusCode(401)
-            .body(matchesJsonSchemaInClasspath("schemas/login/wrong_credls_login_response_schemas.json"))
+            .body(matchesJsonSchemaInClasspath("schemas/login/wrong_credls_login_response_schema.json"))
             .body("detail", notNullValue())
             .extract().as(WrongCredlsLoginRespModel.class);
 

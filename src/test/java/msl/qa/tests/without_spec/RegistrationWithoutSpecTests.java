@@ -48,7 +48,7 @@ public class RegistrationWithoutSpecTests extends TestBase {
             .then()
             .log().all()
             .statusCode(201)
-            .body(matchesJsonSchemaInClasspath("schemas/register/register_response_schemas.json"))
+            .body(matchesJsonSchemaInClasspath("schemas/register/register_response_schema.json"))
             .body("id", notNullValue())
             .body("username", notNullValue())
             .body("remoteAddr", notNullValue())
@@ -77,7 +77,7 @@ public class RegistrationWithoutSpecTests extends TestBase {
             .then()
             .log().all()
             .statusCode(201)
-            .body(matchesJsonSchemaInClasspath("schemas/register/register_response_schemas.json"))
+            .body(matchesJsonSchemaInClasspath("schemas/register/register_response_schema.json"))
             .body("username", is(username))
             .body("id", notNullValue());
 
@@ -91,7 +91,7 @@ public class RegistrationWithoutSpecTests extends TestBase {
             .then()
             .log().all()
             .statusCode(400)
-            .body(matchesJsonSchemaInClasspath("schemas/register/existin_user_response_schemas.json"))
+            .body(matchesJsonSchemaInClasspath("schemas/register/existin_user_response_schema.json"))
             .extract().as(ExistingUser400RespModel.class);
 
     String actualdError = resp.username().getFirst();
@@ -114,7 +114,7 @@ public class RegistrationWithoutSpecTests extends TestBase {
             .then()
             .log().all()
             .statusCode(400)
-            .body(matchesJsonSchemaInClasspath("schemas/register/invalid_user_response_schemas.json"))
+            .body(matchesJsonSchemaInClasspath("schemas/register/invalid_user_response_schema.json"))
             .body("username[0]", containsString(ENTER_VALID_USERNAME));
   }
 

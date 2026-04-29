@@ -23,7 +23,7 @@ public class RegistrationTests extends TestBase{
   @BeforeEach
   public void prepareTestData() {
     Faker faker = new Faker();
-    username = faker.name().firstName();
+    username = faker.name().firstName() + "qa";
     password = "1234";
     registrationData = new RegistrationReqModel(username, password);
   }
