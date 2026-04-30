@@ -9,6 +9,7 @@ import org.junit.jupiter.api.Test;
 
 import java.util.List;
 
+import static io.qameta.allure.Allure.step;
 import static io.restassured.RestAssured.given;
 import static msl.qa.spec.login.LoginSpec.*;
 import static msl.qa.tests.TestData.*;
@@ -25,92 +26,104 @@ public class LoginTests extends TestBase{
 
   @Test
   public void successfulLoginTest() {
-    LoginRespModel loginResp = given(loginReqSpec)
-            .body(loginData)
-            .when()
-            .post(url)
-            .then()
-            .spec(successLoginRespSpec)
-            .extract().as(LoginRespModel.class);
+    step("Successful login", () -> {
+      LoginRespModel loginResp = given(loginReqSpec)
+              .body(loginData)
+              .when()
+              .post(url)
+              .then()
+              .spec(successLoginRespSpec)
+              .extract().as(LoginRespModel.class);
 
-    String actualAccess = loginResp.access();
-    String actualRefresh = loginResp.refresh();
-    assertThat(actualAccess).startsWith(TOKEN_PREFIX);
-    assertThat(actualRefresh).startsWith(TOKEN_PREFIX);
-    assertThat(actualRefresh).isNotEqualTo(actualAccess);
+      String actualAccess = loginResp.access();
+      String actualRefresh = loginResp.refresh();
+      assertThat(actualAccess).startsWith(TOKEN_PREFIX);
+      assertThat(actualRefresh).startsWith(TOKEN_PREFIX);
+      assertThat(actualRefresh).isNotEqualTo(actualAccess);
+    });
   }
 
   @Test
   public void checkTrimFunctionLoginTest() {
-    LoginRespModel loginResp = given(loginReqSpec)
-            .body(loginDataForTrim)
-            .when()
-            .post(url)
-            .then()
-            .spec(successLoginRespSpec)
-            .extract().as(LoginRespModel.class);
+    step("Check that trim function cut spaces in the end and in the beginning", () -> {
+      LoginRespModel loginResp = given(loginReqSpec)
+              .body(loginDataForTrim)
+              .when()
+              .post(url)
+              .then()
+              .spec(successLoginRespSpec)
+              .extract().as(LoginRespModel.class);
 
-    String actualAccess = loginResp.access();
-    String actualRefresh = loginResp.refresh();
-    assertThat(actualAccess).startsWith(TOKEN_PREFIX);
-    assertThat(actualRefresh).startsWith(TOKEN_PREFIX);
-    assertThat(actualRefresh).isNotEqualTo(actualAccess);
+      String actualAccess = loginResp.access();
+      String actualRefresh = loginResp.refresh();
+      assertThat(actualAccess).startsWith(TOKEN_PREFIX);
+      assertThat(actualRefresh).startsWith(TOKEN_PREFIX);
+      assertThat(actualRefresh).isNotEqualTo(actualAccess);
+    });
   }
 
   @Test
   public void upperCaseUserLoginTest() {
-    WrongCredlsLoginRespModel wrongCredlsLoginResp = given(loginReqSpec)
-            .body(upperCaseUserData)
-            .when()
-            .post(url)
-            .then()
-            .spec(wrongCredlsLoginRespSpec)
-            .extract().as(WrongCredlsLoginRespModel.class);
+    step("Change username from lowCase to upperCase", () -> {
+      WrongCredlsLoginRespModel wrongCredlsLoginResp = given(loginReqSpec)
+              .body(upperCaseUserData)
+              .when()
+              .post(url)
+              .then()
+              .spec(wrongCredlsLoginRespSpec)
+              .extract().as(WrongCredlsLoginRespModel.class);
 
-    String actualDetail = wrongCredlsLoginResp.detail();
-    assertThat(WRONG_CREDLS_DETAIL).isEqualTo(actualDetail);
+      String actualDetail = wrongCredlsLoginResp.detail();
+      assertThat(WRONG_CREDLS_DETAIL).isEqualTo(actualDetail);
+    });
   }
 
   @Test
   public void wrongPasswordLoginTest() {
-    WrongCredlsLoginRespModel wrongCredlsLoginResp = given(loginReqSpec)
-            .body(wrongPasswordData)
-            .when()
-            .post(url)
-            .then()
-            .spec(wrongCredlsLoginRespSpec)
-            .extract().as(WrongCredlsLoginRespModel.class);
+    step("Change username from lowCase to upperCase", () -> {
+      WrongCredlsLoginRespModel wrongCredlsLoginResp = given(loginReqSpec)
+              .body(wrongPasswordData)
+              .when()
+              .post(url)
+              .then()
+              .spec(wrongCredlsLoginRespSpec)
+              .extract().as(WrongCredlsLoginRespModel.class);
 
-    String actualDetail = wrongCredlsLoginResp.detail();
-    assertThat(WRONG_CREDLS_DETAIL).isEqualTo(actualDetail);
+      String actualDetail = wrongCredlsLoginResp.detail();
+      assertThat(WRONG_CREDLS_DETAIL).isEqualTo(actualDetail);
+    });
   }
 
   @Test
   public void emptyPasswordLoginTest() {
-    EmptyPasswordLoginRespModel emptyPasswordLoginResp = given(loginReqSpec)
-            .body(emptyPasswordData)
-            .when()
-            .post(url)
-            .then()
-            .spec(emptyPasswordLoginRespSpec)
-            .extract().as(EmptyPasswordLoginRespModel.class);
+    step("Password is empty", () -> {
+      EmptyPasswordLoginRespModel emptyPasswordLoginResp = given(loginReqSpec)
+              .body(emptyPasswordData)
+              .when()
+              .post(url)
+              .then()
+              .spec(emptyPasswordLoginRespSpec)
+              .extract().as(EmptyPasswordLoginRespModel.class);
 
-    List<String> actualDetail = emptyPasswordLoginResp.password();
-    assertThat(BLANK_FIELD).isEqualTo(actualDetail.getFirst());
+      List<String> actualDetail = emptyPasswordLoginResp.password();
+      assertThat(BLANK_FIELD).isEqualTo(actualDetail.getFirst());
+    });
   }
 
   @Test
   public void emptyUserLoginTest() {
-    EmptyUserLoginRespModel emptyUserLoginResp = given(loginReqSpec)
-            .body(emptyUserData)
-            .when()
-            .post(url)
-            .then()
-            .spec(emptyUserLoginRespSpec)
-            .extract().as(EmptyUserLoginRespModel.class);
+    step("Username is empty", () -> {
+      EmptyUserLoginRespModel emptyUserLoginResp = given(loginReqSpec)
+              .body(emptyUserData)
+              .when()
+              .post(url)
+              .then()
+              .spec(emptyUserLoginRespSpec)
+              .extract().as(EmptyUserLoginRespModel.class);
 
-    List<String> actualDetail = emptyUserLoginResp.username();
-    assertThat(BLANK_FIELD).isEqualTo(actualDetail.getFirst());
+      List<String> actualDetail = emptyUserLoginResp.username();
+      assertThat(BLANK_FIELD).isEqualTo(actualDetail.getFirst());
+    });
   }
 
 }
