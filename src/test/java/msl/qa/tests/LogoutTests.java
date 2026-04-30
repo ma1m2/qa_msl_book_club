@@ -22,57 +22,30 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class LogoutTests extends TestBase{
 
   String urlLogin = "/auth/token/";
-  String urlLogout = "/auth/logout/";
+  String LOGOUT_URL = "/auth/logout/";
   LoginReqModel loginData = new LoginReqModel(USERNAME, PASSWORD);
   LogoutReqModel logoutData;
   LogoutReqModel partLogoutData;
 
   @Test
   public void successfulLogoutTest() {
-    String refreshToken = step("Login and get refresh-token", () ->
-            given(loginReqSpec)
-                    .body(loginData)
-                    .when()
-                    .post(urlLogin)
-                    .then()
-                    .spec(successLoginRespSpec)
-                    .extract().path("refresh"));
 
-    logoutData = new LogoutReqModel(refreshToken);
-
-    step("Logout with refresh-token", () -> {
-      given(logoutReqSpec)
-              .body(logoutData)
-              .when()
-              .post(urlLogout)
-              .then()
-              .spec(successLogoutRespSpec);
+    step("Login and Logout with refresh-token", () -> {
+      String refreshToken = api.auth.extractRefreshToken(loginData);
+      logoutData = new LogoutReqModel(refreshToken);
+      api.auth.logout(logoutData);
     });
   }
 
   @Test
   public void wrongRefreshTokenLogoutTest() {
 
-    step("Login and get wrong-token (accessToken)", () -> {
-      String accessToken = given(loginReqSpec)
-              .body(loginData)
-              .when()
-              .post(urlLogin)
-              .then()
-              .spec(successLoginRespSpec)
-              .extract().path("access");
-
+    step("Login and get wrong-token for logout (accessToken)", () -> {
+      String accessToken = api.auth.extractAccessToken(loginData);
       logoutData = new LogoutReqModel(accessToken);
-    });
 
-    step("Logout with wrong-token (accessToken)", () -> {
-      WrongTokenLogoutRespModel wrongLogoutResp = given(logoutReqSpec)
-              .body(logoutData)
-              .when()
-              .post(urlLogout)
-              .then()
-              .spec(wrongTokenLogoutRespSpec)
-              .extract().as(WrongTokenLogoutRespModel.class);
+      WrongTokenLogoutRespModel wrongLogoutResp = api.auth.logoutWithWrongToken(logoutData);
+
       String actualDetail = wrongLogoutResp.detail();
       assertThat(TOKEN_HAS_WRONG_TYPE).isEqualTo(actualDetail);
       String actualCode = wrongLogoutResp.code();
@@ -82,28 +55,15 @@ public class LogoutTests extends TestBase{
 
   @Test
   public void partRefreshTokenLogoutTest() {
-    String refreshToken = step("Login and get refresh-token", () ->
-            given(loginReqSpec)
-            .body(loginData)
-            .when()
-            .post(urlLogin)
-            .then()
-            .spec(successLoginRespSpec)
-            .extract().path("refresh"));
 
     step("Logout with part of refresh-token (length/5*4)", () -> {
+      String refreshToken = api.auth.extractRefreshToken(loginData);
+
       int length = refreshToken.length();
       String partOfString = refreshToken.substring(0, length/5*4);
-
       partLogoutData = new LogoutReqModel(partOfString);
 
-      WrongTokenLogoutRespModel wrongLogoutResp = given(logoutReqSpec)
-              .body(partLogoutData)
-              .when()
-              .post(urlLogout)
-              .then()
-              .spec(wrongTokenLogoutRespSpec)
-              .extract().as(WrongTokenLogoutRespModel.class);
+      WrongTokenLogoutRespModel wrongLogoutResp = api.auth.logoutWithWrongToken(partLogoutData);
 
       String actualDetail = wrongLogoutResp.detail();
       assertThat(INVALID_TOKEN_DETAIL).isEqualTo(actualDetail);
