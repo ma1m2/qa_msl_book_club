@@ -9,14 +9,12 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import static io.qameta.allure.Allure.step;
-import static io.restassured.RestAssured.given;
-import static msl.qa.spec.register.RegistrationSpec.*;
-import static msl.qa.tests.TestData.*;
+import static msl.qa.tests.TestData.EXISTING_USER_ERROR;
+import static msl.qa.tests.TestData.IP_REGEXP;
+import static msl.qa.tests.TestData.UNSUPPORTED_MEDIA_TYPE;
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.hamcrest.Matchers.containsString;
 
 public class RegistrationTests extends TestBase{
-  String url = "/users/register/";
   String username;
   String password;
   RegistrationReqModel registrationData;
@@ -31,14 +29,7 @@ public class RegistrationTests extends TestBase{
 
   @Test
   public void successfulRegistrationTest() {
-    step("Successful register new user", () -> {
-      RegistrationRespModel respModel = given(registerReqSpec)
-              .body(registrationData)
-              .when()
-              .post(url)
-              .then()
-              .spec(registerRespSpec)
-              .extract().as(RegistrationRespModel.class);
+      final RegistrationRespModel respModel = api.users.register(registrationData);
 
       assertThat(respModel.username()).isEqualTo(username);
       assertThat(respModel.id()).isGreaterThan(0);
@@ -47,31 +38,14 @@ public class RegistrationTests extends TestBase{
       assertThat(respModel.email()).isEmpty();
 
       assertThat(respModel.remoteAddr()).matches(IP_REGEXP);
-    });
   }
 
   @Test
   public void existingUser400RegistrationTest() {
-    RegistrationReqModel data = new RegistrationReqModel(username, password);
 
-    step("Register new user", () -> {
-      given(registerReqSpec)
-              .body(data)
-              .when()
-              .post(url)
-              .then()
-              .log().all()
-              .spec(registerRespSpec);
-    });
-
-    step("Try register the same user", () -> {
-      ExistingUser400RespModel resp = given(registerReqSpec)
-              .body(data)
-              .when()
-              .post(url)
-              .then()
-              .spec(existingUserRespSpec)
-              .extract().as(ExistingUser400RespModel.class);
+    step("Register existing user", () -> {
+      api.users.register(registrationData);
+      ExistingUser400RespModel resp = api.users.registerExistingUser(registrationData);
 
       String actualdError = resp.username().getFirst();
       assertThat(actualdError).isEqualTo(EXISTING_USER_ERROR);
@@ -84,46 +58,20 @@ public class RegistrationTests extends TestBase{
     String username = faker.name().firstName() + "#";
     RegistrationReqModel data = new RegistrationReqModel(username, password);
 
-    step("Try register user with wrong username", () -> {
-      given(registerReqSpec)
-              .body(data)
-              .when()
-              .post(url)
-              .then()
-              .spec(invalidUserNameRespSpec)
-              .body("username[0]", containsString(ENTER_VALID_USERNAME));
-    });
+    api.users.invalidUserName(data);
   }
 
   @Test
   public void wrongUrl500RegistrationTest() {
     String wrongUrl = "https://book-club.qa.guru/api/v1/users/register";
-    RegistrationReqModel data = new RegistrationReqModel(username, password);
-
-    step("Use wrong URL", () -> {
-      given(registerReqSpec)
-              .body(data)
-              .when()
-              .post(wrongUrl)
-              .then()
-              .spec(wrongUrlRespSpec);
-    });
+    api.users.registerWithWrongUrl(registrationData, wrongUrl);
   }
 
   @Test
   public void noContentType415RegistrationTest() {
-    RegistrationReqModel data = new RegistrationReqModel(username, password);
-
-    step("Don't add ContentType JSON", () -> {
-      DetailRespModel detailRespModel = given(noContentTypeReqSpec)
-              .body(data)
-              .when()
-              .post(url)
-              .then()
-              .spec(noContentTypeRespSpec)
-              .extract().as(DetailRespModel.class);
+      DetailRespModel detailRespModel = api.users.noContentType(registrationData);
 
       assertThat(detailRespModel.detail()).contains(UNSUPPORTED_MEDIA_TYPE);
-    });
+
   }
 }
