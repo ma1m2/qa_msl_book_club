@@ -23,4 +23,8 @@ public class TestData {
   //-------------UPDATE-------------------
   public static final String AUTHORIZATION_HEADER_DETAIL = "Authorization header must contain two space-delimited values";
   public static final String BAD_HEADER_CODE = "bad_authorization_header";
+
+  //-------------DELETE-------------------
+  public static final String USER_NOT_FOUND_DETAIL = "User not found";
+  public static final String USER_NOT_FOUND_CODE = "user_not_found";
 }

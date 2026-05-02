@@ -6,12 +6,6 @@ import msl.qa.models.logout.WrongTokenLogoutRespModel;
 import org.junit.jupiter.api.Test;
 
 import static io.qameta.allure.Allure.step;
-import static io.restassured.RestAssured.given;
-import static msl.qa.spec.login.LoginSpec.loginReqSpec;
-import static msl.qa.spec.login.LoginSpec.successLoginRespSpec;
-import static msl.qa.spec.logout.LogoutSpec.logoutReqSpec;
-import static msl.qa.spec.logout.LogoutSpec.successLogoutRespSpec;
-import static msl.qa.spec.logout.LogoutSpec.wrongTokenLogoutRespSpec;
 import static msl.qa.tests.TestData.CODE;
 import static msl.qa.tests.TestData.INVALID_TOKEN_DETAIL;
 import static msl.qa.tests.TestData.PASSWORD;
@@ -21,8 +15,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 public class LogoutTests extends TestBase{
 
-  String urlLogin = "/auth/token/";
-  String LOGOUT_URL = "/auth/logout/";
   LoginReqModel loginData = new LoginReqModel(USERNAME, PASSWORD);
   LogoutReqModel logoutData;
   LogoutReqModel partLogoutData;

@@ -32,4 +32,6 @@ public class UserSpec {
           .expectBody("detail", notNullValue())
           .expectBody("code", notNullValue())
           .build();
+
+
 }
