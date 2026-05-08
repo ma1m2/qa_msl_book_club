@@ -6,11 +6,7 @@ import msl.qa.models.logout.WrongTokenLogoutRespModel;
 import org.junit.jupiter.api.Test;
 
 import static io.qameta.allure.Allure.step;
-import static msl.qa.tests.TestData.CODE;
-import static msl.qa.tests.TestData.INVALID_TOKEN_DETAIL;
-import static msl.qa.tests.TestData.PASSWORD;
-import static msl.qa.tests.TestData.TOKEN_HAS_WRONG_TYPE;
-import static msl.qa.tests.TestData.USERNAME;
+import static msl.qa.tests.TestData.*;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class LogoutTests extends TestBase{
