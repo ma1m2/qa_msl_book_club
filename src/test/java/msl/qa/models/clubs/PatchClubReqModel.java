@@ -8,6 +8,5 @@ public record PatchClubReqModel(
         String bookAuthors,
         Integer publicationYear,
         String description,
-        String telegramChatLink
-) {
+        String telegramChatLink) {
 }
