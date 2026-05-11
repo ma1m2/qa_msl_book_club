@@ -1,0 +1,36 @@
+{
+  "count": 123,
+  "next": "http://api.example.org/accounts/?page=4",
+  "previous": "http://api.example.org/accounts/?page=2",
+  "results": [
+    {
+      "id": 0,
+      "bookTitle": "string",
+      "bookAuthors": "string",
+      "publicationYear": 2147483647,
+      "description": "string",
+      "telegramChatLink": "string",
+      "owner": 0,
+      "members": [
+        0
+      ],
+      "reviews": [
+        {
+          "id": 0,
+          "club": 0,
+          "user": {
+            "id": 0,
+            "username": "6Rnhs@b-hbN8-2X.mYkv8tlNZAUrcW_Ir6mQJAFuMt4gonSYhUqG-WwvS"
+          },
+          "review": "string",
+          "assessment": 5,
+          "readPages": 2147483647,
+          "created": "2026-05-11T09:22:18.990Z",
+          "modified": "2026-05-11T09:22:18.990Z"
+        }
+      ],
+      "created": "2026-05-11T09:22:18.990Z",
+      "modified": "2026-05-11T09:22:18.990Z"
+    }
+  ]
+}

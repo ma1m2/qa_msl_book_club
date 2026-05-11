@@ -14,15 +14,15 @@ import static msl.qa.tests.TestData.PASSWORD;
 public class TestBase {
 
   protected static final ApiClient api = new ApiClient();
-  String username;
-  String password;
-  String firstName;
-  String updatedFirstName;
-  String lastName;
-  String email;
-  String token;
-  RegistrationReqModel registrationData;
-  LoginReqModel loginData;
+  protected String username;
+  protected String password;
+  protected String firstName;
+  protected String updatedFirstName;
+  protected String lastName;
+  protected String email;
+  protected String token;
+  protected RegistrationReqModel registrationData;
+  protected LoginReqModel loginData;
 
   @BeforeAll
   public static void setUp() {

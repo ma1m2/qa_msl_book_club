@@ -1,9 +1,10 @@
-package msl.qa.tests;
+package msl.qa.tests.register;
 
 import msl.qa.models.register.DetailRespModel;
 import msl.qa.models.register.ExistingUser400RespModel;
 import msl.qa.models.register.RegistrationReqModel;
 import msl.qa.models.register.RegistrationRespModel;
+import msl.qa.tests.TestBase;
 import net.datafaker.Faker;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -14,7 +15,7 @@ import static msl.qa.tests.TestData.IP_REGEXP;
 import static msl.qa.tests.TestData.UNSUPPORTED_MEDIA_TYPE;
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class RegistrationTests extends TestBase{
+public class RegistrationTests extends TestBase {
   String username;
   String password;
   RegistrationReqModel registrationData;

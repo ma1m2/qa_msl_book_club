@@ -1,6 +1,5 @@
-package msl.qa.tests;
+package msl.qa.tests.user;
 
-import io.restassured.response.Response;
 import msl.qa.models.login.LoginReqModel;
 import msl.qa.models.login.LoginRespModel;
 import msl.qa.models.register.RegistrationReqModel;
@@ -9,20 +8,12 @@ import msl.qa.models.user.PatchUserReqModel;
 import msl.qa.models.user.UnauthorisedUserRespModel;
 import msl.qa.models.user.UpdateRespModel;
 import msl.qa.models.user.UpdateUserReqModel;
-import net.datafaker.Faker;
+import msl.qa.tests.TestBase;
 import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import static io.qameta.allure.Allure.step;
 import static io.restassured.RestAssured.given;
-import static msl.qa.spec.login.LoginSpec.loginReqSpec;
-import static msl.qa.spec.login.LoginSpec.successLoginRespSpec;
-import static msl.qa.spec.register.RegistrationSpec.registerReqSpec;
-import static msl.qa.spec.register.RegistrationSpec.registerRespSpec;
-import static msl.qa.spec.user.UserSpec.updateRespSpec;
-import static msl.qa.spec.user.UserSpec.updateUnauthorizedUserRespSpec;
-import static msl.qa.spec.user.UserSpec.userReqSpec;
 import static msl.qa.tests.TestData.AUTHORIZATION_HEADER_DETAIL;
 import static msl.qa.tests.TestData.BAD_HEADER_CODE;
 import static msl.qa.tests.TestData.PASSWORD;

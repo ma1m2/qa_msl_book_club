@@ -1,9 +1,10 @@
-package msl.qa.tests;
+package msl.qa.tests.user;
 
 import msl.qa.models.login.LoginReqModel;
 import msl.qa.models.login.LoginRespModel;
 import msl.qa.models.register.RegistrationReqModel;
 import msl.qa.models.user.DetailCodeRespModel;
+import msl.qa.tests.TestBase;
 import org.junit.jupiter.api.Test;
 
 import static io.qameta.allure.Allure.step;

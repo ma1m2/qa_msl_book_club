@@ -1,0 +1,1058 @@
+openapi: 3.0.3
+info:
+  title: Book Club API
+  version: 0.0.0 (v1)
+  description: So great, needs no docs
+paths:
+  /api/v1/auth/logout/:
+    post:
+      operationId: authLogoutCreate
+      description: |-
+        Takes a token and blacklists it. Must be used with the
+        `rest_framework_simplejwt.token_blacklist` app installed.
+      tags:
+      - auth
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TokenBlacklist'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/TokenBlacklist'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/TokenBlacklist'
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TokenBlacklist'
+          description: ''
+  /api/v1/auth/token/:
+    post:
+      operationId: authTokenCreate
+      description: |-
+        Takes a set of user credentials and returns an access and refresh JSON web
+        token pair to prove the authentication of those credentials.
+      tags:
+      - auth
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TokenObtainPairWithProperMessage'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/TokenObtainPairWithProperMessage'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/TokenObtainPairWithProperMessage'
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TokenObtainPairWithProperMessage'
+          description: ''
+  /api/v1/auth/token/refresh/:
+    post:
+      operationId: authTokenRefreshCreate
+      description: |-
+        Takes a refresh type JSON web token and returns an access type JSON web
+        token if the refresh token is valid.
+      tags:
+      - auth
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TokenRefresh'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/TokenRefresh'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/TokenRefresh'
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TokenRefresh'
+          description: ''
+  /api/v1/clubs/:
+    get:
+      operationId: clubsList
+      parameters:
+      - in: query
+        name: membership
+        schema:
+          type: string
+      - name: page
+        required: false
+        in: query
+        description: A page number within the paginated result set.
+        schema:
+          type: integer
+      - name: page_size
+        required: false
+        in: query
+        description: Number of results to return per page.
+        schema:
+          type: integer
+      - in: query
+        name: search
+        schema:
+          type: string
+      tags:
+      - clubs
+      security:
+      - jwtAuth: []
+      - tokenAuth: []
+      - cookieAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedClubList'
+          description: ''
+    post:
+      operationId: clubsCreate
+      tags:
+      - clubs
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Club'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Club'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Club'
+        required: true
+      security:
+      - jwtAuth: []
+      - tokenAuth: []
+      - cookieAuth: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Club'
+          description: ''
+  /api/v1/clubs/{id}/:
+    get:
+      operationId: clubsRetrieve
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this Book Club.
+        required: true
+      tags:
+      - clubs
+      security:
+      - jwtAuth: []
+      - tokenAuth: []
+      - cookieAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Club'
+          description: ''
+    put:
+      operationId: clubsUpdate
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this Book Club.
+        required: true
+      tags:
+      - clubs
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Club'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Club'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Club'
+        required: true
+      security:
+      - jwtAuth: []
+      - tokenAuth: []
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Club'
+          description: ''
+    patch:
+      operationId: clubsPartialUpdate
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this Book Club.
+        required: true
+      tags:
+      - clubs
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedClub'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedClub'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedClub'
+      security:
+      - jwtAuth: []
+      - tokenAuth: []
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Club'
+          description: ''
+    delete:
+      operationId: clubsDestroy
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this Book Club.
+        required: true
+      tags:
+      - clubs
+      security:
+      - jwtAuth: []
+      - tokenAuth: []
+      - cookieAuth: []
+      responses:
+        '204':
+          description: No response body
+  /api/v1/clubs/{id}/members/me/:
+    post:
+      operationId: clubsMembersMeCreate
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this Book Club.
+        required: true
+      tags:
+      - clubs
+      security:
+      - jwtAuth: []
+      - tokenAuth: []
+      - cookieAuth: []
+      responses:
+        '204':
+          description: No response body
+    delete:
+      operationId: clubsMembersMeDestroy
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this Book Club.
+        required: true
+      tags:
+      - clubs
+      security:
+      - jwtAuth: []
+      - tokenAuth: []
+      - cookieAuth: []
+      responses:
+        '204':
+          description: No response body
+  /api/v1/clubs/reviews/:
+    get:
+      operationId: clubsReviewsList
+      parameters:
+      - in: query
+        name: club
+        schema:
+          type: integer
+      - name: page
+        required: false
+        in: query
+        description: A page number within the paginated result set.
+        schema:
+          type: integer
+      - name: page_size
+        required: false
+        in: query
+        description: Number of results to return per page.
+        schema:
+          type: integer
+      tags:
+      - clubs
+      security:
+      - jwtAuth: []
+      - tokenAuth: []
+      - cookieAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedBookReviewList'
+          description: ''
+    post:
+      operationId: clubsReviewsCreate
+      tags:
+      - clubs
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/BookReview'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/BookReview'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/BookReview'
+        required: true
+      security:
+      - jwtAuth: []
+      - tokenAuth: []
+      - cookieAuth: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BookReview'
+          description: ''
+  /api/v1/clubs/reviews/{id}/:
+    get:
+      operationId: clubsReviewsRetrieve
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this Book Review.
+        required: true
+      tags:
+      - clubs
+      security:
+      - jwtAuth: []
+      - tokenAuth: []
+      - cookieAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BookReview'
+          description: ''
+    put:
+      operationId: clubsReviewsUpdate
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this Book Review.
+        required: true
+      tags:
+      - clubs
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/BookReview'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/BookReview'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/BookReview'
+        required: true
+      security:
+      - jwtAuth: []
+      - tokenAuth: []
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BookReview'
+          description: ''
+    patch:
+      operationId: clubsReviewsPartialUpdate
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this Book Review.
+        required: true
+      tags:
+      - clubs
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedBookReview'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedBookReview'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedBookReview'
+      security:
+      - jwtAuth: []
+      - tokenAuth: []
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BookReview'
+          description: ''
+    delete:
+      operationId: clubsReviewsDestroy
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this Book Review.
+        required: true
+      tags:
+      - clubs
+      security:
+      - jwtAuth: []
+      - tokenAuth: []
+      - cookieAuth: []
+      responses:
+        '204':
+          description: No response body
+  /api/v1/docs/schema/:
+    get:
+      operationId: docsSchemaRetrieve
+      description: |-
+        OpenApi3 schema for this API. Format can be selected via content negotiation.
+
+        - YAML: application/vnd.oai.openapi
+        - JSON: application/vnd.oai.openapi+json
+      parameters:
+      - in: query
+        name: format
+        schema:
+          type: string
+          enum:
+          - json
+          - yaml
+      - in: query
+        name: lang
+        schema:
+          type: string
+          enum:
+          - af
+          - ar
+          - ar-dz
+          - ast
+          - az
+          - be
+          - bg
+          - bn
+          - br
+          - bs
+          - ca
+          - ckb
+          - cs
+          - cy
+          - da
+          - de
+          - dsb
+          - el
+          - en
+          - en-au
+          - en-gb
+          - eo
+          - es
+          - es-ar
+          - es-co
+          - es-mx
+          - es-ni
+          - es-ve
+          - et
+          - eu
+          - fa
+          - fi
+          - fr
+          - fy
+          - ga
+          - gd
+          - gl
+          - he
+          - hi
+          - hr
+          - hsb
+          - hu
+          - hy
+          - ia
+          - id
+          - ig
+          - io
+          - is
+          - it
+          - ja
+          - ka
+          - kab
+          - kk
+          - km
+          - kn
+          - ko
+          - ky
+          - lb
+          - lt
+          - lv
+          - mk
+          - ml
+          - mn
+          - mr
+          - ms
+          - my
+          - nb
+          - ne
+          - nl
+          - nn
+          - os
+          - pa
+          - pl
+          - pt
+          - pt-br
+          - ro
+          - ru
+          - sk
+          - sl
+          - sq
+          - sr
+          - sr-latn
+          - sv
+          - sw
+          - ta
+          - te
+          - tg
+          - th
+          - tk
+          - tr
+          - tt
+          - udm
+          - ug
+          - uk
+          - ur
+          - uz
+          - vi
+          - zh-hans
+          - zh-hant
+      tags:
+      - docs
+      security:
+      - jwtAuth: []
+      - tokenAuth: []
+      - cookieAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/vnd.oai.openapi:
+              schema:
+                type: object
+                additionalProperties: {}
+            application/yaml:
+              schema:
+                type: object
+                additionalProperties: {}
+            application/vnd.oai.openapi+json:
+              schema:
+                type: object
+                additionalProperties: {}
+            application/json:
+              schema:
+                type: object
+                additionalProperties: {}
+          description: ''
+  /api/v1/users/me/:
+    get:
+      operationId: usersMeRetrieve
+      tags:
+      - users
+      security:
+      - jwtAuth: []
+      - tokenAuth: []
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+          description: ''
+    put:
+      operationId: usersMeUpdate
+      tags:
+      - users
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/User'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/User'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/User'
+        required: true
+      security:
+      - jwtAuth: []
+      - tokenAuth: []
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+          description: ''
+    patch:
+      operationId: usersMePartialUpdate
+      tags:
+      - users
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedUser'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedUser'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedUser'
+      security:
+      - jwtAuth: []
+      - tokenAuth: []
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+          description: ''
+    delete:
+      operationId: usersMeDestroy
+      tags:
+      - users
+      security:
+      - jwtAuth: []
+      - tokenAuth: []
+      - cookieAuth: []
+      responses:
+        '204':
+          description: No response body
+  /api/v1/users/register/:
+    post:
+      operationId: usersRegisterCreate
+      tags:
+      - users
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserRegister'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/UserRegister'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/UserRegister'
+        required: true
+      security:
+      - jwtAuth: []
+      - tokenAuth: []
+      - cookieAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserRegister'
+          description: ''
+components:
+  schemas:
+    BookReview:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        club:
+          type: integer
+        user:
+          allOf:
+          - $ref: '#/components/schemas/User'
+          readOnly: true
+        review:
+          type: string
+          title: Book Review
+        assessment:
+          type: integer
+          maximum: 5
+          minimum: 1
+        readPages:
+          type: integer
+          maximum: 2147483647
+          minimum: -2147483648
+        created:
+          type: string
+          format: date-time
+          readOnly: true
+          title: Дата создания
+        modified:
+          type: string
+          format: date-time
+          readOnly: true
+          nullable: true
+          title: Дата изменения
+      required:
+      - assessment
+      - club
+      - created
+      - id
+      - modified
+      - readPages
+      - review
+      - user
+    Club:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        bookTitle:
+          type: string
+          maxLength: 255
+        bookAuthors:
+          type: string
+          maxLength: 255
+        publicationYear:
+          type: integer
+          maximum: 2147483647
+          minimum: -2147483648
+        description:
+          type: string
+          title: Book Description
+        telegramChatLink:
+          type: string
+          format: uri
+          title: Link on Telegram chat
+          maxLength: 200
+        owner:
+          type: integer
+          readOnly: true
+        members:
+          type: array
+          items:
+            type: integer
+          readOnly: true
+        reviews:
+          type: array
+          items:
+            $ref: '#/components/schemas/BookReview'
+          readOnly: true
+        created:
+          type: string
+          format: date-time
+          readOnly: true
+          title: Дата создания
+        modified:
+          type: string
+          format: date-time
+          readOnly: true
+          nullable: true
+          title: Дата изменения
+      required:
+      - bookAuthors
+      - bookTitle
+      - created
+      - description
+      - id
+      - members
+      - modified
+      - owner
+      - publicationYear
+      - reviews
+      - telegramChatLink
+    PaginatedBookReviewList:
+      type: object
+      required:
+      - count
+      - results
+      properties:
+        count:
+          type: integer
+          example: 123
+        next:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=4
+        previous:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=2
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/BookReview'
+    PaginatedClubList:
+      type: object
+      required:
+      - count
+      - results
+      properties:
+        count:
+          type: integer
+          example: 123
+        next:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=4
+        previous:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=2
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/Club'
+    PatchedBookReview:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        club:
+          type: integer
+        user:
+          allOf:
+          - $ref: '#/components/schemas/User'
+          readOnly: true
+        review:
+          type: string
+          title: Book Review
+        assessment:
+          type: integer
+          maximum: 5
+          minimum: 1
+        readPages:
+          type: integer
+          maximum: 2147483647
+          minimum: -2147483648
+        created:
+          type: string
+          format: date-time
+          readOnly: true
+          title: Дата создания
+        modified:
+          type: string
+          format: date-time
+          readOnly: true
+          nullable: true
+          title: Дата изменения
+    PatchedClub:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        bookTitle:
+          type: string
+          maxLength: 255
+        bookAuthors:
+          type: string
+          maxLength: 255
+        publicationYear:
+          type: integer
+          maximum: 2147483647
+          minimum: -2147483648
+        description:
+          type: string
+          title: Book Description
+        telegramChatLink:
+          type: string
+          format: uri
+          title: Link on Telegram chat
+          maxLength: 200
+        owner:
+          type: integer
+          readOnly: true
+        members:
+          type: array
+          items:
+            type: integer
+          readOnly: true
+        reviews:
+          type: array
+          items:
+            $ref: '#/components/schemas/BookReview'
+          readOnly: true
+        created:
+          type: string
+          format: date-time
+          readOnly: true
+          title: Дата создания
+        modified:
+          type: string
+          format: date-time
+          readOnly: true
+          nullable: true
+          title: Дата изменения
+    PatchedUser:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        username:
+          type: string
+          description: Required. 150 characters or fewer. Letters, digits and @/./+/-/_
+            only.
+          pattern: ^[\w.@+-]+$
+          maxLength: 150
+        firstName:
+          type: string
+          maxLength: 150
+        lastName:
+          type: string
+          maxLength: 150
+        email:
+          type: string
+          format: email
+          title: Email address
+          maxLength: 254
+        remoteAddr:
+          type: string
+          readOnly: true
+    TokenBlacklist:
+      type: object
+      properties:
+        refresh:
+          type: string
+          writeOnly: true
+      required:
+      - refresh
+    TokenObtainPairWithProperMessage:
+      type: object
+      properties:
+        username:
+          type: string
+          writeOnly: true
+        password:
+          type: string
+          writeOnly: true
+      required:
+      - password
+      - username
+    TokenRefresh:
+      type: object
+      properties:
+        access:
+          type: string
+          readOnly: true
+        refresh:
+          type: string
+      required:
+      - access
+      - refresh
+    User:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        username:
+          type: string
+          description: Required. 150 characters or fewer. Letters, digits and @/./+/-/_
+            only.
+          pattern: ^[\w.@+-]+$
+          maxLength: 150
+      required:
+      - id
+      - username
+    UserRegister:
+      type: object
+      properties:
+        username:
+          type: string
+          description: Required. 150 characters or fewer. Letters, digits and @/./+/-/_
+            only.
+          pattern: ^[\w.@+-]+$
+          maxLength: 150
+        password:
+          type: string
+          maxLength: 128
+      required:
+      - password
+      - username
+  securitySchemes:
+    cookieAuth:
+      type: apiKey
+      in: cookie
+      name: sessionid
+    jwtAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+    tokenAuth:
+      type: apiKey
+      in: header
+      name: Authorization
+      description: Token-based authentication with required prefix "Token"

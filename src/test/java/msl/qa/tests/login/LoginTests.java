@@ -1,10 +1,11 @@
-package msl.qa.tests;
+package msl.qa.tests.login;
 
 import msl.qa.models.login.EmptyPasswordLoginRespModel;
 import msl.qa.models.login.EmptyUserLoginRespModel;
 import msl.qa.models.login.LoginReqModel;
 import msl.qa.models.login.LoginRespModel;
 import msl.qa.models.login.WrongCredlsLoginRespModel;
+import msl.qa.tests.TestBase;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
@@ -18,7 +19,7 @@ import static msl.qa.tests.TestData.WRONG_CREDLS_DETAIL;
 import static msl.qa.tests.TestData.WRONG_PASSWORD;
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class LoginTests extends TestBase{
+public class LoginTests extends TestBase {
   LoginReqModel loginData = new LoginReqModel(USERNAME, PASSWORD);
   LoginReqModel wrongPasswordData = new LoginReqModel(USERNAME, WRONG_PASSWORD);
   LoginReqModel emptyPasswordData = new LoginReqModel(USERNAME, "");

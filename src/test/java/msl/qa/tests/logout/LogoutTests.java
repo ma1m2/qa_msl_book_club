@@ -1,15 +1,16 @@
-package msl.qa.tests;
+package msl.qa.tests.logout;
 
 import msl.qa.models.login.LoginReqModel;
 import msl.qa.models.logout.LogoutReqModel;
 import msl.qa.models.logout.WrongTokenLogoutRespModel;
+import msl.qa.tests.TestBase;
 import org.junit.jupiter.api.Test;
 
 import static io.qameta.allure.Allure.step;
 import static msl.qa.tests.TestData.*;
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class LogoutTests extends TestBase{
+public class LogoutTests extends TestBase {
 
   LoginReqModel loginData = new LoginReqModel(USERNAME, PASSWORD);
   LogoutReqModel logoutData;
