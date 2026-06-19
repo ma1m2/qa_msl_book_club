@@ -27,4 +27,7 @@ public class TestData {
   //-------------DELETE-------------------
   public static final String USER_NOT_FOUND_DETAIL = "User not found";
   public static final String USER_NOT_FOUND_CODE = "user_not_found";
+
+  //-------------CREATE CLUB----------------------
+  public static final String TELEGRAM_CHAT_LINK = "https://t.me/Sveta2607bot";
 }

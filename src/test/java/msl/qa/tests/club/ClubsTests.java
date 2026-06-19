@@ -12,12 +12,11 @@ import org.junit.jupiter.api.Test;
 import java.util.Map;
 
 import static msl.qa.tests.TestData.PASSWORD;
-import static msl.qa.tests.TestData.USERNAME;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class ClubsTests extends TestBase {
 
-  LoginReqModel loginData = new LoginReqModel(USERNAME, PASSWORD);
+  LoginReqModel loginData = new LoginReqModel(username, PASSWORD);
 
   //-----------------------------CREATE----------------------------
   @Test

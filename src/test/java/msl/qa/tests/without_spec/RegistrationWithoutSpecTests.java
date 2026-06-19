@@ -28,7 +28,7 @@ public class RegistrationWithoutSpecTests extends TestBase {
   RegistrationReqModel registrationData;
 
   @BeforeEach
-  public void prepareTestData() {
+  public void prepareTestDataAndAddListener() {
     Faker faker = new Faker();
     username = faker.name().firstName();
     password = faker.name().firstName();

@@ -1,6 +1,10 @@
 package msl.qa.tests;
 
+import com.codeborne.selenide.Configuration;
+import com.codeborne.selenide.logevents.SelenideLogger;
+import io.qameta.allure.selenide.AllureSelenide;
 import io.restassured.RestAssured;
+import msl.qa.allure.Attach;
 import msl.qa.api.ApiClient;
 import msl.qa.models.clubs.CreateClubReqModel;
 import msl.qa.models.clubs.CreateClubRespModel;
@@ -11,10 +15,8 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 
-import java.time.LocalDate;
-import java.time.ZoneOffset;
-
-import static msl.qa.tests.TestData.PASSWORD;
+import static com.codeborne.selenide.Selenide.closeWebDriver;
+import static msl.qa.tests.TestData.*;
 
 public class TestBase {
 
@@ -26,6 +28,9 @@ public class TestBase {
   protected String lastName;
   protected String email;
   protected String token;
+  protected String bookTitle;
+  protected String bookAuthors;
+  protected Integer publicationYear;
   protected String description;
   protected String newDescription;
   protected String telegramChatLink;
@@ -35,34 +40,49 @@ public class TestBase {
 
   @BeforeAll
   public static void setUp() {
-    RestAssured.baseURI = "https://book-club.qa.guru";
+    RestAssured.baseURI = "http://localhost:8100";
     RestAssured.basePath = "/api/v1";
+    Configuration.browserSize = "1920x1080";
   }
 
   @BeforeEach
-  public void prepareTestData() {
+  public void prepareTestDataAndAddListener() {
+    SelenideLogger.addListener("AllureSelenide", new AllureSelenide());
     Faker faker = new Faker();
-    username = faker.name().firstName() + "sssss";
+    username = faker.name().firstName() + "abc";
     password = PASSWORD;
     firstName = faker.name().firstName();
     updatedFirstName = faker.name().firstName();
     lastName = faker.name().lastName();
     email = faker.internet().emailAddress();
-    description = faker.lorem().sentence(8);
+    bookTitle = faker.book().title();
+    bookAuthors = faker.book().author();
+    publicationYear = faker.number().numberBetween(1950, 2025);
+    description = faker.lorem().sentence(10);
     newDescription = faker.lorem().sentence(9);
-    telegramChatLink = "https://t.me/" + faker.regexify("[a-z]{10}");
+    telegramChatLink = TELEGRAM_CHAT_LINK;//"https://t.me/" + faker.regexify("[a-z]{10}");
 
-    int publicationTimestampSeconds = (int) LocalDate
+/*    int publicationTimestampSeconds = (int) LocalDate
             .of(faker.number().numberBetween(1970, 2038), 1, 1)
             .atStartOfDay()
-            .toEpochSecond(ZoneOffset.UTC);
+            .toEpochSecond(ZoneOffset.UTC);*/
     createClubData = new CreateClubReqModel(
-            "QA Club " + faker.number().digits(6),
-            faker.book().author(),
-            publicationTimestampSeconds,
-            faker.lorem().sentence(10),
-            "https://t.me/" + faker.regexify("[a-z]{10}")
+            bookTitle,
+            bookAuthors,
+            publicationYear,
+            description,
+            telegramChatLink
     );
+  }
+
+  //@AfterEach
+  public void addAttachments() {
+    Attach.screenshotAs("Last screenshot");
+    Attach.pageSource();
+    Attach.browserConsoleLogs();
+   // Attach.addVideo();
+
+    closeWebDriver();
   }
 
   protected String registerAndLoginNewUser() {
