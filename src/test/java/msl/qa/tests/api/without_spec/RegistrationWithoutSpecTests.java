@@ -1,8 +1,8 @@
-package msl.qa.tests.without_spec;
+package msl.qa.tests.api.without_spec;
 
 import io.restassured.http.ContentType;
 import msl.qa.models.register.ExistingUser400RespModel;
-import msl.qa.models.register.RegistrationReqModel;
+import msl.qa.models.register.RegisterReqModel;
 import msl.qa.models.register.RegistrationRespModel;
 import msl.qa.tests.TestBase;
 import net.datafaker.Faker;
@@ -25,14 +25,14 @@ public class RegistrationWithoutSpecTests extends TestBase {
   String basePath = "/api/v1";
   String username;
   String password;
-  RegistrationReqModel registrationData;
+  RegisterReqModel registrationData;
 
   @BeforeEach
   public void prepareTestDataAndAddListener() {
     Faker faker = new Faker();
     username = faker.name().firstName();
     password = faker.name().firstName();
-    registrationData = new RegistrationReqModel(username, password);
+    registrationData = new RegisterReqModel(username, password);
   }
 
   @Test
@@ -65,7 +65,7 @@ public class RegistrationWithoutSpecTests extends TestBase {
 
   @Test
   public void existingUser400RegistrationTest() {
-    RegistrationReqModel data = new RegistrationReqModel(username, password);
+    RegisterReqModel data = new RegisterReqModel(username, password);
 
     given()
             .log().all()
@@ -102,7 +102,7 @@ public class RegistrationWithoutSpecTests extends TestBase {
   public void invalidUsername400RegistrationTest() {
     Faker faker = new Faker();
     String username = faker.name().firstName() + "#";
-    RegistrationReqModel data = new RegistrationReqModel(username, password);
+    RegisterReqModel data = new RegisterReqModel(username, password);
 
     given()
             .log().all()
@@ -121,7 +121,7 @@ public class RegistrationWithoutSpecTests extends TestBase {
   @Test
   public void error500RegistrationTest() {
     String wrongUrl = "https://book-club.qa.guru/api/v1/users/register";
-    RegistrationReqModel data = new RegistrationReqModel(username, password);
+    RegisterReqModel data = new RegisterReqModel(username, password);
 
     given()
             .log().all()
@@ -137,7 +137,7 @@ public class RegistrationWithoutSpecTests extends TestBase {
 
   @Test
   public void wrongContentType415RegistrationTest() {
-    RegistrationReqModel data = new RegistrationReqModel(username, password);
+    RegisterReqModel data = new RegisterReqModel(username, password);
 
     given()
             .log().all()

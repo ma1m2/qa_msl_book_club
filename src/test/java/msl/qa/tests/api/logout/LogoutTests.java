@@ -1,22 +1,32 @@
-package msl.qa.tests.logout;
+package msl.qa.tests.api.logout;
 
-import msl.qa.models.login.LoginReqModel;
+import io.qameta.allure.Feature;
 import msl.qa.models.logout.LogoutReqModel;
 import msl.qa.models.logout.WrongTokenLogoutRespModel;
+import msl.qa.models.register.RegisterReqModel;
 import msl.qa.tests.TestBase;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 
 import static io.qameta.allure.Allure.step;
-import static msl.qa.tests.TestData.*;
+import static msl.qa.tests.TestData.CODE;
+import static msl.qa.tests.TestData.INVALID_TOKEN_DETAIL;
+import static msl.qa.tests.TestData.PASSWORD;
+import static msl.qa.tests.TestData.TOKEN_HAS_WRONG_TYPE;
+import static msl.qa.tests.TestData.USERNAME;
 import static org.assertj.core.api.Assertions.assertThat;
 
+@Feature("[API] Logout")
+@Tag("api")
 public class LogoutTests extends TestBase {
 
-  LoginReqModel loginData = new LoginReqModel(USERNAME, PASSWORD);
+  RegisterReqModel loginData = new RegisterReqModel(USERNAME, PASSWORD);
   LogoutReqModel logoutData;
   LogoutReqModel partLogoutData;
 
   @Test
+  @DisplayName("[API] Successful Logout")
   public void successfulLogoutTest() {
 
     step("Login and Logout with refresh-token", () -> {
@@ -27,6 +37,8 @@ public class LogoutTests extends TestBase {
   }
 
   @Test
+  @Tag("negative")
+  @DisplayName("[API] Logout with Access Token is not allowed")
   public void wrongRefreshTokenLogoutTest() {
 
     step("Login and get wrong-token for logout (accessToken)", () -> {
@@ -43,6 +55,8 @@ public class LogoutTests extends TestBase {
   }
 
   @Test
+  @Tag("negative")
+  @DisplayName("[API] Logout with part Refresh Token is not allowed")
   public void partRefreshTokenLogoutTest() {
 
     step("Logout with part of refresh-token (length/5*4)", () -> {

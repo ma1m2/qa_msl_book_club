@@ -1,6 +1,6 @@
 package msl.qa.models.register;
 
-public record RegistrationReqModel(
+public record RegisterReqModel(
         String username,
         String password) {
 }

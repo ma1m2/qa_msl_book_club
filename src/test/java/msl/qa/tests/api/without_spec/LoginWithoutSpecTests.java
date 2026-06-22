@@ -1,9 +1,9 @@
-package msl.qa.tests.without_spec;
+package msl.qa.tests.api.without_spec;
 
 import io.restassured.http.ContentType;
-import msl.qa.models.login.LoginReqModel;
 import msl.qa.models.login.LoginRespModel;
 import msl.qa.models.login.WrongCredlsLoginRespModel;
+import msl.qa.models.register.RegisterReqModel;
 import msl.qa.tests.TestBase;
 import org.junit.jupiter.api.Test;
 
@@ -17,8 +17,8 @@ public class LoginWithoutSpecTests extends TestBase {
   String basePath = "/api/v1";
   String username = "qamsl";
   String password = "1234";
-  LoginReqModel loginData = new LoginReqModel(username, password);
-  LoginReqModel wrongPassword = new LoginReqModel(username, "12345");
+  RegisterReqModel loginData = new RegisterReqModel(username, password);
+  RegisterReqModel wrongPassword = new RegisterReqModel(username, "12345");
 
   @Test
   public void successfulLoginTest() {

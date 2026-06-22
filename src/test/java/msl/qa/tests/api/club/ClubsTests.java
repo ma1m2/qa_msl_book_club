@@ -1,12 +1,11 @@
-package msl.qa.tests.club;
+package msl.qa.tests.api.club;
 
 import msl.qa.models.clubs.CreateClubReqModel;
 import msl.qa.models.clubs.CreateClubRespModel;
-import msl.qa.models.clubs.PatchClubReqModel;
 import msl.qa.models.clubs.PaginatedClubListRespModel;
-import msl.qa.models.login.LoginReqModel;
+import msl.qa.models.clubs.PatchClubReqModel;
+import msl.qa.models.register.RegisterReqModel;
 import msl.qa.tests.TestBase;
-import net.datafaker.Faker;
 import org.junit.jupiter.api.Test;
 
 import java.util.Map;
@@ -16,13 +15,13 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 public class ClubsTests extends TestBase {
 
-  LoginReqModel loginData = new LoginReqModel(username, PASSWORD);
+  RegisterReqModel loginData = new RegisterReqModel(td.username(), PASSWORD);
 
   //-----------------------------CREATE----------------------------
   @Test
   public void createClubSuccessTest() {
     String accessToken = registerAndLoginNewUser();
-    CreateClubReqModel createData = createClubData;
+    CreateClubReqModel createData = td.createClubData();
 
     CreateClubRespModel createdClub = api.clubs.createClub(accessToken, createData);
 
@@ -41,7 +40,7 @@ public class ClubsTests extends TestBase {
   //-----------------------------READ----------------------------
   @Test
   public void getClubsListTest() {
-    token = api.auth.extractAccessToken(loginData);
+    String token = api.auth.extractAccessToken(loginData);
 
     PaginatedClubListRespModel clubs = api.clubs.getClubs(token);
 
@@ -51,7 +50,7 @@ public class ClubsTests extends TestBase {
 
   @Test
   public void getClubsListWithQueryParamsTest() {
-    token = api.auth.extractAccessToken(loginData);
+    String token = api.auth.extractAccessToken(loginData);
 
     PaginatedClubListRespModel clubs = api.clubs.getClubs(token,
             Map.of("page_size", 1,"page", 100));
@@ -64,14 +63,14 @@ public class ClubsTests extends TestBase {
   @Test
   public void patchClubDescriptionAndTelegramChatLinkSuccessTest() {
     String accessToken = registerAndLoginNewUser();
-    CreateClubRespModel createdClub = api.clubs.createClub(accessToken, createClubData);
+    CreateClubRespModel createdClub = api.clubs.createClub(accessToken, td.createClubData());
 
     PatchClubReqModel patchData = new PatchClubReqModel(
             null,
             null,
             null,
-            description,
-            telegramChatLink
+            td.description(),
+            td.telegramChatLink()
     );
 
     CreateClubRespModel updatedClub = api.clubs.patchClub(accessToken, createdClub.id(), patchData);
@@ -85,19 +84,19 @@ public class ClubsTests extends TestBase {
   @Test
   public void putClubChangeOnlyDescriptionSuccessTest() {
     String accessToken = registerAndLoginNewUser();
-    CreateClubRespModel createdClub = api.clubs.createClub(accessToken, createClubData);
+    CreateClubRespModel createdClub = api.clubs.createClub(accessToken, td.createClubData());
 
     CreateClubReqModel putData = new CreateClubReqModel(
             createdClub.bookTitle(),
             createdClub.bookAuthors(),
             createdClub.publicationYear(),
-            newDescription,
+            td.description(),
             createdClub.telegramChatLink()
     );
 
     CreateClubRespModel updatedClub = api.clubs.putClub(accessToken, createdClub.id(), putData);
 
-    assertThat(updatedClub.description()).isEqualTo(newDescription);
+    assertThat(updatedClub.description()).isEqualTo(td.newDescription());
     assertThat(updatedClub.telegramChatLink()).isEqualTo(createdClub.telegramChatLink());
     assertThat(updatedClub.bookTitle()).isEqualTo(createdClub.bookTitle());
     assertThat(updatedClub.bookAuthors()).isEqualTo(createdClub.bookAuthors());
@@ -108,7 +107,7 @@ public class ClubsTests extends TestBase {
   @Test
   public void deleteClubSuccessTest() {
     String accessToken = registerAndLoginNewUser();
-    CreateClubRespModel createdClub = api.clubs.createClub(accessToken, createClubData);
+    CreateClubRespModel createdClub = api.clubs.createClub(accessToken, td.createClubData());
     api.clubs.deleteClub(accessToken, createdClub.id());
   }
 

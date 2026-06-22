@@ -20,7 +20,7 @@ public class ClubsApiClient {
   private static final String CLUBS_URL = "/clubs/";
 
   //-----------------------------CREATE----------------------------
-  @Step("Create new club")
+  @Step("[API] Create new club")
   public CreateClubRespModel createClub(String accessToken, CreateClubReqModel createClubData) {
     return given(clubsReqSpec)
             .header("Authorization", "Bearer " + accessToken)
@@ -33,7 +33,7 @@ public class ClubsApiClient {
   }
 
   //-----------------------------READ----------------------------
-  @Step("Get clubs list")
+  @Step("[API] Get clubs list")
   public PaginatedClubListRespModel getClubs(String accessToken) {
     return given(clubsReqSpec)
             .header("Authorization", "Bearer " + accessToken)
@@ -44,7 +44,7 @@ public class ClubsApiClient {
             .extract().as(PaginatedClubListRespModel.class);
   }
 
-  @Step("Get clubs list with query params")
+  @Step("[API] Get clubs list with query params")
   public PaginatedClubListRespModel getClubs(String accessToken, Map<String, ?> queryParams) {
     return given(clubsReqSpec)
             .header("Authorization", "Bearer " + accessToken)
@@ -57,7 +57,7 @@ public class ClubsApiClient {
   }
 
   //-----------------------------UPDATE----------------------------
-  @Step("Patch club by id")
+  @Step("[API] Patch club by id")
   public CreateClubRespModel patchClub(String accessToken, Integer clubId, PatchClubReqModel patchData) {
     return given(clubsReqSpec)
             .header("Authorization", "Bearer " + accessToken)
@@ -69,7 +69,7 @@ public class ClubsApiClient {
             .extract().as(CreateClubRespModel.class);
   }
 
-  @Step("Put club by id")
+  @Step("[API] Put club by id")
   public CreateClubRespModel putClub(String accessToken, Integer clubId, CreateClubReqModel putData) {
     return given(clubsReqSpec)
             .header("Authorization", "Bearer " + accessToken)
@@ -82,7 +82,7 @@ public class ClubsApiClient {
   }
 
   //-----------------------------DELETE----------------------------
-  @Step("Delete club by id")
+  @Step("[API] Delete club by id")
   public void deleteClub(String accessToken, Integer clubId) {
     given(clubsReqSpec)
             .header("Authorization", "Bearer " + accessToken)
