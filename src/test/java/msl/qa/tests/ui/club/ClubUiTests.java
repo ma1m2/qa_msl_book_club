@@ -1,8 +1,9 @@
-package msl.qa.tests.ui;
+package msl.qa.tests.ui.club;
 
+import com.codeborne.selenide.Selenide;
 import io.qameta.allure.Description;
-import io.qameta.allure.Epic;
 import io.qameta.allure.Feature;
+import io.qameta.allure.Owner;
 import io.qameta.allure.Severity;
 import io.qameta.allure.SeverityLevel;
 import msl.qa.helper.TestDataBuilder;
@@ -27,47 +28,86 @@ import static com.codeborne.selenide.Selenide.confirm;
 import static com.codeborne.selenide.Selenide.open;
 import static io.qameta.allure.Allure.step;
 
-@Feature("Clubs")
-public class ClubTests extends TestBase {
+@Feature("[UI] Club")
+@Tag("ui")
+@Owner("SvetaQa")
+public class ClubUiTests extends TestBase {
+
+  TestDataBuilder td2 = new TestDataBuilder();
 
   Integer clubId;
-  MainPage mainPage = new MainPage();
+  String accessToken;
 
   @Test
   @Tag("ui")
   @Description("Register, login, creating club by API, imitate session by localStorage, navigate on Club Page." +
           "Verify fields on ClubPage")
   @DisplayName("Create club by API and verify by UI")
+  @Severity(SeverityLevel.CRITICAL)
   public void createClub(){
-
-      //register user
-      RegistrationRespModel user = api.users.register(new RegisterReqModel(td.username(), td.password()));
-      //login user
-      LoginRespModel loginResp = api.auth.successfulLogin(td.loginData());
+    step("[UI] Open app with API token in localStorage, create club by API", () -> {
+      LoginRespModel loginResp = clubPage.openMainPageWithNewUser(td.username(), td.password());
       //create club
       CreateClubRespModel createdClub = api.clubs.createClub(loginResp.access(), td.createClubData());
       clubId = createdClub.id();
-
-      //create localStorage
-      String localStorageAuthBody = step("[API] Create authorisation JSON for localStorage", () ->
-              new LocalStorageAuthReqModel(user, loginResp.access(), loginResp.refresh(), true).toJson());
-
-      step("[UI] Open app with API token in localStorage and verify user is authorized", () -> {
-        mainPage.openWithAuth(localStorageAuthBody);
-        mainPage.authorisedUserOnMainPage();
       });
 
-
-    //wrong leaving club
-    step("[UI] Open owner's club and try to leave it", () -> {
-      mainPage.openClubById(clubId)
-              .leaveOwnresClub();
+    step("[UI] Open club by Id and verify book title and year", () -> {
+      mainPage
+              .openClubById(clubId)
+              .assertClubIsExist(td.bookTitle(), td.bookAuthors(), td.publicationYear(), td.description());
     });
   }
 
-  //@Test
-  public void deleteClub(){
+  @Test
+  @DisplayName("[UI] Update club data by API and check by UI")
+  @Severity(SeverityLevel.NORMAL)
+  public void updateClub(){
+    step("[UI] Open app with API token in localStorage, create club by API", () -> {
+      LoginRespModel loginResp = clubPage.openMainPageWithNewUser(td.username(), td.password());
+      //create club
+      accessToken = loginResp.access();
+      CreateClubRespModel createdClub = api.clubs.createClub(accessToken, td.createClubData());
+      clubId = createdClub.id();
+    });
 
+    step("[UI] Open club by Id and verify book content", () -> {
+      mainPage
+              .openClubById(clubId)
+              .assertClubIsExist(td.bookTitle(), td.bookAuthors(), td.publicationYear(), td.description());
+    });
+
+    CreateClubRespModel updatedClub = api.clubs.putClub(accessToken, clubId, td2.createClubData());
+    step("[UI] Refresh club page", Selenide::refresh);
+
+    step("[UI] Open club by Id and verify book content", () -> {
+      mainPage
+              .openClubById(clubId)
+              .assertClubIsExist(td2.bookTitle(), td2.bookAuthors(), td2.publicationYear(), td2.description());
+    });
+  }
+
+  @Test
+  @DisplayName("[UI] Club deleted by API and check by UI")
+  @Severity(SeverityLevel.NORMAL)
+  public void deleteClub(){
+    step("[UI] Open app with API token in localStorage, create club by API", () -> {
+      LoginRespModel loginResp = clubPage.openMainPageWithNewUser(td.username(), td.password());
+      //create club
+      accessToken = loginResp.access();
+      CreateClubRespModel createdClub = api.clubs.createClub(accessToken, td.createClubData());
+      clubId = createdClub.id();
+    });
+
+    step("[UI] Open club by Id and verify book content", () -> {
+      mainPage
+              .openClubById(clubId)
+              .assertClubIsExist(td.bookTitle(), td.bookAuthors(), td.publicationYear(), td.description());
+    });
+
+    api.clubs.deleteClub(accessToken, clubId);
+    step("[UI] Refresh club page", Selenide::refresh);
+    mainPage.openClubById(clubId).checkDeletedClub();
   }
 
   @Test

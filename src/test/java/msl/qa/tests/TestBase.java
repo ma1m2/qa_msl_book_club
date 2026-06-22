@@ -9,6 +9,7 @@ import msl.qa.api.ApiClient;
 import msl.qa.helper.TestDataBuilder;
 import msl.qa.models.clubs.CreateClubRespModel;
 import msl.qa.models.register.RegisterReqModel;
+import msl.qa.pages.ClubPage;
 import msl.qa.pages.MainPage;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
@@ -20,7 +21,9 @@ import static com.codeborne.selenide.Selenide.webdriver;
 public class TestBase {
 
   protected static final ApiClient api = new ApiClient();
+
   protected MainPage mainPage = new MainPage();
+  protected ClubPage clubPage = new ClubPage();
   protected TestDataBuilder td;
 
   @BeforeAll

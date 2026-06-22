@@ -6,17 +6,19 @@ import msl.qa.models.localstorage.LocalStorageAuthReqModel;
 import msl.qa.models.login.LoginRespModel;
 import msl.qa.models.register.RegisterReqModel;
 import msl.qa.models.register.RegistrationRespModel;
+import msl.qa.pages.components.Header;
 
 import static com.codeborne.selenide.Selenide.localStorage;
 import static com.codeborne.selenide.Selenide.open;
 
 public class BasePage {
-  ApiClient api = new ApiClient();
 
-  @Step("[UI] User registration[API], session setup[API], and page opening[UI]")
-  public LoginRespModel openBlankPageWithNewUser(String username, String password) {
+  protected Header header = new Header();
+  protected ApiClient api = new ApiClient();
+
+  @Step("[UI] User registration[API], session setup[localStorage], and page opening[UI]")
+  public LoginRespModel openMainPageWithNewUser(String username, String password) {
     RegisterReqModel loginData = new RegisterReqModel(username, password);
-
     //register user
     RegistrationRespModel user = api.users.register(loginData);
     //login user
@@ -25,15 +27,16 @@ public class BasePage {
     String localStorageAuthBody = new LocalStorageAuthReqModel(user,
             loginResp.access(), loginResp.refresh(), true).toJson();
 
-    openFaviconAndSetLocalStorage("book_club_auth", localStorageAuthBody);
+    openFaviconAndSetLocalStorageAndMainPage("book_club_auth", localStorageAuthBody);
 
     return loginResp;
   }
 
   @Step("[UI] Открытие /favicon.ico и установка данных в localstorage")
-  public void openFaviconAndSetLocalStorage(String key, String value) {
+  public void openFaviconAndSetLocalStorageAndMainPage(String key, String value) {
     openFavicon();
     localStorage().setItem(key, value);
+    open("/");
   }
 
   @Step("[UI] Открытие /favicon.ico")

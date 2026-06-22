@@ -27,10 +27,11 @@ public class RegisterPage {
   }
 
   @Step("Fill Register Form with name '{name}' and password '{secret}'")
-  public void fillRegisterForm(String name, String secret) {
+  public RegisterPage fillRegisterForm(String name, String secret) {
     username.setValue(name);
     password.setValue(secret);
     confirmPassword.setValue(secret);
+    return this;
   }
 
   @Step("Submit Registration")

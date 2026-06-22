@@ -77,8 +77,9 @@ public class ClubsTests extends TestBase {
             null,
             null,
             null,
-            td.description(),
-            td.telegramChatLink()
+            td.updatedDescription(),
+            td.updatedTelegramChatLink()
+
     );
 
     clubId = createdClub.id();

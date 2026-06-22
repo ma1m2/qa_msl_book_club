@@ -14,12 +14,7 @@ import org.junit.jupiter.api.Test;
 import java.util.List;
 
 import static io.qameta.allure.Allure.step;
-import static msl.qa.tests.TestData.BLANK_FIELD;
-import static msl.qa.tests.TestData.PASSWORD;
-import static msl.qa.tests.TestData.TOKEN_PREFIX;
-import static msl.qa.tests.TestData.USERNAME;
-import static msl.qa.tests.TestData.WRONG_CREDLS_DETAIL;
-import static msl.qa.tests.TestData.WRONG_PASSWORD;
+import static msl.qa.tests.TestData.*;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @Feature("[API] Login")
