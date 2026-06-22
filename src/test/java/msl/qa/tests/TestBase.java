@@ -53,9 +53,4 @@ public class TestBase {
     return api.auth.extractAccessToken(new RegisterReqModel(td.username(), td.password()));
   }
 
-  protected CreateClubRespModel createClubByNewUser() {
-    String accessToken = registerAndLoginNewUser();
-    return api.clubs.createClub(accessToken, td.createClubData());
-  }
-
 }

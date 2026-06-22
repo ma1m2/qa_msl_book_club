@@ -1,26 +1,30 @@
 package msl.qa.tests.api.club;
 
+import io.qameta.allure.Feature;
 import msl.qa.models.clubs.CreateClubReqModel;
 import msl.qa.models.clubs.CreateClubRespModel;
 import msl.qa.models.clubs.PaginatedClubListRespModel;
 import msl.qa.models.clubs.PatchClubReqModel;
-import msl.qa.models.register.RegisterReqModel;
 import msl.qa.tests.TestBase;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 
 import java.util.Map;
 
-import static msl.qa.tests.TestData.PASSWORD;
 import static org.assertj.core.api.Assertions.assertThat;
 
+@Feature("[API] Club")
+@Tag("api")
 public class ClubsTests extends TestBase {
-
-  RegisterReqModel loginData = new RegisterReqModel(td.username(), PASSWORD);
+  String accessToken;
+  Integer clubId;
 
   //-----------------------------CREATE----------------------------
   @Test
+  @DisplayName("[API] Successful creating Club")
   public void createClubSuccessTest() {
-    String accessToken = registerAndLoginNewUser();
+    accessToken = registerAndLoginNewUser();
     CreateClubReqModel createData = td.createClubData();
 
     CreateClubRespModel createdClub = api.clubs.createClub(accessToken, createData);
@@ -39,28 +43,32 @@ public class ClubsTests extends TestBase {
 
   //-----------------------------READ----------------------------
   @Test
+  @DisplayName("[API] GET all Clubs")
   public void getClubsListTest() {
-    String token = api.auth.extractAccessToken(loginData);
 
-    PaginatedClubListRespModel clubs = api.clubs.getClubs(token);
+    accessToken = registerAndLoginNewUser();
+
+    PaginatedClubListRespModel clubs = api.clubs.getClubs(accessToken);
 
     assertThat(clubs.count()).isGreaterThanOrEqualTo(1);
     assertThat(clubs.results()).size().isGreaterThanOrEqualTo(1);
   }
 
   @Test
+  @DisplayName("[API] GET Club List With Query Params")
   public void getClubsListWithQueryParamsTest() {
-    String token = api.auth.extractAccessToken(loginData);
+    accessToken = registerAndLoginNewUser();
 
-    PaginatedClubListRespModel clubs = api.clubs.getClubs(token,
-            Map.of("page_size", 1,"page", 100));
+    PaginatedClubListRespModel clubs = api.clubs.getClubs(accessToken,
+            Map.of("page_size", 10,"page", 1));
 
     assertThat(clubs.count()).isGreaterThan(1);
-    assertThat(clubs.results().size()).isLessThanOrEqualTo(1);
+    assertThat(clubs.results().size()).isGreaterThan(1);
   }
 
   //-----------------------------UPDATE----------------------------
   @Test
+  @DisplayName("[API] PATCH Club Description And TelegramChatLink Successfully")
   public void patchClubDescriptionAndTelegramChatLinkSuccessTest() {
     String accessToken = registerAndLoginNewUser();
     CreateClubRespModel createdClub = api.clubs.createClub(accessToken, td.createClubData());
@@ -73,7 +81,8 @@ public class ClubsTests extends TestBase {
             td.telegramChatLink()
     );
 
-    CreateClubRespModel updatedClub = api.clubs.patchClub(accessToken, createdClub.id(), patchData);
+    clubId = createdClub.id();
+    CreateClubRespModel updatedClub = api.clubs.patchClub(accessToken, clubId, patchData);
 
     assertThat(updatedClub.description()).isEqualTo(patchData.description());
     assertThat(updatedClub.telegramChatLink()).isEqualTo(patchData.telegramChatLink());
@@ -82,6 +91,7 @@ public class ClubsTests extends TestBase {
   }
 
   @Test
+  @DisplayName("[API] PUT Club Change Description Successfully")
   public void putClubChangeOnlyDescriptionSuccessTest() {
     String accessToken = registerAndLoginNewUser();
     CreateClubRespModel createdClub = api.clubs.createClub(accessToken, td.createClubData());
@@ -90,13 +100,14 @@ public class ClubsTests extends TestBase {
             createdClub.bookTitle(),
             createdClub.bookAuthors(),
             createdClub.publicationYear(),
-            td.description(),
+            td.updatedDescription(),
             createdClub.telegramChatLink()
     );
 
-    CreateClubRespModel updatedClub = api.clubs.putClub(accessToken, createdClub.id(), putData);
+    clubId = createdClub.id();
+    CreateClubRespModel updatedClub = api.clubs.putClub(accessToken, clubId, putData);
 
-    assertThat(updatedClub.description()).isEqualTo(td.newDescription());
+    assertThat(updatedClub.description()).isEqualTo(td.updatedDescription());
     assertThat(updatedClub.telegramChatLink()).isEqualTo(createdClub.telegramChatLink());
     assertThat(updatedClub.bookTitle()).isEqualTo(createdClub.bookTitle());
     assertThat(updatedClub.bookAuthors()).isEqualTo(createdClub.bookAuthors());
@@ -105,10 +116,12 @@ public class ClubsTests extends TestBase {
 
   //-----------------------------DELETE----------------------------
   @Test
+  @DisplayName("[API] DELETE Club Successfully")
   public void deleteClubSuccessTest() {
     String accessToken = registerAndLoginNewUser();
     CreateClubRespModel createdClub = api.clubs.createClub(accessToken, td.createClubData());
-    api.clubs.deleteClub(accessToken, createdClub.id());
+    clubId = createdClub.id();
+    api.clubs.deleteClub(accessToken, clubId);
   }
 
 }

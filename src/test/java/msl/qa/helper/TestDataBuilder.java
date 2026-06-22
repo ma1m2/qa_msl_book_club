@@ -19,7 +19,7 @@ public class TestDataBuilder {
   private final String bookAuthors;
   private final Integer publicationYear;
   private final String description;
-  private final String newDescription;
+  private final String udatedDescription;
   private final String telegramChatLink;
   private final RegisterReqModel registrationData;
   private final RegisterReqModel loginData;
@@ -37,7 +37,7 @@ public class TestDataBuilder {
     this.bookAuthors = faker.book().author() + suffix;
     this.publicationYear = faker.number().numberBetween(1950, 2025);
     this.description = faker.lorem().sentence(10);
-    this.newDescription = faker.lorem().sentence(9);
+    this.udatedDescription = faker.lorem().sentence(9);
     this.telegramChatLink = TELEGRAM_CHAT_LINK;//"https://t.me/" + faker.regexify("[a-z]{10}");
     this.registrationData = new RegisterReqModel(username, password);
     this.loginData = registrationData;
@@ -90,8 +90,8 @@ public class TestDataBuilder {
     return description;
   }
 
-  public String newDescription() {
-    return newDescription;
+  public String updatedDescription() {
+    return udatedDescription;
   }
 
   public String telegramChatLink() {
