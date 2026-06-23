@@ -1,8 +1,6 @@
-package msl.qa.models.review;
+package msl.qa.models.clubs.review;
 
-import java.time.Instant;
-
-public record ReviewRespModel(
+public record BookReviewRespModel(
         Integer id,
         Integer club,
         UserReviewRespModel user,
@@ -10,5 +8,7 @@ public record ReviewRespModel(
         Integer assessment,
         Integer readPages,
         String created,
-        String modified) {
+        String modified
+) {
 }
+

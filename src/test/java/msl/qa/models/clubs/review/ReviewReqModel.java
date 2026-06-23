@@ -1,4 +1,4 @@
-package msl.qa.models.review;
+package msl.qa.models.clubs.review;
 
 public record ReviewReqModel(Integer club,
                              String review,

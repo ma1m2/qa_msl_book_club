@@ -1,5 +1,7 @@
 package msl.qa.models.clubs;
 
+import msl.qa.models.clubs.review.BookReviewRespModel;
+
 import java.util.List;
 
 public record CreateClubRespModel(
