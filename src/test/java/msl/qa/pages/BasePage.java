@@ -5,7 +5,7 @@ import msl.qa.api.ApiClient;
 import msl.qa.models.localstorage.LocalStorageAuthReqModel;
 import msl.qa.models.login.LoginRespModel;
 import msl.qa.models.register.RegisterReqModel;
-import msl.qa.models.register.RegistrationRespModel;
+import msl.qa.models.register.RegisterRespModel;
 import msl.qa.pages.components.Header;
 
 import static com.codeborne.selenide.Selenide.localStorage;
@@ -20,7 +20,7 @@ public class BasePage {
   public LoginRespModel openMainPageWithNewUser(String username, String password) {
     RegisterReqModel loginData = new RegisterReqModel(username, password);
     //register user
-    RegistrationRespModel user = api.users.register(loginData);
+    RegisterRespModel user = api.users.register(loginData);
     //login user
     LoginRespModel loginResp = api.auth.successfulLogin(loginData);
     //create localStorage

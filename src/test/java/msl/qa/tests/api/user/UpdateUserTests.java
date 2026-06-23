@@ -2,7 +2,7 @@ package msl.qa.tests.api.user;
 
 import io.qameta.allure.Feature;
 import msl.qa.models.login.LoginRespModel;
-import msl.qa.models.register.RegistrationRespModel;
+import msl.qa.models.register.RegisterRespModel;
 import msl.qa.models.user.PatchUserReqModel;
 import msl.qa.models.user.UnauthorisedUserRespModel;
 import msl.qa.models.user.UpdateRespModel;
@@ -36,7 +36,7 @@ public class UpdateUserTests extends TestBase {
   public void updateUserPutTest() {
     step("Update user", () -> {
 
-      RegistrationRespModel respModel = api.users.register(td.registrationData());
+      RegisterRespModel respModel = api.users.register(td.registrationData());
 
       LoginRespModel loginResp = api.auth.successfulLogin(td.loginData());
 

@@ -3,7 +3,7 @@ package msl.qa.tests.api.without_spec;
 import io.restassured.http.ContentType;
 import msl.qa.models.register.ExistingUser400RespModel;
 import msl.qa.models.register.RegisterReqModel;
-import msl.qa.models.register.RegistrationRespModel;
+import msl.qa.models.register.RegisterRespModel;
 import msl.qa.tests.TestBase;
 import net.datafaker.Faker;
 import org.junit.jupiter.api.BeforeEach;
@@ -38,7 +38,7 @@ public class RegistrationWithoutSpecTests extends TestBase {
   @Test
   public void successfulRegistrationTest() {
 
-    RegistrationRespModel respModel = given()
+    RegisterRespModel respModel = given()
             .log().all()
             .body(registrationData)
             .contentType(ContentType.JSON)
@@ -52,7 +52,7 @@ public class RegistrationWithoutSpecTests extends TestBase {
             .body("id", notNullValue())
             .body("username", notNullValue())
             .body("remoteAddr", notNullValue())
-            .extract().as(RegistrationRespModel.class);
+            .extract().as(RegisterRespModel.class);
 
     assertThat(respModel.username()).isEqualTo(username);
     assertThat(respModel.id()).isGreaterThan(0);

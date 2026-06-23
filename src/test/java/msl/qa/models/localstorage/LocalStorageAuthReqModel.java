@@ -1,12 +1,12 @@
 package msl.qa.models.localstorage;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import msl.qa.models.register.RegistrationRespModel;
+import msl.qa.models.register.RegisterRespModel;
 import tools.jackson.core.JacksonException;
 import tools.jackson.databind.json.JsonMapper;
 
 public record LocalStorageAuthReqModel(
-        @JsonProperty("user") RegistrationRespModel user,
+        @JsonProperty("user") RegisterRespModel user,
         @JsonProperty("accessToken") String access,
         @JsonProperty("refreshToken") String refresh,
         @JsonProperty("isAuthenticated") boolean authenticated

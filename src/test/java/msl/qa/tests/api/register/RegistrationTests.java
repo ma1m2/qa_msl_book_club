@@ -4,7 +4,7 @@ import io.qameta.allure.Feature;
 import msl.qa.models.register.DetailRespModel;
 import msl.qa.models.register.ExistingUser400RespModel;
 import msl.qa.models.register.RegisterReqModel;
-import msl.qa.models.register.RegistrationRespModel;
+import msl.qa.models.register.RegisterRespModel;
 import msl.qa.tests.TestBase;
 import net.datafaker.Faker;
 import org.junit.jupiter.api.Disabled;
@@ -25,7 +25,7 @@ public class RegistrationTests extends TestBase {
   @Test
   @DisplayName("[API] Successful Registration 201")
   public void successfulRegistrationTest() {
-      final RegistrationRespModel respModel = api.users.register(td.registrationData());
+      final RegisterRespModel respModel = api.users.register(td.registrationData());
 
       assertThat(respModel.username()).isEqualTo(td.username());
       assertThat(respModel.id()).isGreaterThan(0);

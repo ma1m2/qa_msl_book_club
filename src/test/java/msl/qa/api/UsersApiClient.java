@@ -4,7 +4,7 @@ import io.qameta.allure.Step;
 import msl.qa.models.register.DetailRespModel;
 import msl.qa.models.register.ExistingUser400RespModel;
 import msl.qa.models.register.RegisterReqModel;
-import msl.qa.models.register.RegistrationRespModel;
+import msl.qa.models.register.RegisterRespModel;
 import msl.qa.models.user.DetailCodeRespModel;
 import msl.qa.models.user.PatchUserReqModel;
 import msl.qa.models.user.UnauthorisedUserRespModel;
@@ -31,14 +31,14 @@ public class UsersApiClient {
 
   //-----------------------------CREATE----------------------------
   @Step("[API] Successful register new user")
-  public RegistrationRespModel register(RegisterReqModel registrationData) {
+  public RegisterRespModel register(RegisterReqModel registrationData) {
     return given(registerReqSpec)
             .body(registrationData)
             .when()
             .post(REGISTER_URL)
             .then()
             .spec(registerRespSpec)
-            .extract().as(RegistrationRespModel.class);
+            .extract().as(RegisterRespModel.class);
   }
 
   @Step("[API] Have error trying register existing user")

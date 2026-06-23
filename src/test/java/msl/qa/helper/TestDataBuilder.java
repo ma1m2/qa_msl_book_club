@@ -4,7 +4,8 @@ import msl.qa.models.clubs.CreateClubReqModel;
 import msl.qa.models.register.RegisterReqModel;
 import net.datafaker.Faker;
 
-import static msl.qa.tests.TestData.*;
+import static msl.qa.tests.TestData.PASSWORD;
+import static msl.qa.tests.TestData.TELEGRAM_CHAT_LINK;
 
 public class TestDataBuilder {
   Faker faker = new Faker();
@@ -22,6 +23,11 @@ public class TestDataBuilder {
   private final String udatedDescription;
   private final String telegramChatLink;
   private final String updatedTelegramChatLink;
+
+  private final String review;
+  private final Integer assessment;
+  private final Integer readPages;
+
   private final RegisterReqModel registrationData;
   private final RegisterReqModel loginData;
   private final CreateClubReqModel createClubData;
@@ -41,6 +47,11 @@ public class TestDataBuilder {
     this.udatedDescription = faker.lorem().sentence(9);
     this.telegramChatLink = TELEGRAM_CHAT_LINK;
     this.updatedTelegramChatLink = "https://t.me/" + faker.regexify("[a-z]{10}");
+
+    this.review = faker.lorem().sentence(10);
+    this.assessment = faker.number().numberBetween(1, 5);
+    this.readPages = faker.number().numberBetween(1, 1000);
+
     this.registrationData = new RegisterReqModel(username, password);
     this.loginData = registrationData;
     this.createClubData = new CreateClubReqModel(
@@ -102,6 +113,18 @@ public class TestDataBuilder {
 
   public String updatedTelegramChatLink() {
     return updatedTelegramChatLink;
+  }
+
+  public String review() {
+    return review;
+  }
+
+  public Integer assessment() {
+    return assessment;
+  }
+
+  public Integer readPages() {
+    return readPages;
   }
 
   public RegisterReqModel registrationData() {

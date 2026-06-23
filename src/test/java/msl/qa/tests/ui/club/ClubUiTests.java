@@ -11,8 +11,7 @@ import msl.qa.models.clubs.CreateClubRespModel;
 import msl.qa.models.localstorage.LocalStorageAuthReqModel;
 import msl.qa.models.login.LoginRespModel;
 import msl.qa.models.register.RegisterReqModel;
-import msl.qa.models.register.RegistrationRespModel;
-import msl.qa.pages.MainPage;
+import msl.qa.models.register.RegisterRespModel;
 import msl.qa.tests.TestBase;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
@@ -119,7 +118,7 @@ public class ClubUiTests extends TestBase {
 
     step("Authorized app launch with API token from localStorage", () -> {
       //register user
-      RegistrationRespModel user = step("[API] Register user", () ->
+      RegisterRespModel user = step("[API] Register user", () ->
               api.users.register(new RegisterReqModel(td.username(), td.password())));
 
       //login user
