@@ -32,8 +32,6 @@ import static io.qameta.allure.Allure.step;
 @Owner("SvetaQa")
 public class ClubUiTests extends TestBase {
 
-  TestDataBuilder td2 = new TestDataBuilder();
-
   Integer clubId;
   String accessToken;
 
@@ -45,14 +43,14 @@ public class ClubUiTests extends TestBase {
   @Severity(SeverityLevel.CRITICAL)
   public void createClub(){
     step("[UI] Open app with API token in localStorage, create club by API", () -> {
-      LoginRespModel loginResp = clubPage.openMainPageWithNewUser(td.username(), td.password());
+      LoginRespModel loginResp = clubsPage.openClubsPageWithNewUser(td.username(), td.password());
       //create club
       CreateClubRespModel createdClub = api.clubs.createClub(loginResp.access(), td.createClubData());
       clubId = createdClub.id();
       });
 
     step("[UI] Open club by Id and verify book title and year", () -> {
-      mainPage
+      clubsPage
               .openClubById(clubId)
               .assertClubIsExist(td.bookTitle(), td.bookAuthors(), td.publicationYear(), td.description());
     });
@@ -63,7 +61,7 @@ public class ClubUiTests extends TestBase {
   @Severity(SeverityLevel.NORMAL)
   public void updateClub(){
     step("[UI] Open app with API token in localStorage, create club by API", () -> {
-      LoginRespModel loginResp = clubPage.openMainPageWithNewUser(td.username(), td.password());
+      LoginRespModel loginResp = clubsPage.openClubsPageWithNewUser(td.username(), td.password());
       //create club
       accessToken = loginResp.access();
       CreateClubRespModel createdClub = api.clubs.createClub(accessToken, td.createClubData());
@@ -71,7 +69,7 @@ public class ClubUiTests extends TestBase {
     });
 
     step("[UI] Open club by Id and verify book content", () -> {
-      mainPage
+      clubsPage
               .openClubById(clubId)
               .assertClubIsExist(td.bookTitle(), td.bookAuthors(), td.publicationYear(), td.description());
     });
@@ -80,7 +78,7 @@ public class ClubUiTests extends TestBase {
     step("[UI] Refresh club page", Selenide::refresh);
 
     step("[UI] Open club by Id and verify book content", () -> {
-      mainPage
+      clubsPage
               .openClubById(clubId)
               .assertClubIsExist(td2.bookTitle(), td2.bookAuthors(), td2.publicationYear(), td2.description());
     });
@@ -91,7 +89,7 @@ public class ClubUiTests extends TestBase {
   @Severity(SeverityLevel.NORMAL)
   public void deleteClub(){
     step("[UI] Open app with API token in localStorage, create club by API", () -> {
-      LoginRespModel loginResp = clubPage.openMainPageWithNewUser(td.username(), td.password());
+      LoginRespModel loginResp = clubsPage.openClubsPageWithNewUser(td.username(), td.password());
       //create club
       accessToken = loginResp.access();
       CreateClubRespModel createdClub = api.clubs.createClub(accessToken, td.createClubData());
@@ -99,14 +97,14 @@ public class ClubUiTests extends TestBase {
     });
 
     step("[UI] Open club by Id and verify book content", () -> {
-      mainPage
+      clubsPage
               .openClubById(clubId)
               .assertClubIsExist(td.bookTitle(), td.bookAuthors(), td.publicationYear(), td.description());
     });
 
     api.clubs.deleteClub(accessToken, clubId);
     step("[UI] Refresh club page", Selenide::refresh);
-    mainPage.openClubById(clubId).checkDeletedClub();
+    clubsPage.openClubById(clubId).checkDeletedClub();
   }
 
   @Test
@@ -136,14 +134,14 @@ public class ClubUiTests extends TestBase {
               new LocalStorageAuthReqModel(user, loginResp.access(), loginResp.refresh(), true).toJson());
 
       step("[UI] Open app with API token in localStorage and verify user is authorized", () -> {
-        mainPage.openWithAuth(localStorageAuthBody);
-        mainPage.authorisedUserOnMainPage();
+        clubsPage.openWithAuth(localStorageAuthBody);
+        clubsPage.authorisedUserOnMainPage();
       });
     });
 
     //wrong leaving club
     step("[UI] Open owner's club and try to leave it", () -> {
-      mainPage.openClubById(clubId)
+      clubsPage.openClubById(clubId)
               .leaveOwnresClub();
     });
   }

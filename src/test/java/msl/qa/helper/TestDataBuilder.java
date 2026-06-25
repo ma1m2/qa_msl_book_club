@@ -1,6 +1,7 @@
 package msl.qa.helper;
 
 import msl.qa.models.clubs.CreateClubReqModel;
+import msl.qa.models.clubs.review.ReviewReqModel;
 import msl.qa.models.register.RegisterReqModel;
 import net.datafaker.Faker;
 

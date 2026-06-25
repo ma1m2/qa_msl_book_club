@@ -14,11 +14,11 @@ public class LoginPage extends BasePage {
   private final SelenideElement loginButton = $("[data-testid=submit-button]");
 
   @Step("Login with name '{username}' and password '{password}'")
-  public MainPage login(String username, String password) {
+  public ClubsPage login(String username, String password) {
     usernameInput.setValue(username);
     passwordInput.setValue(password);
     loginButton.click();
-    return new MainPage();
+    return new ClubsPage();
   }
 
   @Step("[UI] Verify logout redirects to login page")

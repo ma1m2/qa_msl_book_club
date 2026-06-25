@@ -1,7 +1,7 @@
 package msl.qa.tests.api.register;
 
 import io.qameta.allure.Feature;
-import msl.qa.models.register.DetailRespModel;
+import msl.qa.models.DetailRespModel;
 import msl.qa.models.register.ExistingUser400RespModel;
 import msl.qa.models.register.RegisterReqModel;
 import msl.qa.models.register.RegisterRespModel;

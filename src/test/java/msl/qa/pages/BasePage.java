@@ -17,7 +17,7 @@ public class BasePage {
   protected ApiClient api = new ApiClient();
 
   @Step("[UI] User registration[API], session setup[localStorage], and page opening[UI]")
-  public LoginRespModel openMainPageWithNewUser(String username, String password) {
+  public LoginRespModel openClubsPageWithNewUser(String username, String password) {
     RegisterReqModel loginData = new RegisterReqModel(username, password);
     //register user
     RegisterRespModel user = api.users.register(loginData);

@@ -1,14 +1,21 @@
 package msl.qa.pages;
 
+import com.codeborne.selenide.SelenideElement;
 import io.qameta.allure.Step;
+import msl.qa.pages.components.ClubCard;
 import msl.qa.pages.components.Header;
 
 import static com.codeborne.selenide.Condition.text;
 import static com.codeborne.selenide.Condition.visible;
+import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.Selenide.localStorage;
 import static com.codeborne.selenide.Selenide.open;
 
-public class MainPage extends BasePage{
+public class ClubsPage extends BasePage{
+
+  private final SelenideElement clubsList = $(".clubs-list");
+
+  ClubCard clubCard = new ClubCard();
 
   @Step("Verify successful authorization")
   public void authorisedUserOnMainPage() {

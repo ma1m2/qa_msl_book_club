@@ -1,6 +1,6 @@
 package msl.qa.models.clubs.review;
 
-public record BookReviewRespModel(
+public record ReviewRespModel(
         Integer id,
         Integer club,
         UserReviewRespModel user,

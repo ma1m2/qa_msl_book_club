@@ -1,4 +1,4 @@
-package msl.qa.models.register;
+package msl.qa.models;
 
 public record DetailRespModel(
         String detail) {

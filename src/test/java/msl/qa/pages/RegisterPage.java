@@ -35,9 +35,9 @@ public class RegisterPage {
   }
 
   @Step("Submit Registration")
-  public MainPage submitRegistration() {
+  public ClubsPage submitRegistration() {
     signupBtn.click();
-    return new  MainPage();
+    return new ClubsPage();
   }
 
 }

@@ -19,7 +19,7 @@ public class LoginUiTests extends TestBase {
   public void successfulLoginTest() {
     api.users.register(td.registrationData());
     open("");
-    mainPage.header()
+    clubsPage.header()
             .doLogin()
             .login(td.username(), td.password())
             .authorisedUserOnMainPage();

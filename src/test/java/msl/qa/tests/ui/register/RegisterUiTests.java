@@ -2,7 +2,7 @@ package msl.qa.tests.ui.register;
 
 import io.qameta.allure.Feature;
 import io.qameta.allure.Owner;
-import msl.qa.pages.MainPage;
+import msl.qa.pages.ClubsPage;
 import msl.qa.tests.TestBase;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Tag;
@@ -14,7 +14,7 @@ import static com.codeborne.selenide.Selenide.*;
 @Tag("ui")
 public class RegisterUiTests extends TestBase {
 
-  MainPage mainPage = new MainPage();
+  ClubsPage clubsPage = new ClubsPage();
 
   @Test
   @Tag("positive")
@@ -22,7 +22,7 @@ public class RegisterUiTests extends TestBase {
   @DisplayName("[UI] Successful Registration by UI")
   public void successfulRegistrationUi() {
     open("");
-    mainPage.header()
+    clubsPage.header()
             .doRegister()
             .fillRegisterForm(td.username(),td.password())
             .submitRegistration()
