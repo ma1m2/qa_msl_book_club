@@ -29,6 +29,14 @@ public class ClubsSpec {
           .expectBody("owner", notNullValue())
           .build();
 
+  public static ResponseSpecification getClubRespSpec = new ResponseSpecBuilder()
+          .log(LogDetail.ALL)
+          .expectStatusCode(200)
+          .expectBody(matchesJsonSchemaInClasspath("schemas/clubs/create_club_response_schema.json"))
+          .expectBody("id", notNullValue())
+          .expectBody("owner", notNullValue())
+          .build();
+
   public static ResponseSpecification updateClubRespSpec = new ResponseSpecBuilder()
           .log(LogDetail.ALL)
           .expectStatusCode(200)

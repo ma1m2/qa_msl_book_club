@@ -1,31 +1,21 @@
 package msl.qa.api;
 
 import io.qameta.allure.Step;
-import msl.qa.models.login.EmptyPasswordLoginRespModel;
-import msl.qa.models.login.EmptyUserLoginRespModel;
-import msl.qa.models.login.LoginReqModel;
-import msl.qa.models.login.LoginRespModel;
-import msl.qa.models.login.WrongCredlsLoginRespModel;
-import msl.qa.models.logout.LogoutReqModel;
-import msl.qa.models.logout.WrongTokenLogoutRespModel;
+import msl.qa.models.login.*;
+import msl.qa.models.logout.*;
+import msl.qa.models.register.RegisterReqModel;
 
 import static io.restassured.RestAssured.given;
-import static msl.qa.spec.login.LoginSpec.emptyPasswordLoginRespSpec;
-import static msl.qa.spec.login.LoginSpec.emptyUserLoginRespSpec;
-import static msl.qa.spec.login.LoginSpec.loginReqSpec;
-import static msl.qa.spec.login.LoginSpec.successLoginRespSpec;
-import static msl.qa.spec.login.LoginSpec.wrongCredlsLoginRespSpec;
-import static msl.qa.spec.logout.LogoutSpec.logoutReqSpec;
-import static msl.qa.spec.logout.LogoutSpec.successLogoutRespSpec;
-import static msl.qa.spec.logout.LogoutSpec.wrongTokenLogoutRespSpec;
+import static msl.qa.spec.login.LoginSpec.*;
+import static msl.qa.spec.logout.LogoutSpec.*;
 
 public class AuthApiClient {
   private static final  String LOGIN_URL = "/auth/token/";
   private static final  String LOGOUT_URL = "/auth/logout/";
 
   //------------------LOGIN---------------------------
-  @Step("Successful login")
-  public LoginRespModel successfulLogin(LoginReqModel loginData) {
+  @Step("[API] Successful login")
+  public LoginRespModel successfulLogin(RegisterReqModel loginData) {
     return given(loginReqSpec)
             .body(loginData)
             .when()
@@ -35,8 +25,8 @@ public class AuthApiClient {
             .extract().as(LoginRespModel.class);
   }
 
-  @Step("Check that trim function cut spaces in the end and in the beginning")
-  public LoginRespModel checkTrimFunction(LoginReqModel loginDataForTrim) {
+  @Step("[API] Trim removes edge spaces")
+  public LoginRespModel checkTrimFunction(RegisterReqModel loginDataForTrim) {
     return given(loginReqSpec)
             .body(loginDataForTrim)
             .when()
@@ -46,8 +36,8 @@ public class AuthApiClient {
             .extract().as(LoginRespModel.class);
   }
 
-  @Step("Change username from lowCase to upperCase")
-  public WrongCredlsLoginRespModel upperCaseUser(LoginReqModel loginDataForTrim) {
+  @Step("[API] Change username from lowCase to upperCase")
+  public WrongCredlsLoginRespModel upperCaseUser(RegisterReqModel loginDataForTrim) {
     return given(loginReqSpec)
             .body(loginDataForTrim)
             .when()
@@ -57,8 +47,8 @@ public class AuthApiClient {
             .extract().as(WrongCredlsLoginRespModel.class);
   }
 
-  @Step("Login with wrong password")
-  public WrongCredlsLoginRespModel wrongPassword (LoginReqModel wrongPasswordData){
+  @Step("[API] Login with wrong password")
+  public WrongCredlsLoginRespModel wrongPassword (RegisterReqModel wrongPasswordData){
     return given(loginReqSpec)
             .body(wrongPasswordData)
             .when()
@@ -68,8 +58,8 @@ public class AuthApiClient {
             .extract().as(WrongCredlsLoginRespModel.class);
   }
 
-  @Step("Password is empty string")
-  public EmptyPasswordLoginRespModel emptyPassword (LoginReqModel emptyPasswordData){
+  @Step("[API] Password is empty string")
+  public EmptyPasswordLoginRespModel emptyPassword (RegisterReqModel emptyPasswordData){
     return given(loginReqSpec)
             .body(emptyPasswordData)
             .when()
@@ -79,8 +69,8 @@ public class AuthApiClient {
             .extract().as(EmptyPasswordLoginRespModel.class);
   }
 
-  @Step("Username is empty string")
-  public EmptyUserLoginRespModel emptyUser (LoginReqModel emptyUserData){
+  @Step("[API] Username is empty string")
+  public EmptyUserLoginRespModel emptyUser (RegisterReqModel emptyUserData){
     return given(loginReqSpec)
             .body(emptyUserData)
             .when()
@@ -90,8 +80,8 @@ public class AuthApiClient {
             .extract().as(EmptyUserLoginRespModel.class);
   }
 
-  @Step("Login and get refresh-token")
-  public String extractRefreshToken(LoginReqModel loginData){
+  @Step("[API] Login and get refresh-token")
+  public String extractRefreshToken(RegisterReqModel loginData){
     return given(loginReqSpec)
             .body(loginData)
             .when()
@@ -101,8 +91,8 @@ public class AuthApiClient {
             .extract().path("refresh");
   }
 
-  @Step("Login and get access-token")
-  public String extractAccessToken(LoginReqModel loginData){
+  @Step("[API] Login and get access-token")
+  public String extractAccessToken(RegisterReqModel loginData){
     return given(loginReqSpec)
             .body(loginData)
             .when()
@@ -113,7 +103,7 @@ public class AuthApiClient {
   }
 
   //------------------LOGOUT---------------------------
-  @Step("Logout with refresh-token")
+  @Step("[API] Logout with refresh-token")
   public void logout(LogoutReqModel logoutData) {
     given(logoutReqSpec)
             .body(logoutData)
@@ -123,7 +113,7 @@ public class AuthApiClient {
             .spec(successLogoutRespSpec);
   }
 
-  @Step("Logout with wrong-token")
+  @Step("[API] Logout with wrong-token")
   public WrongTokenLogoutRespModel logoutWithWrongToken(LogoutReqModel logoutData) {
     return given(logoutReqSpec)
             .body(logoutData)

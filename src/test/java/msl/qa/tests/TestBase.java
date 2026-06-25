@@ -1,79 +1,95 @@
 package msl.qa.tests;
 
+import com.codeborne.selenide.Configuration;
+import com.codeborne.selenide.logevents.SelenideLogger;
+import io.qameta.allure.Step;
+import io.qameta.allure.selenide.AllureSelenide;
 import io.restassured.RestAssured;
+import msl.qa.allure.Attach;
 import msl.qa.api.ApiClient;
-import msl.qa.models.clubs.CreateClubReqModel;
+import msl.qa.helper.TestDataBuilder;
 import msl.qa.models.clubs.CreateClubRespModel;
-import msl.qa.models.login.LoginReqModel;
-import msl.qa.models.register.RegistrationReqModel;
-import net.datafaker.Faker;
+import msl.qa.models.clubs.review.ReviewRespModel;
+import msl.qa.models.clubs.review.ReviewReqModel;
+import msl.qa.models.register.RegisterReqModel;
+import msl.qa.models.register.RegisterRespModel;
+import msl.qa.pages.ClubsPage;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 
-import java.time.LocalDate;
-import java.time.ZoneOffset;
-
-import static msl.qa.tests.TestData.PASSWORD;
+import static com.codeborne.selenide.Selenide.closeWebDriver;
+import static com.codeborne.selenide.Selenide.webdriver;
 
 public class TestBase {
 
   protected static final ApiClient api = new ApiClient();
-  protected String username;
-  protected String password;
-  protected String firstName;
-  protected String updatedFirstName;
-  protected String lastName;
-  protected String email;
-  protected String token;
-  protected String description;
-  protected String newDescription;
-  protected String telegramChatLink;
-  protected RegistrationReqModel registrationData;
-  protected LoginReqModel loginData;
-  protected CreateClubReqModel createClubData;
+
+  protected ClubsPage clubsPage = new ClubsPage();
+
+  protected TestDataBuilder td;
+  protected TestDataBuilder td2;
 
   @BeforeAll
   public static void setUp() {
-    RestAssured.baseURI = "https://book-club.qa.guru";
+    RestAssured.baseURI = "http://localhost:8100";
     RestAssured.basePath = "/api/v1";
+    Configuration.baseUrl = "http://localhost:8100";
+    Configuration.browserSize = "1920x1080";
   }
 
   @BeforeEach
-  public void prepareTestData() {
-    Faker faker = new Faker();
-    username = faker.name().firstName() + "sssss";
-    password = PASSWORD;
-    firstName = faker.name().firstName();
-    updatedFirstName = faker.name().firstName();
-    lastName = faker.name().lastName();
-    email = faker.internet().emailAddress();
-    description = faker.lorem().sentence(8);
-    newDescription = faker.lorem().sentence(9);
-    telegramChatLink = "https://t.me/" + faker.regexify("[a-z]{10}");
-
-    int publicationTimestampSeconds = (int) LocalDate
-            .of(faker.number().numberBetween(1970, 2038), 1, 1)
-            .atStartOfDay()
-            .toEpochSecond(ZoneOffset.UTC);
-    createClubData = new CreateClubReqModel(
-            "QA Club " + faker.number().digits(6),
-            faker.book().author(),
-            publicationTimestampSeconds,
-            faker.lorem().sentence(10),
-            "https://t.me/" + faker.regexify("[a-z]{10}")
-    );
+  public void prepareTestDataAndAddListener() {
+    SelenideLogger.addListener("AllureSelenide", new AllureSelenide());
+    td = new TestDataBuilder();
+    td2 = new TestDataBuilder();
   }
 
+  @AfterEach
+  void addAttachments() {
+    if(webdriver().driver().hasWebDriverStarted()) {
+      Attach.screenshotAs("Last screenshot");
+      Attach.pageSource();
+      Attach.browserConsoleLogs();
+//          Attach.addVideo();
+      closeWebDriver();
+    }
+  }
+
+  @Step("[API] Register and login new user")
   protected String registerAndLoginNewUser() {
-    registrationData = new RegistrationReqModel(username, password);
-    api.users.register(registrationData);
-    return api.auth.extractAccessToken(new LoginReqModel(username, password));
+    api.users.register(td.registrationData());
+    return api.auth.extractAccessToken(new RegisterReqModel(td.username(), td.password()));
   }
 
-  protected CreateClubRespModel createClubByNewUser() {
-    String accessToken = registerAndLoginNewUser();
-    return api.clubs.createClub(accessToken, createClubData);
+  @Step("[API] Create Club")
+  protected CreateClubRespModel createClub(String token){
+    return api.clubs.createClub(token, td.createClubData());
   }
+
+  @Step("[API] Create Review for Owner Club")
+  protected ReviewRespModel createReviewOwnerClub(String token){
+    //create club
+    CreateClubRespModel createdClub = api.clubs.createClub(token, td.createClubData());
+    //create review and return
+    ReviewReqModel reviewReqModel = new ReviewReqModel(createdClub.id(),td.review(),td.assessment(),td.readPages());
+
+    return api.review.createReview(token, reviewReqModel);
+  }
+
+  @Step("[API] Create Review For Second User Club")
+  protected ReviewRespModel createReviewForSecondUserClubClub(String token){
+    //register second user
+    RegisterRespModel secondUser = api.users.register(td2.registrationData());
+    //login second user
+    String secondAccessToken = api.auth.extractAccessToken(td2.loginData());
+    //create club for second user
+    CreateClubRespModel createdClub = api.clubs.createClub(secondAccessToken, td2.createClubData());
+    //create review and return
+    ReviewReqModel reviewReqModel = new ReviewReqModel(createdClub.id(),td.review(),td.assessment(),td.readPages());
+
+    return api.review.createReview(token, reviewReqModel);
+  }
+
 
 }

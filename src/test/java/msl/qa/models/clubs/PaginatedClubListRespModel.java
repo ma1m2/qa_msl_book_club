@@ -6,7 +6,7 @@ public record PaginatedClubListRespModel(
         Integer count,
         String next,
         String previous,
-        List<ClubRespModel> results
+        List<CreateClubRespModel> results
 ) {
 }
 

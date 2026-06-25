@@ -27,4 +27,11 @@ public class TestData {
   //-------------DELETE-------------------
   public static final String USER_NOT_FOUND_DETAIL = "User not found";
   public static final String USER_NOT_FOUND_CODE = "user_not_found";
+
+  //-------------CREATE CLUB----------------------
+  public static final String TELEGRAM_CHAT_LINK = "https://t.me/Sveta2607bot";
+
+  //-------------REVIEW----------------------
+  public static final String NO_BOOK_REVIEW = "No BookReview matches the given query.";
+  public static final String NO_PERMISSION = "You do not have permission to perform this action.";
 }

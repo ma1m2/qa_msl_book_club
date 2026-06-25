@@ -1,10 +1,10 @@
 package msl.qa.api;
 
 import io.qameta.allure.Step;
-import msl.qa.models.register.DetailRespModel;
+import msl.qa.models.DetailRespModel;
 import msl.qa.models.register.ExistingUser400RespModel;
-import msl.qa.models.register.RegistrationReqModel;
-import msl.qa.models.register.RegistrationRespModel;
+import msl.qa.models.register.RegisterReqModel;
+import msl.qa.models.register.RegisterRespModel;
 import msl.qa.models.user.DetailCodeRespModel;
 import msl.qa.models.user.PatchUserReqModel;
 import msl.qa.models.user.UnauthorisedUserRespModel;
@@ -30,19 +30,19 @@ public class UsersApiClient {
   private final String ME_URL = "/users/me/";
 
   //-----------------------------CREATE----------------------------
-  @Step("Successful register new user")
-  public RegistrationRespModel register(RegistrationReqModel registrationData) {
+  @Step("[API] Successful register new user")
+  public RegisterRespModel register(RegisterReqModel registrationData) {
     return given(registerReqSpec)
             .body(registrationData)
             .when()
             .post(REGISTER_URL)
             .then()
             .spec(registerRespSpec)
-            .extract().as(RegistrationRespModel.class);
+            .extract().as(RegisterRespModel.class);
   }
 
-  @Step("Have error trying register existing user")
-  public ExistingUser400RespModel registerExistingUser(RegistrationReqModel registrationData) {
+  @Step("[API] Have error trying register existing user")
+  public ExistingUser400RespModel registerExistingUser(RegisterReqModel registrationData) {
     return given(registerReqSpec)
             .body(registrationData)
             .when()
@@ -52,8 +52,8 @@ public class UsersApiClient {
             .extract().as(ExistingUser400RespModel.class);
   }
 
-  @Step("Register new user with invalid username")
-  public void invalidUserName(RegistrationReqModel data) {
+  @Step("[API] Register new user with invalid username")
+  public void invalidUserName(RegisterReqModel data) {
     given(registerReqSpec)
             .body(data)
             .when()
@@ -63,8 +63,8 @@ public class UsersApiClient {
             .body("username[0]", containsString(ENTER_VALID_USERNAME));
   }
 
-  @Step("Have 500 status code using wrong URL (no / in the end ")
-  public void registerWithWrongUrl(RegistrationReqModel registrationData, String url) {
+  @Step("[API] Have 500 status code using wrong URL (no / in the end ")
+  public void registerWithWrongUrl(RegisterReqModel registrationData, String url) {
     given(registerReqSpec)
             .body(registrationData)
             .when()
@@ -73,8 +73,8 @@ public class UsersApiClient {
             .spec(wrongUrlRespSpec);
   }
 
-  @Step("Register new user without ContentType JSON")
-  public DetailRespModel noContentType (RegistrationReqModel registrationData) {
+  @Step("[API] Register new user without ContentType JSON")
+  public DetailRespModel noContentType (RegisterReqModel registrationData) {
     return given(noContentTypeReqSpec)
             .body(registrationData)
             .when()
@@ -87,7 +87,7 @@ public class UsersApiClient {
   //-----------------------------READ----------------------------
 
   //-----------------------------UPDATE----------------------------
-  @Step("Update user with PUT method")
+  @Step("[API] Update user with PUT method")
   public UpdateRespModel updateUserPUT (UpdateUserReqModel updateUserData, String token) {
     return given(userReqSpec)
             .header("Authorization", "Bearer " + token)
@@ -99,7 +99,7 @@ public class UsersApiClient {
             .extract().as(UpdateRespModel.class);
   }
 
-  @Step("Update user with PATCH method")
+  @Step("[API] Update user with PATCH method")
   public UpdateRespModel updateUserPATHCH (PatchUserReqModel patchUpdateUserData, String token) {
     return  given(userReqSpec)
             .header("Authorization", "Bearer " + token)
@@ -111,7 +111,7 @@ public class UsersApiClient {
             .extract().as(UpdateRespModel.class);
   }
 
-  @Step("Update user without token")
+  @Step("[API] Update user without token")
   public UnauthorisedUserRespModel updateUnauthorizedUserPUT (UpdateUserReqModel updateUserData) {
     return given(userReqSpec)
             .header("Authorization", "Bearer ")
@@ -124,7 +124,7 @@ public class UsersApiClient {
   }
 
   //-----------------------------DELETE----------------------------
-  @Step("Delete user status code 204")
+  @Step("[API] Delete user status code 204")
   public void deleteUser (String token) {
     given()
     .header("Authorization", "Bearer " + token)
@@ -135,7 +135,7 @@ public class UsersApiClient {
             .statusCode(204);
   }
 
-  @Step("Deleting deleted user status code 401")
+  @Step("[API] Deleting deleted user status code 401")
   public DetailCodeRespModel deleteUnfoundUser401 (String token) {
     return given()
             .header("Authorization", "Bearer " + token)

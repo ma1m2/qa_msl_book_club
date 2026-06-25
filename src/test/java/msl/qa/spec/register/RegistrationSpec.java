@@ -46,7 +46,7 @@ public class RegistrationSpec {
   public static ResponseSpecification noContentTypeRespSpec = new ResponseSpecBuilder()
           .log(LogDetail.ALL)
           .expectStatusCode(415)
-          .expectBody(matchesJsonSchemaInClasspath("schemas/register/detail_response_schema.json"))
+          .expectBody(matchesJsonSchemaInClasspath("schemas/detail_response_schema.json"))
           .build();
 
 }

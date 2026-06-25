@@ -1,0 +1,15 @@
+{
+  "book_club_auth": {
+    "user": {
+      "id": 4,
+      "username": "mariya",
+      "firstName": "",
+      "lastName": "",
+      "email": "",
+      "remoteAddr": "172.18.0.1"
+    },
+    "accessToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzgyNDc5MDU2LCJpYXQiOjE3ODE4NzQyNTYsImp0aSI6ImY5NzNiZjVhMWM1YjQ2ZmQ5NDg0ZDMxMTJmY2Q3OTNkIiwidXNlcl9pZCI6NH0.sGI9hzwkxCwhThZ7XxZ8dYoHuZE69I_8aoA_sdHpUpw",
+    "refreshToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoicmVmcmVzaCIsImV4cCI6MTc4Mzk0Nzg1NiwiaWF0IjoxNzgxODc0MjU2LCJqdGkiOiI3MzNlNzkxMmE4MjI0YWU2YmUyYmFjMzEwMjI2YzM2NCIsInVzZXJfaWQiOjR9.Qb_Qo9V9d9Acn4ECr70HjccN0i43i7_9EsWE8mfIKYM",
+    "isAuthenticated": true
+  }
+}
