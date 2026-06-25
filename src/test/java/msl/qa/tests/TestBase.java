@@ -62,11 +62,6 @@ public class TestBase {
     return api.auth.extractAccessToken(new RegisterReqModel(td.username(), td.password()));
   }
 
-  @Step("[API] Create Club")
-  protected CreateClubRespModel createClub(String token){
-    return api.clubs.createClub(token, td.createClubData());
-  }
-
   @Step("[API] Create Review for Owner Club")
   protected ReviewRespModel createReviewOwnerClub(String token){
     //create club
@@ -76,20 +71,5 @@ public class TestBase {
 
     return api.review.createReview(token, reviewReqModel);
   }
-
-  @Step("[API] Create Review For Second User Club")
-  protected ReviewRespModel createReviewForSecondUserClubClub(String token){
-    //register second user
-    RegisterRespModel secondUser = api.users.register(td2.registrationData());
-    //login second user
-    String secondAccessToken = api.auth.extractAccessToken(td2.loginData());
-    //create club for second user
-    CreateClubRespModel createdClub = api.clubs.createClub(secondAccessToken, td2.createClubData());
-    //create review and return
-    ReviewReqModel reviewReqModel = new ReviewReqModel(createdClub.id(),td.review(),td.assessment(),td.readPages());
-
-    return api.review.createReview(token, reviewReqModel);
-  }
-
 
 }

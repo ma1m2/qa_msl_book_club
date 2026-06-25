@@ -2,11 +2,12 @@ package msl.qa.tests.ui.review;
 
 import com.codeborne.selenide.Selenide;
 import io.qameta.allure.Feature;
-import msl.qa.helper.ApiUtil;
+import io.qameta.allure.Step;
 import msl.qa.models.clubs.CreateClubRespModel;
 import msl.qa.models.clubs.review.ReviewReqModel;
 import msl.qa.models.clubs.review.ReviewRespModel;
 import msl.qa.models.login.LoginRespModel;
+import msl.qa.models.register.RegisterRespModel;
 import msl.qa.pages.components.ReviewCard;
 import msl.qa.tests.TestBase;
 import org.junit.jupiter.api.DisplayName;
@@ -17,7 +18,7 @@ import java.time.LocalDate;
 import java.time.ZonedDateTime;
 
 import static io.qameta.allure.Allure.step;
-import static msl.qa.helper.ApiUtil.*;
+import static msl.qa.helper.Util.*;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @Feature("[UI] Review")
@@ -138,8 +139,26 @@ public class ReviewUiTests extends TestBase {
 
       rc.assertReviewIsExist(td.username(), td2.assessment(), td2.readPages(), td2.review(), formatDate(apiDate));
     });
-
-
   }
+
+  @Step("[API] Create Club")
+  private CreateClubRespModel createClub(String token){
+    return api.clubs.createClub(token, td.createClubData());
+  }
+
+  @Step("[API] Create Review For Second User Club")
+  private ReviewRespModel createReviewForSecondUserClubClub(String token){
+    //register second user
+    RegisterRespModel secondUser = api.users.register(td2.registrationData());
+    //login second user
+    String secondAccessToken = api.auth.extractAccessToken(td2.loginData());
+    //create club for second user
+    CreateClubRespModel createdClub = api.clubs.createClub(secondAccessToken, td2.createClubData());
+    //create review and return
+    ReviewReqModel reviewReqModel = new ReviewReqModel(createdClub.id(),td.review(),td.assessment(),td.readPages());
+
+    return api.review.createReview(token, reviewReqModel);
+  }
+
 
 }

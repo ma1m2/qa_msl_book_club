@@ -142,7 +142,7 @@ public class ClubUiTests extends TestBase {
     //wrong leaving club
     step("[UI] Open owner's club and try to leave it", () -> {
       clubsPage.openClubById(clubId)
-              .leaveOwnresClub();
+              .leaveOwnClub();
     });
   }
 

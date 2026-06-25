@@ -4,7 +4,6 @@ import com.codeborne.selenide.SelenideElement;
 import io.qameta.allure.Step;
 
 import java.time.LocalDate;
-import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Locale;
 

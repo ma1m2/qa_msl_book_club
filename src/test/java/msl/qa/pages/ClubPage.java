@@ -28,8 +28,25 @@ public class ClubPage extends BasePage {
   private final String errorUser = "Не удалось покинуть клуб";
   private final String errorClub = "Не удалось загрузить информацию о клубе";
 
+  private ReviewForm reviewForm;
+  private ReviewCard reviewCard;
+
+  public ReviewForm reviewForm() {
+    if (reviewForm == null) {
+      reviewForm = new ReviewForm();
+    }
+    return reviewForm;
+  }
+
+  public ReviewCard reviewCard() {
+    if (reviewCard == null) {
+      reviewCard = new ReviewCard();
+    }
+    return reviewCard;
+  }
+
   @Step("[UI] Impossible to leave owner's club ")
-  public void leaveOwnresClub() {
+  public void leaveOwnClub() {
     leaveBtn.click();
     confirm();//close alert
     error.shouldHave(text(errorUser));
@@ -71,10 +88,6 @@ public class ClubPage extends BasePage {
   public ReviewForm addReview() {
     reviewBtn.scrollTo().click();
     return new  ReviewForm();
-  }
-
-  public ReviewCard reviewCard() {
-    return new ReviewCard();
   }
 
 }
