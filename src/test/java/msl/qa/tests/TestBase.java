@@ -7,22 +7,26 @@ import io.qameta.allure.selenide.AllureSelenide;
 import io.restassured.RestAssured;
 import msl.qa.allure.Attach;
 import msl.qa.api.ApiClient;
+import msl.qa.config.WebConfig;
 import msl.qa.helper.TestDataBuilder;
 import msl.qa.models.clubs.CreateClubRespModel;
-import msl.qa.models.clubs.review.ReviewRespModel;
 import msl.qa.models.clubs.review.ReviewReqModel;
+import msl.qa.models.clubs.review.ReviewRespModel;
 import msl.qa.models.register.RegisterReqModel;
-import msl.qa.models.register.RegisterRespModel;
 import msl.qa.pages.ClubsPage;
+import org.aeonbits.owner.ConfigFactory;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
+
+import java.util.Map;
 
 import static com.codeborne.selenide.Selenide.closeWebDriver;
 import static com.codeborne.selenide.Selenide.webdriver;
 
 public class TestBase {
 
+  private static final WebConfig WEB_CONFIG = ConfigFactory.create(WebConfig.class, System.getProperties());
   protected static final ApiClient api = new ApiClient();
 
   protected ClubsPage clubsPage = new ClubsPage();
@@ -31,16 +35,38 @@ public class TestBase {
   protected TestDataBuilder td2;
 
   @BeforeAll
+  static void setUp() {
+    RestAssured.baseURI = WEB_CONFIG.baseURI();
+    RestAssured.basePath = WEB_CONFIG.basePath();
+
+    Configuration.baseUrl = WEB_CONFIG.uiBaseUrl();
+    Configuration.browser = WEB_CONFIG.browser();
+    Configuration.browserSize = WEB_CONFIG.browserSize();
+    Configuration.browserVersion = WEB_CONFIG.browserVersion();
+    Configuration.timeout = 6000;
+
+    String remote = WEB_CONFIG.remoteUrl();
+    if (remote != null && !remote.isEmpty()) {
+      Configuration.remote = remote;
+
+      Configuration.browserCapabilities.setCapability("selenoid:options",
+              Map.of("enableVNC", WEB_CONFIG.enableVNC(),
+                      "enableLog", WEB_CONFIG.enableLog(),
+                      "enableVideo",  WEB_CONFIG.enableVideo()));
+    }
+  }
+
+/*  @BeforeAll
   public static void setUp() {
     RestAssured.baseURI = "http://localhost:8100";
     RestAssured.basePath = "/api/v1";
     Configuration.baseUrl = "http://localhost:8100";
     Configuration.browserSize = "1920x1080";
-  }
+  }*/
 
   @BeforeEach
   public void prepareTestDataAndAddListener() {
-    SelenideLogger.addListener("AllureSelenide", new AllureSelenide());
+    SelenideLogger.addListener("allureSelenide", new AllureSelenide());
     td = new TestDataBuilder();
     td2 = new TestDataBuilder();
   }
@@ -51,7 +77,13 @@ public class TestBase {
       Attach.screenshotAs("Last screenshot");
       Attach.pageSource();
       Attach.browserConsoleLogs();
-//          Attach.addVideo();
+
+      // Проверяем, что НЕ в Docker
+      String env = System.getenv("ENV");
+      if (!"docker".equalsIgnoreCase(env)) {
+        Attach.addVideo();
+      }
+
       closeWebDriver();
     }
   }

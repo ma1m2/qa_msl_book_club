@@ -42,6 +42,7 @@ dependencies {
     testImplementation "tools.jackson.core:jackson-databind:3.1.2"
     testImplementation "org.assertj:assertj-core:3.27.7"
     testImplementation "org.slf4j:slf4j-simple:$slf4jVersion"
+    testImplementation 'org.aeonbits.owner:owner:1.0.12'
 
 // !!! don't work without it (Gradle 8.14.3 + Java 21) !!!
     testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
