@@ -3,6 +3,7 @@ package msl.qa.config;
 import org.aeonbits.owner.Config;
 
 @Config.Sources({
+        "system:properties",
         "classpath:config/${env}.properties",
         "classpath:config/remote.properties"
 })
@@ -52,9 +53,4 @@ public interface WebConfig extends Config {
   @Key("enableVideo")
   @DefaultValue("true")
   boolean enableVideo();
-  //enableVNC=true
-  //enableLog=true
-  //enableVideo=true
-
-
 }
