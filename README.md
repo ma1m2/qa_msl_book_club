@@ -105,8 +105,16 @@ To access Jenkins, registration on the resource is required [Jenkins](https://je
 To start the build, click the <code>Build Now</code> button.
 ____
 <p align="center">  
-<a href="https://jenkins.qa.guru/view/java-students/job/C40-ma1m2-mobile-bs/" target="_blank" rel="noopener noreferrer"><img src="media/screen/Jenkins2.png" alt="Jenkins" width="950"/></a>  
+<a href="https://jenkins.qa.guru/view/java-students/job/C40-ma1m2-book-club/" target="_blank" rel="noopener noreferrer"><img src="media/screen/Jenkins.png" alt="Jenkins" width="850"/></a>  
 </p>
+
+### **Build Parameters in Jenkins:**
+
+- *browser (default is chrome)*
+- *browserVersion (browser version, default is an empty string = latest version)*
+- *browserSize (browser window size, default is 1366x768)*
+- *env (configuration file, default is local)*
+
 
 <a id="console"></a>
 ## Running Tests (Terminal)
@@ -115,26 +123,29 @@ ___
 ```bash  
 ./gradlew clean test -Denv=local
 ```
-
+***Docker run:***
+```bash  
+./gradlew clean test -Denv=docker
+```
 ***Remote run in Selenoid:***
 ```bash  
 ./gradlew clean test -Denv=remote
 ```
 ___
 <a id="allure"></a>
-## <img alt="Allure" height="20" src="media/logo/allure.svg" width="20"/></a> <a name="Allure"></a>Allure [Report](https://jenkins.qa.guru/view/java-students/job/C40-ma1m2-mobile-bs/allure-report)</a>
+## <img alt="Allure" height="20" src="media/logo/allure.svg" width="20"/></a> <a name="Allure"></a>Allure [Report](https://jenkins.qa.guru/view/java-students/job/C40-ma1m2-book-club/3/allure-report/)</a>
 ___
 
 ### Overview page of Allure Report
 
 <p align="center">  
-<img title="Allure Overview Dashboard" src="media/screen/AllureOverview.png" width="850">  
+<img title="Allure Overview Dashboard" src="media/screen/Allure Overview.png" width="850">  
 </p>  
 
 ### Test-cases
 
 <p align="center">  
-<img title="Allure Tests" src="media/screen/AllureTests.png" width="850">  
+<img title="Allure Tests" src="media/screen/Allure Tests.png" width="850">  
 </p>
 
 ### Graphs
@@ -145,23 +156,24 @@ ___
 
 ___
 <a id="allure-testops"></a>
-## <img alt="Allure" height="25" src="media/logo/AllureTestOps.svg" width="25"/></a> Integration with <a target="_blank" href="https://allure.autotests.cloud/project/5259/dashboards">Allure TestOps</a>
+## <img alt="Allure" height="25" src="media/logo/AllureTestOps.svg" width="25"/></a> Integration with <a target="_blank" href="https://allure.autotests.cloud/project/5304/launches">Allure TestOps</a>
+Allure TestOps is a full-stack test management platform that unites automated and manual testing in one workspace.
 ____
 ### *Allure TestOps Dashboard*
 
 <p align="center">  
-<img title="Allure TestOps Dashboard" src="media/screen/Dash-TestOps.png" width="850">  
+<img title="Allure TestOps Dashboard" src="media/screen/DashboardTestOps.png" width="850">  
 </p>  
 
 ### Auto and Manual Test-cases
 
 <p align="center">  
-<img title="Allure Tests" src="media/screen/autoManual.png" width="850">  
+<img title="Allure Tests" src="media/screen/TestOps Tests.png" width="850">  
 </p>
 
 ___
 <a id="jira"></a>
-## <img alt="Jira" height="25" src="media/logo/Jira.svg" width="25"/></a> Integration with <a target="_blank" href="https://jira.qa.guru/browse/REF-8">Jira</a>
+## <img alt="Jira" height="25" src="media/logo/Jira.svg" width="25"/></a> Integration with <a target="_blank" href="https://jira.qa.guru/browse/REF-14">Jira</a>
 ____
 <p align="center">  
 <img title="Jira" src="media/screen/jira.png" width="850">  
@@ -172,20 +184,19 @@ ____
 
 ## <img width="30" style="vertical-align:middle" title="Telegram" src="media/logo/Telegram.svg">Telegram notifications:
 
-After the build is completed, a <code>Telegram bot</code> automatically processes the test run results and sends a report to a dedicated chat
+Upon completion of each test run, a <code>Telegram bot</code> automatically processes the test run results and sends a report to a dedicated chat
 
 ____  
 <p align="center">  
-<img title="Telegram" src="media/screen/br-tg-bot.png" width="550">  
+<img title="Telegram" src="media/screen/tg.png" width="500">  
 </p>
 
 ____  
 
-
 <a id="video"></a>
 ## Video Example in Selenoid:
-<table align="center">
-  <tr>
-    <td align="center"><img title="Browserstack Video" src="media/video/bs.gif" width="250" height="500" alt="video"></td>
-  </tr>
-</table>
+The Allure report attaches a screenshot from the final step and a video of the entire test run to each test case.
+<p align="center">
+  <img src="media/video/createReview.gif" width="700" alt="video">
+</p>
+
