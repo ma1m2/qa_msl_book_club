@@ -59,16 +59,14 @@ ___
 
 <a id="#cases"></a>
 ## Automated Test Scenarios
-### For local launch
-
-- Check Onboarding Screens
-- Check successful Search Result
-- Open first Search Result and check the article
-
-### For remote launch
-- Check successful Search Result
-- Open article in Search Result and check Error icon.
-
+____
+- ✓ * *
+- ✓ * *
+- ✓ * *
+- ✓ * *
+- ✓ * *
+- ✓ * *
+- ✓ * *
 ____
 <a id="project-structure"></a>
 ## 📁 Project Structure
