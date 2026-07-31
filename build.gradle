@@ -52,6 +52,7 @@ tasks.withType(Test).configureEach {
     useJUnitPlatform()
     systemProperties(System.getProperties())
 
+    // ./gradlew clean test -Denv=local
     // ./gradlew clean test -Dtags=api,ui
     def tags = System.getProperty('tags')
     if (tags != null && !tags.isEmpty()) {

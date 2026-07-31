@@ -56,14 +56,6 @@ public class TestBase {
     }
   }
 
-/*  @BeforeAll
-  public static void setUp() {
-    RestAssured.baseURI = "http://localhost:8100";
-    RestAssured.basePath = "/api/v1";
-    Configuration.baseUrl = "http://localhost:8100";
-    Configuration.browserSize = "1920x1080";
-  }*/
-
   @BeforeEach
   public void prepareTestDataAndAddListener() {
     SelenideLogger.addListener("allureSelenide", new AllureSelenide());
@@ -78,9 +70,9 @@ public class TestBase {
       Attach.pageSource();
       Attach.browserConsoleLogs();
 
-      // Проверяем, что НЕ в Docker
-      String env = System.getenv("ENV");
-      if (!"docker".equalsIgnoreCase(env)) {
+      // Проверяем, что в remote
+      String env = WEB_CONFIG.env();
+      if ("remote".equalsIgnoreCase(env)) {
         Attach.addVideo();
       }
 

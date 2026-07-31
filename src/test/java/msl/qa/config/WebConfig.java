@@ -2,15 +2,15 @@ package msl.qa.config;
 
 import org.aeonbits.owner.Config;
 
+@Config.LoadPolicy(Config.LoadType.MERGE)
 @Config.Sources({
         "system:properties",
         "classpath:config/${env}.properties",
-        "classpath:config/remote.properties"
+        "classpath:config/local.properties"
 })
 public interface WebConfig extends Config {
 
   @Key("env")
-  @DefaultValue("remote")
   String env();
 
   @Key("baseURI")
@@ -26,7 +26,7 @@ public interface WebConfig extends Config {
   String uiBaseUrl();
 
   @Key("remoteUrl")
-  @DefaultValue("https://user1:1234@selenoid.autotests.cloud/wd/hub")
+    //@DefaultValue("https://user1:1234@selenoid.autotests.cloud/wd/hub")
   String remoteUrl();
 
   @Key("browser")
@@ -34,7 +34,6 @@ public interface WebConfig extends Config {
   String browser();
 
   @Key("browserVersion")
-  @DefaultValue("128.0")
   String browserVersion();
 
   @Key("browserSize")
@@ -43,14 +42,11 @@ public interface WebConfig extends Config {
 
 //===========selenoid:options=============
   @Key("enableVNC")
-  @DefaultValue("true")
   boolean enableVNC();
 
   @Key("enableLog")
-  @DefaultValue("true")
   boolean enableLog();
 
   @Key("enableVideo")
-  @DefaultValue("true")
   boolean enableVideo();
 }
