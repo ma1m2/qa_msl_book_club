@@ -1,7 +1,40 @@
 [Launch details in Docker](RUN_INFO.md)
 # [Book Club](https://book-club.qa.guru/) Web App — API + UI Test Automation Demo
 
-> This is a demo project with automated tests for the Book Club web application, covering both REST API and UI layers.
+> This is an automated test framework built in Java using Selenide for UI testing and RestAssured for API testing.
+> The project is managed with Gradle, runs on JUnit 5, and uses Allure for comprehensive test reporting.
+
+**It covers the core functionality of a web application, including:**
+
+- Club management (create, read, update, delete)
+
+- Review system (create, read, update, delete)
+
+- User authentication (login, logout, registration)
+
+- User management (create, read, update, delete)
+
+**UI:**
+
+- Page Object classes for web interface testing using Selenide
+
+- Reusable UI components
+
+**API:**
+
+- Request/response models for API interactions
+
+- JSON schema validation for API responses
+
+- API clients for endpoint interactions
+
+- RequestSpecifications for RestAssured
+
+**General:**
+
+- Environment-specific configurations (local, remote, Docker)
+
+- Structured test organization (API tests, UI tests, integration specs)
 
 ## Contents:
 ____
@@ -58,45 +91,87 @@ ____
 ___
 
 <a id="#cases"></a>
-## Automated Test Scenarios
+## Examples of Automated Test Scenarios
 ____
-- ✓ * *
-- ✓ * *
-- ✓ * *
-- ✓ * *
-- ✓ * *
-- ✓ * *
-- ✓ * *
+**API Tests:**
+- Register user with valid credentials
+- Login with valid credentials
+- Create a club
+- Update club description
+- Create a review for a club you own
+
+**UI Tests:**
+- Register a new user via web interface
+- Login via web interface
+- Logout via web interface
+- User registration[API], session setup[localStorage], and page opening[UI]
+
+**Hybrid Tests (API + UI):**
+- Register and login via API, set up the session via localStorage, create a club via API, and verify the club details via UI
+- Register, login, create and update a club via API, set up the session via localStorage, and verify the updated club details via UI
+- Register, login, create a club and a review via API, set up the session via localStorage, and verify the review is displayed on the UI
+
+**Negative Scenarios:**
+- Registration with an already existing user
+- Registration with an invalid username format
+- Registration with invalid endpoint (404)
+- Login fails with case-modified username
+- Login fails with wrong password
+- Non-member cannot create review for a club
+- Cannot update another user's review
+
 ____
 <a id="project-structure"></a>
 ## 📁 Project Structure
 
 ```text
-src/test/java/msl/qa/
-├── allure/
-│   ├── Attach.java     # вложения для Allure Report (скриншот, видео, логи)
-│   └── Manual.java     # аннотация для Мануальных тестов
-├── config/
-│   ├── WebConfig.java  # настройки (ключи, url)
-├── page/
-│   ├── BasePage.java       # базовая страница
-│   ├── EducationPage.java  # page object для сля страницы Образование
-│   ├── HomePage.java       # page object для главной страницы
-│   └── component/
-│       ├── FooterComponent.java # футор
-│       └── MainMenu.java        # главное меню
-└── tests/
-    ├── HomeTests.java        # тесты для главной страницы
-    ├── SearchTests.java      # тесты для поисковой строки на EducationPage
-    ├── SocialLinksTests.java # тесты на ссылки для социальных сетей
-    ├── SwitchTests.java      # тесты на открытие страницы в новой вкладке браузера
-    ├── TestBase.java         # с методами @BeforeAll, @BeforeEach, @AfterEach
-    └── TestData.java         # статические тестовые данные для проверки строк на сайте
-        
-src/test/resources/
-└── config/
-    ├── local.properties   # файл конфигурации для локального запуска
-    └── remote.properties  # файл конфигурации для удаленного запуска
+src/
+└── test/
+    └── java/
+        └── mslt.qa/
+            ├── allure/                     # Allure listeners and custom attachments
+            ├── api/                        # API clients for endpoint interactions
+            ├── config/                     # Configuration classes
+            ├── helper/                     # Utilities and test data builders
+            ├── models/                     # POJO models for requests/responses
+            │   ├── clubs/                  # Club-related models
+            │   ├── review/                 # Review-related models
+            │   └── localstorage/           # Local storage auth models
+            ├── pages/                      # Page Object classes for UI tests
+            │   └── components/             # Reusable UI components
+            ├── spec/                       # RestAssured Request/ResponseSpecifications
+            │   ├── clubs/                  # Clubs API specs
+            │   ├── login/                  # Login API specs
+            │   ├── logout/                 # Logout API specs
+            │   ├── register/               # Registration API specs
+            │   ├── review/                 # Reviews API specs
+            │   └── user/                   # User API specs
+            └── tests/                      # Tests grouped by type (API, UI)
+                ├── api/                    # API tests
+                │   ├── club/               # Clubs API tests
+                │   ├── login/              # Login API tests
+                │   ├── logout/             # Logout API tests
+                │   ├── register/           # Registration API tests
+                │   ├── review/             # Reviews API tests
+                │   └── user/               # User API tests
+                ├── without_spec/           # Tests without specifications
+                └── ui/                     # UI tests
+                    ├── club/               # Clubs UI tests
+                    ├── login/              # Login UI tests
+                    ├── logout/             # Logout UI tests
+                    ├── register/           # Registration UI tests
+                    └── review/             # Reviews UI tests
+
+resources/
+├── config/                                 # Environment configurations (local, remote, docker)
+└── json/
+└── schemas/                                # JSON schemas for API response validation
+    ├── clubs/                              # Clubs response schemas
+    ├── login/                              # Login response schemas
+    ├── logout/                             # Logout response schemas
+    ├── register/                           # Registration response schemas
+    ├── review/                             # Reviews response schemas
+    └── update/                             # User update response schemas
 ```
 ----
 <a id="jenkins"></a>

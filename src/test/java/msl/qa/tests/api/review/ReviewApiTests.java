@@ -30,7 +30,7 @@ public class ReviewApiTests extends TestBase {
   RegisterRespModel user;
   //-----------------------------CREATE----------------------------
   @Test
-  @DisplayName("[API] Creat review for own club")
+  @DisplayName("[API] Create review for own club")
   public void createReviewOwnerClubTest() {
     //register
     RegisterRespModel user = api.users.register(td.registrationData());
@@ -57,7 +57,7 @@ public class ReviewApiTests extends TestBase {
   }
 
   @Test
-  @DisplayName("[API] Creat review for another club")
+  @DisplayName("[API] Create review for another club")
   public void createReviewForAnotherClubTest() {
 
     step("[API] Register and login first user", () ->{
@@ -100,7 +100,7 @@ public class ReviewApiTests extends TestBase {
   }
 
   @Test
-  @DisplayName("[API] Non member club can creat review")
+  @DisplayName("[API] Non-member club can create review")
   public void createReviewNonMemberTest() {
     step("[API] Register and login first user", () ->{
       //register
@@ -181,7 +181,7 @@ public class ReviewApiTests extends TestBase {
   }
 
   @Test
-  @DisplayName("[API] PATCH cannot update another review")
+  @DisplayName("[API] PATCH cannot update another user's review")
   @Tag("negative")
   public void updateAnotherReviewTest() {
     //register
