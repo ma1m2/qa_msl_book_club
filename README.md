@@ -33,8 +33,11 @@
 **General:**
 
 - Environment-specific configurations (local, remote, docker)
-
-- Structured test organization (API tests, UI tests)
+- Reusable test utilities and data builders
+- Allure reporting with custom FreeMarker templates (`resources/tpl/`) for enriching test logs with request/response details
+- Selenide commands and screenshots attached via `AllureSelenide` listener
+- Custom `Attach` class for comprehensive test artifacts(screenshots, page source, console logs, Selenoid video)
+- Structured test organization (API tests, UI tests, hybrid API+UI tests)
 
 ## Contents:
 ____
