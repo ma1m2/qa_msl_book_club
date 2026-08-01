@@ -32,9 +32,9 @@
 
 **General:**
 
-- Environment-specific configurations (local, remote, Docker)
+- Environment-specific configurations (local, remote, docker)
 
-- Structured test organization (API tests, UI tests, integration specs)
+- Structured test organization (API tests, UI tests)
 
 ## Contents:
 ____
