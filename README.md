@@ -179,7 +179,7 @@ resources/
 ----
 <a id="jenkins"></a>
 ## <img width="25" style="vertical-align:middle" title="Jenkins" src="media/logo/Jenkins.svg"> </a> Jenkins Build <a target="_blank" href="https://jenkins.qa.guru/job/C40-ma1m2-redsoft/"></a>
-To access Jenkins, registration on the resource is required [Jenkins](https://jenkins.qa.guru/).
+To access Jenkins, registration on the resource is required [Jenkins](https://jenkins.qa.guru/view/java-students/job/C40-ma1m2-book-club/).
 To start the build, click the <code>Build Now</code> button.
 ____
 <p align="center">  
