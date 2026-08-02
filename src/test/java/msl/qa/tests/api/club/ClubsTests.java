@@ -12,6 +12,7 @@ import org.junit.jupiter.api.Test;
 
 import java.util.Map;
 
+import static io.qameta.allure.Allure.step;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @Feature("[API] Club")
@@ -29,16 +30,19 @@ public class ClubsTests extends TestBase {
 
     CreateClubRespModel createdClub = api.clubs.createClub(accessToken, createData);
 
-    assertThat(createdClub.id()).isGreaterThan(0);
-    assertThat(createdClub.bookTitle()).isEqualTo(createData.bookTitle());
-    assertThat(createdClub.bookAuthors()).isEqualTo(createData.bookAuthors());
-    assertThat(createdClub.publicationYear()).isEqualTo(createData.publicationYear());
-    assertThat(createdClub.description()).isEqualTo(createData.description());
-    assertThat(createdClub.telegramChatLink()).isEqualTo(createData.telegramChatLink());
-    assertThat(createdClub.owner()).isGreaterThan(0);
-    assertThat(createdClub.members()).isNotEmpty();
-    assertThat(createdClub.reviews()).isEmpty();
-    assertThat(createdClub.created()).isNotBlank();
+    step("Verify id > 0, book Title, book Authors, publication Year, description, telegram ChatLink, owner > 0, members is not empty, reviews is empty, created date is not blank", ()-> {
+      assertThat(createdClub.id()).isGreaterThan(0);
+      assertThat(createdClub.bookTitle()).isEqualTo(createData.bookTitle());
+      assertThat(createdClub.bookAuthors()).isEqualTo(createData.bookAuthors());
+      assertThat(createdClub.publicationYear()).isEqualTo(createData.publicationYear());
+      assertThat(createdClub.description()).isEqualTo(createData.description());
+      assertThat(createdClub.telegramChatLink()).isEqualTo(createData.telegramChatLink());
+      assertThat(createdClub.owner()).isGreaterThan(0);
+      assertThat(createdClub.members()).isNotEmpty();
+      assertThat(createdClub.reviews()).isEmpty();
+      assertThat(createdClub.created()).isNotBlank();
+    });
+
   }
 
   //-----------------------------READ----------------------------
@@ -50,8 +54,11 @@ public class ClubsTests extends TestBase {
 
     PaginatedClubListRespModel clubs = api.clubs.getClubs(accessToken);
 
-    assertThat(clubs.count()).isGreaterThanOrEqualTo(1);
-    assertThat(clubs.results()).size().isGreaterThanOrEqualTo(1);
+    step("Verify count > 1, results size > 1", ()-> {
+      assertThat(clubs.count()).isGreaterThanOrEqualTo(1);
+      assertThat(clubs.results()).size().isGreaterThanOrEqualTo(1);
+    });
+
   }
 
   @Test
@@ -62,8 +69,12 @@ public class ClubsTests extends TestBase {
     PaginatedClubListRespModel clubs = api.clubs.getClubs(accessToken,
             Map.of("page_size", 10,"page", 1));
 
-    assertThat(clubs.count()).isGreaterThan(1);
-    assertThat(clubs.results().size()).isGreaterThan(1);
+
+    step("Verify count > 1, results size > 1", ()-> {
+      assertThat(clubs.count()).isGreaterThan(1);
+      assertThat(clubs.results().size()).isGreaterThan(1);
+    });
+
   }
 
   //-----------------------------UPDATE----------------------------
@@ -85,10 +96,13 @@ public class ClubsTests extends TestBase {
     clubId = createdClub.id();
     CreateClubRespModel updatedClub = api.clubs.patchClub(accessToken, clubId, patchData);
 
-    assertThat(updatedClub.description()).isEqualTo(patchData.description());
-    assertThat(updatedClub.telegramChatLink()).isEqualTo(patchData.telegramChatLink());
-    assertThat(updatedClub.bookTitle()).isEqualTo(createdClub.bookTitle());
-    assertThat(updatedClub.bookAuthors()).isEqualTo(createdClub.bookAuthors());
+    step("Verify updated description, telegram ChatLink, not updated book Title, book Authors", ()-> {
+      assertThat(updatedClub.description()).isEqualTo(patchData.description());
+      assertThat(updatedClub.telegramChatLink()).isEqualTo(patchData.telegramChatLink());
+      assertThat(updatedClub.bookTitle()).isEqualTo(createdClub.bookTitle());
+      assertThat(updatedClub.bookAuthors()).isEqualTo(createdClub.bookAuthors());
+    });
+
   }
 
   @Test
@@ -108,11 +122,15 @@ public class ClubsTests extends TestBase {
     clubId = createdClub.id();
     CreateClubRespModel updatedClub = api.clubs.putClub(accessToken, clubId, putData);
 
-    assertThat(updatedClub.description()).isEqualTo(td.updatedDescription());
-    assertThat(updatedClub.telegramChatLink()).isEqualTo(createdClub.telegramChatLink());
-    assertThat(updatedClub.bookTitle()).isEqualTo(createdClub.bookTitle());
-    assertThat(updatedClub.bookAuthors()).isEqualTo(createdClub.bookAuthors());
-    assertThat(updatedClub.publicationYear()).isEqualTo(createdClub.publicationYear());
+    step("Verify updated description, telegram ChatLink, book Title, book Authors, publication Year",
+            () -> {
+              assertThat(updatedClub.description()).isEqualTo(td.updatedDescription());
+              assertThat(updatedClub.telegramChatLink()).isEqualTo(createdClub.telegramChatLink());
+              assertThat(updatedClub.bookTitle()).isEqualTo(createdClub.bookTitle());
+              assertThat(updatedClub.bookAuthors()).isEqualTo(createdClub.bookAuthors());
+              assertThat(updatedClub.publicationYear()).isEqualTo(createdClub.publicationYear());
+            });
+
   }
 
   //-----------------------------DELETE----------------------------
