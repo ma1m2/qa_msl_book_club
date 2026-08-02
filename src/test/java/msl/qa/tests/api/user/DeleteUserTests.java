@@ -48,8 +48,12 @@ public class DeleteUserTests extends TestBase {
 
       DetailCodeRespModel unauthResp = api.users.deleteUnfoundUser401(token);
 
-      assertThat(USER_NOT_FOUND_DETAIL).isEqualTo(unauthResp.detail());
-      assertThat(USER_NOT_FOUND_CODE).isEqualTo(unauthResp.code());
+      step("Verify detail and code in response body", () -> {
+        assertThat(USER_NOT_FOUND_DETAIL).isEqualTo(unauthResp.detail());
+        assertThat(USER_NOT_FOUND_CODE).isEqualTo(unauthResp.code());
+      });
+
+
     });
   }
 }

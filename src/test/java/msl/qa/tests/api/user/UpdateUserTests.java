@@ -47,8 +47,11 @@ public class UpdateUserTests extends TestBase {
 
       UpdateRespModel updatedUser = api.users.updateUserPUT(updateUserData, token);
 
-      assertThat(updatedUser.firstName()).isEqualTo(td.firstname());
-      assertThat(updatedUser.id()).isEqualTo(respModel.id());
+      step("Verify updated user", () -> {
+        assertThat(updatedUser.firstName()).isEqualTo(td.firstname());
+        assertThat(updatedUser.id()).isEqualTo(respModel.id());
+      });
+
     });
   }
 
@@ -68,7 +71,10 @@ public class UpdateUserTests extends TestBase {
       patchUpdateUserData = new PatchUserReqModel(null,td.updatedFirstName(),null,null);
       UpdateRespModel updatedUser = api.users.updateUserPATHCH(patchUpdateUserData,token);
 
-      assertThat(updatedUser.firstName()).isEqualTo(td.updatedFirstName());
+      step("Verify updated user", () -> {
+        assertThat(updatedUser.firstName()).isEqualTo(td.updatedFirstName());
+      });
+
     });
   }
 
@@ -86,8 +92,12 @@ public class UpdateUserTests extends TestBase {
 
       UnauthorisedUserRespModel updatedUser = api.users.updateUnauthorizedUserPUT(updateUserData);
 
-      assertThat(updatedUser.detail()).isEqualTo(AUTHORIZATION_HEADER_DETAIL);
-      assertThat(updatedUser.code()).isEqualTo(BAD_HEADER_CODE);
+      step("Verify detail and code in response body '" + AUTHORIZATION_HEADER_DETAIL
+              + "'" + BAD_HEADER_CODE + "'", () -> {
+        assertThat(updatedUser.detail()).isEqualTo(AUTHORIZATION_HEADER_DETAIL);
+        assertThat(updatedUser.code()).isEqualTo(BAD_HEADER_CODE);
+      });
+
 
     });
   }

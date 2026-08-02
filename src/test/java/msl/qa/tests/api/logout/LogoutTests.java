@@ -47,10 +47,16 @@ public class LogoutTests extends TestBase {
 
       WrongTokenLogoutRespModel wrongLogoutResp = api.auth.logoutWithWrongToken(logoutData);
 
-      String actualDetail = wrongLogoutResp.detail();
-      assertThat(TOKEN_HAS_WRONG_TYPE).isEqualTo(actualDetail);
-      String actualCode = wrongLogoutResp.code();
-      assertThat(CODE).isEqualTo(actualCode);
+      step("Verify detail '" + TOKEN_HAS_WRONG_TYPE + "'", () -> {
+        String actualDetail = wrongLogoutResp.detail();
+        assertThat(TOKEN_HAS_WRONG_TYPE).isEqualTo(actualDetail);
+      });
+
+      step("Verify code '" + CODE + "'", () -> {
+        String actualCode = wrongLogoutResp.code();
+        assertThat(CODE).isEqualTo(actualCode);
+      });
+
     });
   }
 
@@ -68,10 +74,15 @@ public class LogoutTests extends TestBase {
 
       WrongTokenLogoutRespModel wrongLogoutResp = api.auth.logoutWithWrongToken(partLogoutData);
 
-      String actualDetail = wrongLogoutResp.detail();
-      assertThat(INVALID_TOKEN_DETAIL).isEqualTo(actualDetail);
-      String actualCode = wrongLogoutResp.code();
-      assertThat(CODE).isEqualTo(actualCode);
+      step("Verify detail '" + INVALID_TOKEN_DETAIL + "'", () -> {
+        String actualDetail = wrongLogoutResp.detail();
+        assertThat(INVALID_TOKEN_DETAIL).isEqualTo(actualDetail);
+      });
+
+      step("Verify code '" + CODE + "'", () -> {
+        String actualCode = wrongLogoutResp.code();
+        assertThat(CODE).isEqualTo(actualCode);
+      });
     });
   }
 

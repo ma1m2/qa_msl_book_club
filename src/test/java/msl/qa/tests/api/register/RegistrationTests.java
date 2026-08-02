@@ -27,13 +27,15 @@ public class RegistrationTests extends TestBase {
   public void successfulRegistrationTest() {
       final RegisterRespModel respModel = api.users.register(td.registrationData());
 
+    step("Verify username, id > 0, first name is empty, last name is empty, email is empty", () -> {
       assertThat(respModel.username()).isEqualTo(td.username());
       assertThat(respModel.id()).isGreaterThan(0);
       assertThat(respModel.firstName()).isEmpty(); //isEqualTo("");
       assertThat(respModel.lastName()).isEmpty();
       assertThat(respModel.email()).isEmpty();
-
       assertThat(respModel.remoteAddr()).matches(IP_REGEXP);
+    });
+
   }
 
   @Test
@@ -44,8 +46,11 @@ public class RegistrationTests extends TestBase {
       api.users.register(td.registrationData());
       ExistingUser400RespModel resp = api.users.registerExistingUser(td.registrationData());
 
-      String actualdError = resp.username().getFirst();
-      assertThat(actualdError).isEqualTo(EXISTING_USER_ERROR);
+      step("Verify message '" + EXISTING_USER_ERROR + "'", () -> {
+        String actualdError = resp.username().getFirst();
+        assertThat(actualdError).isEqualTo(EXISTING_USER_ERROR);
+      });
+
     });
   }
 
@@ -72,7 +77,10 @@ public class RegistrationTests extends TestBase {
   public void noContentType415RegistrationTest() {
       DetailRespModel detailRespModel = api.users.noContentType(td.registrationData());
 
-      assertThat(detailRespModel.detail()).contains(UNSUPPORTED_MEDIA_TYPE);
+      step("Verify message '" + UNSUPPORTED_MEDIA_TYPE + "'", () -> {
+        assertThat(detailRespModel.detail()).contains(UNSUPPORTED_MEDIA_TYPE);
+      });
+
 
   }
 }

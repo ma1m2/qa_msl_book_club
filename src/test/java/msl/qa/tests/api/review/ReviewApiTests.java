@@ -8,7 +8,6 @@ import msl.qa.models.clubs.review.ReviewReqModel;
 import msl.qa.models.clubs.review.ReviewRespModel;
 import msl.qa.models.register.RegisterRespModel;
 import msl.qa.tests.TestBase;
-import msl.qa.tests.TestData;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
@@ -17,8 +16,8 @@ import java.time.Instant;
 import java.time.temporal.ChronoUnit;
 
 import static io.qameta.allure.Allure.step;
-import static msl.qa.tests.TestData.NO_PERMISSION;
 import static msl.qa.tests.TestData.NO_BOOK_REVIEW;
+import static msl.qa.tests.TestData.NO_PERMISSION;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.within;
 
@@ -45,15 +44,18 @@ public class ReviewApiTests extends TestBase {
     Instant responseInstant = Instant.parse(reviewResponse.created());
     Instant currentInstant = Instant.now().truncatedTo(ChronoUnit.MICROS);
 
-    assertThat(reviewResponse.id()).isGreaterThan(0);
-    assertThat(reviewResponse.club()).isEqualTo(createdClub.id());
-    assertThat(reviewResponse.user().id()).isEqualTo(user.id());
-    assertThat(reviewResponse.user().username()).isEqualTo(td.username());
-    assertThat(reviewResponse.review()).isEqualTo(td.review());
-    assertThat(reviewResponse.assessment()).isEqualTo(td.assessment());
-    assertThat(reviewResponse.readPages()).isEqualTo(td.readPages());
-    assertThat(responseInstant).isCloseTo(currentInstant, within(1, ChronoUnit.SECONDS));
-    assertThat(reviewResponse.modified()).isNull();
+    step("Verify review id >0, club id >0, user id, username, review, assessment, read pages, created time, modified time", () -> {
+      assertThat(reviewResponse.id()).isGreaterThan(0);
+      assertThat(reviewResponse.club()).isEqualTo(createdClub.id());
+      assertThat(reviewResponse.user().id()).isEqualTo(user.id());
+      assertThat(reviewResponse.user().username()).isEqualTo(td.username());
+      assertThat(reviewResponse.review()).isEqualTo(td.review());
+      assertThat(reviewResponse.assessment()).isEqualTo(td.assessment());
+      assertThat(reviewResponse.readPages()).isEqualTo(td.readPages());
+      assertThat(responseInstant).isCloseTo(currentInstant, within(1, ChronoUnit.SECONDS));
+      assertThat(reviewResponse.modified()).isNull();
+    });
+
   }
 
   @Test
@@ -147,8 +149,11 @@ public class ReviewApiTests extends TestBase {
 
     PaginatedReviewListRespModel reviews = api.review.getReview(accessToken);
 
-    assertThat(reviews.count()).isGreaterThanOrEqualTo(1);
-    assertThat(reviews.results()).size().isGreaterThanOrEqualTo(1);
+    step("Verify count > 1, results size >1", () -> {
+      assertThat(reviews.count()).isGreaterThanOrEqualTo(1);
+      assertThat(reviews.results()).size().isGreaterThanOrEqualTo(1);
+    });
+
   }
   //-----------------------------UPDATE----------------------------
   @Test
@@ -170,14 +175,17 @@ public class ReviewApiTests extends TestBase {
     Instant responseInstant = Instant.parse(updatedResponse.modified());
     Instant currentInstant = Instant.now().truncatedTo(ChronoUnit.MICROS);
 
-    assertThat(updatedResponse.id()).isEqualTo(reviewResponse.id());
-    assertThat(updatedResponse.club()).isEqualTo(createdClub.id());
-    assertThat(updatedResponse.user().id()).isEqualTo(user.id());
-    assertThat(updatedResponse.user().username()).isEqualTo(td.username());
-    assertThat(updatedResponse.review()).isEqualTo(td2.review());
-    assertThat(updatedResponse.assessment()).isEqualTo(td2.assessment());
-    assertThat(updatedResponse.readPages()).isEqualTo(td2.readPages());
-    assertThat(responseInstant).isCloseTo(currentInstant, within(1, ChronoUnit.SECONDS));
+    step("Verify updated data and not updated data", () -> {
+      assertThat(updatedResponse.id()).isEqualTo(reviewResponse.id());
+      assertThat(updatedResponse.club()).isEqualTo(createdClub.id());
+      assertThat(updatedResponse.user().id()).isEqualTo(user.id());
+      assertThat(updatedResponse.user().username()).isEqualTo(td.username());
+      assertThat(updatedResponse.review()).isEqualTo(td2.review());
+      assertThat(updatedResponse.assessment()).isEqualTo(td2.assessment());
+      assertThat(updatedResponse.readPages()).isEqualTo(td2.readPages());
+      assertThat(responseInstant).isCloseTo(currentInstant, within(1, ChronoUnit.SECONDS));
+    });
+
   }
 
   @Test
@@ -201,7 +209,9 @@ public class ReviewApiTests extends TestBase {
     ReviewReqModel updatedReviewReq = new ReviewReqModel(createdClub.id(), td.review(), null, td.readPages());
     DetailRespModel detailRespModel = api.review.cantUpdateAnotherReview(accessToken, reviewResponse.id(), updatedReviewReq);
 
-    assertThat(detailRespModel.detail()).isEqualTo(NO_PERMISSION);
+    step("Verify message '" + NO_PERMISSION + "'", () -> {
+      assertThat(detailRespModel.detail()).isEqualTo(NO_PERMISSION);
+    });
 
   }
 
@@ -220,7 +230,10 @@ public class ReviewApiTests extends TestBase {
     //review not exist more
     DetailRespModel detailRespModel = api.review.getReviewByWrongId(accessToken, reviewResponse.id());
 
-    assertThat(detailRespModel.detail()).contains(NO_BOOK_REVIEW);
+    step("Verify message '" + NO_BOOK_REVIEW + "'", () -> {
+      assertThat(detailRespModel.detail()).contains(NO_BOOK_REVIEW);
+    });
+
   }
 
   @Test
@@ -241,7 +254,10 @@ public class ReviewApiTests extends TestBase {
     ReviewRespModel reviewResponse = api.review.createReview(secondAccessToken, reviewReqModel);
     //first user tries to delete second user review
     DetailRespModel detailRespModel = api.review.cantDeleteAnotherReview(accessToken, reviewResponse.id());
-    assertThat(detailRespModel.detail()).isEqualTo(NO_PERMISSION);
+
+    step("Verify message '" + NO_PERMISSION + "'", () -> {
+      assertThat(detailRespModel.detail()).isEqualTo(NO_PERMISSION);
+    });
   }
 
 }
