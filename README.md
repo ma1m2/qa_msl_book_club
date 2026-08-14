@@ -4,43 +4,10 @@
 > This is an automated test framework built in Java using Selenide for UI testing and RestAssured for API testing.
 > The project is managed with Gradle, runs on JUnit 5, and uses Allure for comprehensive test reporting.
 
-**It covers the core functionality of a web application, including:**
-
-- Club management (create, read, update, delete)
-
-- Review system (create, read, update, delete)
-
-- User authentication (login, logout, registration)
-
-- User management (create, read, update, delete)
-
-**UI:**
-
-- Page Object classes for web interface testing using Selenide
-
-- Reusable UI components
-
-**API:**
-
-- Request/response models for API interactions
-
-- JSON schema validation for API responses
-
-- API clients for endpoint interactions
-
-- RequestSpecifications for RestAssured
-
-**General:**
-
-- Environment-specific configurations (local, remote, docker)
-- Reusable test utilities and data builders
-- Allure reporting with custom FreeMarker templates (`resources/tpl/`) for enriching test logs with request/response details
-- Selenide commands and screenshots attached via `AllureSelenide` listener
-- Custom `Attach` class for comprehensive test artifacts(screenshots, page source, console logs, Selenoid video)
-- Structured test organization (API tests, UI tests, hybrid API+UI tests)
-
 ## Contents:
 ____
+* <a href="#overview">Overview</a>
+
 * <a href="#tools">Technologies & Tools</a>
 
 * <a href="#cases">Automated Test Scenarios</a>
@@ -60,6 +27,37 @@ ____
 * <a href="#tg">Telegram Alerts</a>
 
 * <a href="#video">Video Example</a>
+____
+<a id="overview"></a>
+## Overview
+
+**It covers the core functionality of a web application, including:**
+
+- Club management (create, read, update, delete)
+- Review system (create, read, update, delete)
+- User authentication (login, logout, registration)
+- User management (create, read, update, delete)
+
+**UI:**
+
+- Page Object classes for web interface testing using Selenide
+- Reusable UI components
+
+**API:**
+
+- Request/response models for API interactions
+- JSON schema validation for API responses
+- API clients for endpoint interactions
+- RequestSpecifications for RestAssured
+
+**General:**
+
+- Environment-specific configurations (local, remote, docker)
+- Reusable test utilities and data builders
+- Allure reporting with custom FreeMarker templates (`resources/tpl/`) for enriching test logs with request/response details
+- Selenide commands and screenshots attached via `AllureSelenide` listener
+- Custom `Attach` class for comprehensive test artifacts (screenshots, page source, console logs, Selenoid video)
+- Structured test organization (API tests, UI tests, hybrid API+UI tests)
 ____
 <a id="tools"></a>
 ## Technologies & Tools
