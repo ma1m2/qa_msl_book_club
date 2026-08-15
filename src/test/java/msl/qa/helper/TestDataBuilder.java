@@ -1,9 +1,10 @@
 package msl.qa.helper;
 
 import msl.qa.models.clubs.CreateClubReqModel;
-import msl.qa.models.clubs.review.ReviewReqModel;
 import msl.qa.models.register.RegisterReqModel;
 import net.datafaker.Faker;
+
+import java.util.UUID;
 
 import static msl.qa.tests.TestData.PASSWORD;
 import static msl.qa.tests.TestData.TELEGRAM_CHAT_LINK;
@@ -21,7 +22,7 @@ public class TestDataBuilder {
   private final String bookAuthors;
   private final Integer publicationYear;
   private final String description;
-  private final String udatedDescription;
+  private final String updatedDescription;
   private final String telegramChatLink;
   private final String updatedTelegramChatLink;
 
@@ -34,7 +35,7 @@ public class TestDataBuilder {
   private final CreateClubReqModel createClubData;
 
   public TestDataBuilder() {
-    String suffix = "_" + System.currentTimeMillis() / 1000;
+    String suffix = "_" + UUID.randomUUID().toString().substring(0, 8);
     this.username = faker.name().firstName() + suffix;
     this.password = PASSWORD;
     this.firstName = faker.name().firstName();
@@ -45,7 +46,7 @@ public class TestDataBuilder {
     this.bookAuthors = faker.book().author() + suffix;
     this.publicationYear = faker.number().numberBetween(1950, 2025);
     this.description = faker.lorem().sentence(10);
-    this.udatedDescription = faker.lorem().sentence(9);
+    this.updatedDescription = faker.lorem().sentence(9);
     this.telegramChatLink = TELEGRAM_CHAT_LINK;
     this.updatedTelegramChatLink = "https://t.me/" + faker.regexify("[a-z]{10}");
 
@@ -105,7 +106,7 @@ public class TestDataBuilder {
   }
 
   public String updatedDescription() {
-    return udatedDescription;
+    return updatedDescription;
   }
 
   public String telegramChatLink() {
