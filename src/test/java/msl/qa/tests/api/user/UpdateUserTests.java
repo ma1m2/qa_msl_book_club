@@ -43,7 +43,7 @@ public class UpdateUserTests extends TestBase {
       token = loginResp.access();
       System.out.println("### token: " + token);
 
-      updateUserData = new UpdateUserReqModel(td.username(),td.firstname(),td.lastname(),td.email());
+      updateUserData = td.updateUserData();
 
       UpdateRespModel updatedUser = api.users.updateUserPUT(updateUserData, token);
 
@@ -88,7 +88,7 @@ public class UpdateUserTests extends TestBase {
 
       token = api.auth.successfulLogin(td.loginData()).access();
 
-      updateUserData = new UpdateUserReqModel(td.username(),td.firstname(),td.lastname(),td.email());
+      updateUserData = td.updateUserData();
 
       UnauthorisedUserRespModel updatedUser = api.users.updateUnauthorizedUserPUT(updateUserData);
 

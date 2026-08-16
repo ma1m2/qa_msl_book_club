@@ -80,7 +80,6 @@ public class RegistrationTests extends TestBase {
       step("Verify message '" + UNSUPPORTED_MEDIA_TYPE + "'", () -> {
         assertThat(detailRespModel.detail()).contains(UNSUPPORTED_MEDIA_TYPE);
       });
-
-
   }
+
 }

@@ -38,7 +38,7 @@ public class ReviewApiTests extends TestBase {
     //create club
     CreateClubRespModel createdClub = api.clubs.createClub(accessToken, td.createClubData());
     //create review
-    ReviewReqModel reviewReqModel = new ReviewReqModel(createdClub.id(),td.review(),td.assessment(),td.readPages());
+    ReviewReqModel reviewReqModel = td.reviewData(createdClub.id());
     ReviewRespModel reviewResponse = api.review.createReview(accessToken, reviewReqModel);
 
     Instant responseInstant = Instant.parse(reviewResponse.created());
@@ -81,7 +81,7 @@ public class ReviewApiTests extends TestBase {
       //first user join another club
       api.clubs.createMemberOfClub(accessToken, String.valueOf(createdClub.id()));
       //create review
-      ReviewReqModel reviewReqModel = new ReviewReqModel(createdClub.id(),td.review(),td.assessment(),td.readPages());
+      ReviewReqModel reviewReqModel = td.reviewData(createdClub.id());
       return api.review.createReview(accessToken, reviewReqModel);
     });
 
@@ -121,7 +121,7 @@ public class ReviewApiTests extends TestBase {
 
     ReviewRespModel reviewResponse = step("[API] First user non member club can create review", () ->{
       //create review
-      ReviewReqModel reviewReqModel = new ReviewReqModel(createdClub.id(),td.review(),td.assessment(),td.readPages());
+      ReviewReqModel reviewReqModel = td.reviewData(createdClub.id());
       return api.review.createReview(accessToken, reviewReqModel);
     });
 
@@ -166,10 +166,10 @@ public class ReviewApiTests extends TestBase {
     //create club
     CreateClubRespModel createdClub = api.clubs.createClub(accessToken, td.createClubData());
     //create review
-    ReviewReqModel reviewReqModel = new ReviewReqModel(createdClub.id(),td.review(),td.assessment(),td.readPages());
+    ReviewReqModel reviewReqModel = td.reviewData(createdClub.id());
     ReviewRespModel reviewResponse = api.review.createReview(accessToken, reviewReqModel);
     //update review
-    ReviewReqModel updatedReviewReq = new ReviewReqModel(createdClub.id(),td2.review(),td2.assessment(),td2.readPages());
+    ReviewReqModel updatedReviewReq = td2.reviewData(createdClub.id());
     ReviewRespModel updatedResponse = api.review.updatePutReview(accessToken,reviewResponse.id(),updatedReviewReq);
 
     Instant responseInstant = Instant.parse(updatedResponse.modified());
@@ -203,7 +203,7 @@ public class ReviewApiTests extends TestBase {
     //login second user
     String secondAccessToken = api.auth.extractAccessToken(td2.loginData());
     //second user create review
-    ReviewReqModel reviewReqModel = new ReviewReqModel(createdClub.id(),td2.review(),td2.assessment(),td2.readPages());
+    ReviewReqModel reviewReqModel = td2.reviewData(createdClub.id());
     ReviewRespModel reviewResponse = api.review.createReview(secondAccessToken, reviewReqModel);
     //first user tries to update second user review
     ReviewReqModel updatedReviewReq = new ReviewReqModel(createdClub.id(), td.review(), null, td.readPages());
@@ -223,7 +223,7 @@ public class ReviewApiTests extends TestBase {
     //create club
     CreateClubRespModel createdClub = api.clubs.createClub(accessToken, td.createClubData());
     //create review
-    ReviewReqModel reviewReqModel = new ReviewReqModel(createdClub.id(),td.review(),td.assessment(),td.readPages());
+    ReviewReqModel reviewReqModel = td.reviewData(createdClub.id());
     ReviewRespModel reviewResponse = api.review.createReview(accessToken, reviewReqModel);
     //delete review
     api.review.deleteReview(accessToken, reviewResponse.id());
@@ -250,7 +250,7 @@ public class ReviewApiTests extends TestBase {
     //login second user
     String secondAccessToken = api.auth.extractAccessToken(td2.loginData());
     //second user create review
-    ReviewReqModel reviewReqModel = new ReviewReqModel(createdClub.id(),td2.review(),td2.assessment(),td2.readPages());
+    ReviewReqModel reviewReqModel = td2.reviewData(createdClub.id());
     ReviewRespModel reviewResponse = api.review.createReview(secondAccessToken, reviewReqModel);
     //first user tries to delete second user review
     DetailRespModel detailRespModel = api.review.cantDeleteAnotherReview(accessToken, reviewResponse.id());

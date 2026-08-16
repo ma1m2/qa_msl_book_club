@@ -91,7 +91,7 @@ public class TestBase {
     //create club
     CreateClubRespModel createdClub = api.clubs.createClub(token, td.createClubData());
     //create review and return
-    ReviewReqModel reviewReqModel = new ReviewReqModel(createdClub.id(),td.review(),td.assessment(),td.readPages());
+    ReviewReqModel reviewReqModel = td.reviewData(createdClub.id());
 
     return api.review.createReview(token, reviewReqModel);
   }

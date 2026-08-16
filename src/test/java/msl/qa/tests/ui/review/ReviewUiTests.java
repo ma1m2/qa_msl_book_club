@@ -126,7 +126,7 @@ public class ReviewUiTests extends TestBase {
       rc.assertReviewIsExist(td.username(), td.assessment(), td.readPages(), td.review(), formatDate(apiDate));
     });
 
-    ReviewReqModel updateBody = new ReviewReqModel(review.club(), td2.review(), td2.assessment(), td2.readPages());
+    ReviewReqModel updateBody = td2.reviewData(review.club());
     ReviewRespModel updatedReview = api.review.updatePutReview(token, review.id(), updateBody);
     step("[UI] Refresh club page", Selenide::refresh);
 
@@ -155,7 +155,7 @@ public class ReviewUiTests extends TestBase {
     //create club for second user
     CreateClubRespModel createdClub = api.clubs.createClub(secondAccessToken, td2.createClubData());
     //create review and return
-    ReviewReqModel reviewReqModel = new ReviewReqModel(createdClub.id(),td.review(),td.assessment(),td.readPages());
+    ReviewReqModel reviewReqModel = td.reviewData(createdClub.id());
 
     return api.review.createReview(token, reviewReqModel);
   }

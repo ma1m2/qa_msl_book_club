@@ -1,7 +1,9 @@
 package msl.qa.helper;
 
 import msl.qa.models.clubs.CreateClubReqModel;
+import msl.qa.models.clubs.review.ReviewReqModel;
 import msl.qa.models.register.RegisterReqModel;
+import msl.qa.models.user.UpdateUserReqModel;
 import net.datafaker.Faker;
 
 import java.util.UUID;
@@ -10,7 +12,7 @@ import static msl.qa.tests.TestData.PASSWORD;
 import static msl.qa.tests.TestData.TELEGRAM_CHAT_LINK;
 
 public class TestDataBuilder {
-  Faker faker = new Faker();
+  private static final Faker faker = new Faker();
 
   private final String username;
   private final String password;
@@ -31,7 +33,6 @@ public class TestDataBuilder {
   private final Integer readPages;
 
   private final RegisterReqModel registrationData;
-  private final RegisterReqModel loginData;
   private final CreateClubReqModel createClubData;
 
   public TestDataBuilder() {
@@ -55,7 +56,6 @@ public class TestDataBuilder {
     this.readPages = faker.number().numberBetween(1, 1000);
 
     this.registrationData = new RegisterReqModel(username, password);
-    this.loginData = registrationData;
     this.createClubData = new CreateClubReqModel(
             bookTitle,
             bookAuthors,
@@ -134,10 +134,18 @@ public class TestDataBuilder {
   }
 
   public RegisterReqModel loginData() {
-    return loginData;
+    return registrationData;
   }
 
   public CreateClubReqModel createClubData() {
     return createClubData;
+  }
+
+  public ReviewReqModel reviewData(int clubId) {
+    return new ReviewReqModel(clubId, review, assessment, readPages);
+  }
+
+  public UpdateUserReqModel updateUserData() {
+    return new UpdateUserReqModel(username, firstName, lastName, email);
   }
 }
