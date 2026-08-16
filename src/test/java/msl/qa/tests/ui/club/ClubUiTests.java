@@ -7,9 +7,7 @@ import io.qameta.allure.Owner;
 import io.qameta.allure.Severity;
 import io.qameta.allure.SeverityLevel;
 import msl.qa.models.clubs.CreateClubRespModel;
-import msl.qa.models.localstorage.LocalStorageAuthReqModel;
 import msl.qa.models.login.LoginRespModel;
-import msl.qa.models.register.RegisterRespModel;
 import msl.qa.tests.TestBase;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
@@ -41,7 +39,7 @@ public class ClubUiTests extends TestBase {
   @Severity(SeverityLevel.CRITICAL)
   public void createClub(){
     step("[UI] Open app with API token in localStorage, create club by API", () -> {
-      LoginRespModel loginResp = clubsPage.openClubsPageWithNewUser(td.username(), td.password());
+      LoginRespModel loginResp = openClubsPageWithNewUser(td.username(), td.password());
       //create club
       CreateClubRespModel createdClub = api.clubs.createClub(loginResp.access(), td.createClubData());
       clubId = createdClub.id();
@@ -59,7 +57,7 @@ public class ClubUiTests extends TestBase {
   @Severity(SeverityLevel.NORMAL)
   public void updateClub(){
     step("[UI] Open app with API token in localStorage, create club by API", () -> {
-      LoginRespModel loginResp = clubsPage.openClubsPageWithNewUser(td.username(), td.password());
+      LoginRespModel loginResp = openClubsPageWithNewUser(td.username(), td.password());
       //create club
       accessToken = loginResp.access();
       CreateClubRespModel createdClub = api.clubs.createClub(accessToken, td.createClubData());
@@ -87,7 +85,7 @@ public class ClubUiTests extends TestBase {
   @Severity(SeverityLevel.NORMAL)
   public void deleteClub(){
     step("[UI] Open app with API token in localStorage, create club by API", () -> {
-      LoginRespModel loginResp = clubsPage.openClubsPageWithNewUser(td.username(), td.password());
+      LoginRespModel loginResp = openClubsPageWithNewUser(td.username(), td.password());
       //create club
       accessToken = loginResp.access();
       CreateClubRespModel createdClub = api.clubs.createClub(accessToken, td.createClubData());
@@ -113,28 +111,10 @@ public class ClubUiTests extends TestBase {
   public void cantLeaveClubAsOwner() {
 
     step("Authorized app launch with API token from localStorage", () -> {
-      //register user
-      RegisterRespModel user = step("[API] Register user", () ->
-              api.users.register(td.registrationData()));
-
-      //login user
-      LoginRespModel loginResp = step("[API] Authorisation and get token", () ->
-              api.auth.successfulLogin(td.loginData()));
-
-      //create club
-      CreateClubRespModel createdClub = step("[API] Create Club", () ->
-              api.clubs.createClub(loginResp.access(), td.createClubData()));
-
+      LoginRespModel loginResp = openClubsPageWithNewUser(td.username(), td.password());
+      CreateClubRespModel createdClub = api.clubs.createClub(loginResp.access(), td.createClubData());
       clubId = createdClub.id();
-
-      //create localStorage
-      String localStorageAuthBody = step("[API] Create authorisation JSON for localStorage", () ->
-              new LocalStorageAuthReqModel(user, loginResp.access(), loginResp.refresh(), true).toJson());
-
-      step("[UI] Open app with API token in localStorage and verify user is authorized", () -> {
-        clubsPage.openFaviconAndSetLocalStorageAndMainPage("book_club_auth", localStorageAuthBody);
-        clubsPage.authorisedUserOnMainPage();
-      });
+      clubsPage.authorisedUserOnMainPage();
     });
 
     //wrong leaving club

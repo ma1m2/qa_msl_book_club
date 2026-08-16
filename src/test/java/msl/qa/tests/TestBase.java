@@ -12,7 +12,10 @@ import msl.qa.helper.TestDataBuilder;
 import msl.qa.models.clubs.CreateClubRespModel;
 import msl.qa.models.clubs.review.ReviewReqModel;
 import msl.qa.models.clubs.review.ReviewRespModel;
+import msl.qa.models.localstorage.LocalStorageAuthReqModel;
+import msl.qa.models.login.LoginRespModel;
 import msl.qa.models.register.RegisterReqModel;
+import msl.qa.models.register.RegisterRespModel;
 import msl.qa.pages.ClubsPage;
 import org.aeonbits.owner.ConfigFactory;
 import org.junit.jupiter.api.AfterEach;
@@ -22,6 +25,8 @@ import org.junit.jupiter.api.BeforeEach;
 import java.util.Map;
 
 import static com.codeborne.selenide.Selenide.closeWebDriver;
+import static com.codeborne.selenide.Selenide.localStorage;
+import static com.codeborne.selenide.Selenide.open;
 import static com.codeborne.selenide.Selenide.webdriver;
 
 public class TestBase {
@@ -78,6 +83,21 @@ public class TestBase {
 
       closeWebDriver();
     }
+  }
+
+  @Step("[UI] User registration[API], session setup[localStorage], and page opening[UI]")
+  protected LoginRespModel openClubsPageWithNewUser(String username, String password) {
+    RegisterReqModel loginData = new RegisterReqModel(username, password);
+    RegisterRespModel user = api.users.register(loginData);
+    LoginRespModel loginResp = api.auth.successfulLogin(loginData);
+    String localStorageAuthBody = new LocalStorageAuthReqModel(user,
+            loginResp.access(), loginResp.refresh(), true).toJson();
+
+    open("/favicon.ico");
+    localStorage().setItem("book_club_auth", localStorageAuthBody);
+    open("/");
+
+    return loginResp;
   }
 
   @Step("[API] Register and login new user")

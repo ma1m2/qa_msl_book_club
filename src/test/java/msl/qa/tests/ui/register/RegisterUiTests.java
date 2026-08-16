@@ -7,8 +7,6 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 
-import static com.codeborne.selenide.Selenide.*;
-
 @Feature("[UI] Register")
 @Tag("ui")
 public class RegisterUiTests extends TestBase {
@@ -18,10 +16,9 @@ public class RegisterUiTests extends TestBase {
   @Owner("SvetaQa")
   @DisplayName("[UI] Successful Registration by UI")
   public void successfulRegistrationUi() {
-    open("");
-    clubsPage.header()
-            .doRegister()
-            .fillRegisterForm(td.username(),td.password())
+    clubsPage.open()
+            .openRegister()
+            .fillRegisterForm(td.username(), td.password())
             .submitRegistration()
             .authorisedUserOnMainPage();
   }

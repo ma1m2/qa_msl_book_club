@@ -1,11 +1,25 @@
 package msl.qa.pages;
 
+import com.codeborne.selenide.Selenide;
 import io.qameta.allure.Step;
-import msl.qa.pages.components.Header;
 
-import static com.codeborne.selenide.Selenide.open;
+public class ClubsPage extends BasePage {
 
-public class ClubsPage extends BasePage{
+  @Step("[UI] Open clubs page")
+  public ClubsPage open() {
+    Selenide.open("/");
+    return this;
+  }
+
+  @Step("[UI] Open login from header")
+  public LoginPage openLogin() {
+    return header.doLogin();
+  }
+
+  @Step("[UI] Open registration from header")
+  public RegisterPage openRegister() {
+    return header.doRegister();
+  }
 
   @Step("Verify successful authorization")
   public void authorisedUserOnMainPage() {
@@ -14,18 +28,11 @@ public class ClubsPage extends BasePage{
 
   @Step("[UI] Open club with id '{id}'")
   public ClubPage openClubById(Integer id) {
-    open("/clubs/" + id);
-    return new ClubPage();
+    return new ClubPage().open(id);
   }
 
   @Step("[UI] Open Profile")
   public ProfilePage openProfilePage() {
-    open("/profile");
-    return new ProfilePage();
-  }
-
-  @Step("[UI] go to header")
-  public Header header() {
-    return header;
+    return new ProfilePage().open();
   }
 }

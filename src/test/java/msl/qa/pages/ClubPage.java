@@ -1,6 +1,7 @@
 package msl.qa.pages;
 
 import com.codeborne.selenide.ElementsCollection;
+import com.codeborne.selenide.Selenide;
 import com.codeborne.selenide.SelenideElement;
 import io.qameta.allure.Step;
 import msl.qa.pages.components.ReviewCard;
@@ -13,6 +14,9 @@ import static com.codeborne.selenide.Selenide.$$;
 import static com.codeborne.selenide.Selenide.confirm;
 
 public class ClubPage extends BasePage {
+
+  private final ReviewForm reviewForm = new ReviewForm();
+  private final ReviewCard reviewCard = new ReviewCard();
 
   private final SelenideElement clubHeader = $(".club-header h1");
   private final SelenideElement year = $(".club-header span");
@@ -28,8 +32,23 @@ public class ClubPage extends BasePage {
   private final String errorUser = "Не удалось покинуть клуб";
   private final String errorClub = "Не удалось загрузить информацию о клубе";
 
-  public ReviewCard reviewCard() {
-    return new ReviewCard();
+  @Step("[UI] Open club with id '{id}'")
+  public ClubPage open(Integer id) {
+    Selenide.open("/clubs/" + id);
+    return this;
+  }
+
+  @Step("[UI] Open write review form and submit review")
+  public ClubPage addReview(Integer assessment, Integer readPages, String review) {
+    reviewBtn.scrollTo().click();
+    reviewForm.fillReviewForm(assessment, readPages, review);
+    return this;
+  }
+
+  @Step("[UI] Verify review data")
+  public ClubPage assertReviewIsExist(String username, Integer stars, Integer pages, String review, String date) {
+    reviewCard.assertReviewIsExist(username, stars, pages, review, date);
+    return this;
   }
 
   @Step("[UI] Impossible to leave owner's club ")
@@ -69,12 +88,6 @@ public class ClubPage extends BasePage {
   public int getReviewsCount() {
     String str = statItem.findBy(text("Отзывов:")).$(".stat-value").getText();
     return Integer.parseInt(str);
-  }
-
-  @Step("[UI] Open write review form")
-  public ReviewForm addReview() {
-    reviewBtn.scrollTo().click();
-    return new  ReviewForm();
   }
 
 }

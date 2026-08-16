@@ -12,16 +12,17 @@ import static com.codeborne.selenide.Selenide.$;
 public class Header {
 
   private final SelenideElement mainNav = $("[data-testid=main-nav]");
-  private final SelenideElement clubs = $("a[data-testid=clubs-link]");
   private final SelenideElement signin = $("a[data-testid=signin-link]");
   private final SelenideElement signup = $("a[data-testid=signup-link]");
   private final SelenideElement profile = $("[data-testid=profile-link]");
 
+  @Step("[UI] Click signup in header")
   public RegisterPage doRegister() {
     signup.click();
     return new RegisterPage();
   }
 
+  @Step("[UI] Click signin in header")
   public LoginPage doLogin() {
     signin.click();
     return new LoginPage();

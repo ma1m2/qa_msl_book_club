@@ -15,7 +15,7 @@ public class LogoutUiTests extends TestBase {
   @Tag("regression")
   @DisplayName("[UI] Successful Logout")
   public void successfulLogoutTest() {
-    clubsPage.openClubsPageWithNewUser(td.username(), td.password());
+    openClubsPageWithNewUser(td.username(), td.password());
     clubsPage.openProfilePage()
             .authorisedUserOnProfilePage(td.username())
             .logout()

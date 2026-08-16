@@ -8,18 +8,15 @@ import msl.qa.models.clubs.review.ReviewReqModel;
 import msl.qa.models.clubs.review.ReviewRespModel;
 import msl.qa.models.login.LoginRespModel;
 import msl.qa.models.register.RegisterRespModel;
-import msl.qa.pages.components.ReviewCard;
 import msl.qa.tests.TestBase;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 
-import java.time.LocalDate;
-import java.time.ZonedDateTime;
-
 import static io.qameta.allure.Allure.step;
-import static msl.qa.helper.Util.*;
-import static org.assertj.core.api.Assertions.assertThat;
+import static msl.qa.helper.Util.formatDate;
+import static msl.qa.helper.Util.getDateFromJson;
+import static msl.qa.helper.Util.today;
 
 @Feature("[UI] Review")
 @Tag("ui")
@@ -31,23 +28,16 @@ public class ReviewUiTests extends TestBase {
   public void createReviewForOwnerClubByUi() {
 
     CreateClubRespModel club = step("[UI] Open app with API token in localStorage, create club review by API", () -> {
-      LoginRespModel loginResp = clubsPage.openClubsPageWithNewUser(td.username(), td.password());
-      String token = loginResp.access();
-      return createClub(token);
+      LoginRespModel loginResp = openClubsPageWithNewUser(td.username(), td.password());
+      return createClub(loginResp.access());
     });
 
     step("[UI] Open club by Id and verify review data", () -> {
-      ReviewCard rc = clubsPage
+      clubsPage
               .openClubById(club.id())
-              .addReview()
-              .fillReviewForm(td.assessment(), td.readPages(), td.review());
-
-      assertThat(rc.getReviewName()).isEqualTo(td.username());
-      assertThat(rc.getReviewPages()).isEqualTo(td.readPages());
-      assertThat(rc.getReviewStars()).isEqualTo(td.assessment());
-      assertThat(rc.getReviewContent()).isEqualTo(td.review());
-      assertThat(rc.getReviewDate()).isEqualTo(LocalDate.now());
-
+              .addReview(td.assessment(), td.readPages(), td.review())
+              .assertReviewIsExist(td.username(), td.assessment(), td.readPages(), td.review(),
+                      formatDate(today()));
     });
   }
 
@@ -56,25 +46,15 @@ public class ReviewUiTests extends TestBase {
   public void createReviewForOwnerClub() {
 
     ReviewRespModel review = step("[UI] Open app with API token in localStorage, create club review by API", () -> {
-      LoginRespModel loginResp = clubsPage.openClubsPageWithNewUser(td.username(), td.password());
-      String token = loginResp.access();
-      return createReviewOwnerClub(token);
+      LoginRespModel loginResp = openClubsPageWithNewUser(td.username(), td.password());
+      return createReviewOwnerClub(loginResp.access());
     });
 
     step("[UI] Open club by Id and verify review data", () -> {
-      Integer clubId = review.club();
-      ReviewCard rc = clubsPage
-              .openClubById(clubId)
-              .reviewCard();
-
-      LocalDate apiDate = ZonedDateTime.parse(review.created()).toLocalDate();
-
-      assertThat(rc.getReviewName()).isEqualTo(review.user().username());
-      assertThat(rc.getReviewPages()).isEqualTo(review.readPages());
-      assertThat(rc.getReviewStars()).isEqualTo(review.assessment());
-      assertThat(rc.getReviewContent()).isEqualTo(review.review());
-      assertThat(rc.getReviewDate()).isEqualTo(apiDate);
-
+      clubsPage
+              .openClubById(review.club())
+              .assertReviewIsExist(review.user().username(), review.assessment(), review.readPages(),
+                      review.review(), formatDate(getDateFromJson(review.created())));
     });
   }
 
@@ -83,25 +63,15 @@ public class ReviewUiTests extends TestBase {
   public void createReviewForAnotherClub() {
 
     ReviewRespModel review = step("[UI] Open app with API token in localStorage, create club review by API", () -> {
-      LoginRespModel loginResp = clubsPage.openClubsPageWithNewUser(td.username(), td.password());
-      String token = loginResp.access();
-      return createReviewForSecondUserClubClub(token);
+      LoginRespModel loginResp = openClubsPageWithNewUser(td.username(), td.password());
+      return createReviewForSecondUserClubClub(loginResp.access());
     });
 
     step("[UI] Open club by Id and verify review data", () -> {
-      Integer clubId = review.club();
-      ReviewCard rc = clubsPage
-              .openClubById(clubId)
-              .reviewCard();
-
-      LocalDate apiDate = ZonedDateTime.parse(review.created()).toLocalDate();
-
-      assertThat(rc.getReviewName()).isEqualTo(review.user().username());
-      assertThat(rc.getReviewPages()).isEqualTo(review.readPages());
-      assertThat(rc.getReviewStars()).isEqualTo(review.assessment());
-      assertThat(rc.getReviewContent()).isEqualTo(review.review());
-      assertThat(rc.getReviewDate()).isEqualTo(apiDate);
-
+      clubsPage
+              .openClubById(review.club())
+              .assertReviewIsExist(review.user().username(), review.assessment(), review.readPages(),
+                      review.review(), formatDate(getDateFromJson(review.created())));
     });
   }
 
@@ -111,19 +81,16 @@ public class ReviewUiTests extends TestBase {
   public void updateOwnReview() {
 
     ReviewRespModel review = step("[UI] Open app with API token in localStorage, create club review by API", () -> {
-      LoginRespModel loginResp = clubsPage.openClubsPageWithNewUser(td.username(), td.password());
+      LoginRespModel loginResp = openClubsPageWithNewUser(td.username(), td.password());
       token = loginResp.access();
       return createReviewOwnerClub(token);
     });
 
     step("[UI] Open review by Id, verify data, update by API, and check on UI", () -> {
-      LocalDate apiDate = getDateFromJson(review.created());
-      Integer clubId = review.club();
-      ReviewCard rc = clubsPage
-              .openClubById(clubId)
-              .reviewCard();
-
-      rc.assertReviewIsExist(td.username(), td.assessment(), td.readPages(), td.review(), formatDate(apiDate));
+      clubsPage
+              .openClubById(review.club())
+              .assertReviewIsExist(td.username(), td.assessment(), td.readPages(), td.review(),
+                      formatDate(getDateFromJson(review.created())));
     });
 
     ReviewReqModel updateBody = td2.reviewData(review.club());
@@ -131,13 +98,10 @@ public class ReviewUiTests extends TestBase {
     step("[UI] Refresh club page", Selenide::refresh);
 
     step("[UI] Verify updated data by UI", () -> {
-      LocalDate apiDate = getDateFromJson(updatedReview.modified());
-      Integer clubId = updatedReview.club();
-      ReviewCard rc = clubsPage
-              .openClubById(clubId)
-              .reviewCard();
-
-      rc.assertReviewIsExist(td.username(), td2.assessment(), td2.readPages(), td2.review(), formatDate(apiDate));
+      clubsPage
+              .openClubById(updatedReview.club())
+              .assertReviewIsExist(td.username(), td2.assessment(), td2.readPages(), td2.review(),
+                      formatDate(getDateFromJson(updatedReview.modified())));
     });
   }
 
@@ -159,6 +123,5 @@ public class ReviewUiTests extends TestBase {
 
     return api.review.createReview(token, reviewReqModel);
   }
-
 
 }
