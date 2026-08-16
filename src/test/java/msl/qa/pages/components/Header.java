@@ -1,9 +1,12 @@
 package msl.qa.pages.components;
 
 import com.codeborne.selenide.SelenideElement;
+import io.qameta.allure.Step;
 import msl.qa.pages.LoginPage;
 import msl.qa.pages.RegisterPage;
 
+import static com.codeborne.selenide.Condition.text;
+import static com.codeborne.selenide.Condition.visible;
 import static com.codeborne.selenide.Selenide.$;
 
 public class Header {
@@ -14,34 +17,25 @@ public class Header {
   private final SelenideElement signup = $("a[data-testid=signup-link]");
   private final SelenideElement profile = $("[data-testid=profile-link]");
 
-  public RegisterPage doRegister(){
+  public RegisterPage doRegister() {
     signup.click();
     return new RegisterPage();
   }
 
-  public LoginPage doLogin(){
+  public LoginPage doLogin() {
     signin.click();
     return new LoginPage();
   }
 
-  public SelenideElement mainNav() {
-    return mainNav;
+  @Step("[UI] Verify user is logged in")
+  public void verifyUserIsLoggedIn() {
+    profile.shouldHave(text("Профиль"));
+    mainNav.shouldBe(visible);
   }
 
-  public SelenideElement profile(){
-    return profile;
-  }
-
-  public SelenideElement clubs() {
-    return clubs;
-  }
-
-  public SelenideElement signin() {
-    return signin;
-  }
-
-  public SelenideElement signup() {
-    return signup;
+  @Step("[UI] Verify signup link is visible")
+  public void verifySignupLinkVisible() {
+    signup.shouldHave(text("Регистрация"));
   }
 
 }

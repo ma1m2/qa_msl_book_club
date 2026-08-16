@@ -3,7 +3,6 @@ package msl.qa.pages;
 import com.codeborne.selenide.SelenideElement;
 import io.qameta.allure.Step;
 
-import static com.codeborne.selenide.Condition.text;
 import static com.codeborne.selenide.Condition.visible;
 import static com.codeborne.selenide.Selenide.$;
 
@@ -24,7 +23,7 @@ public class LoginPage extends BasePage {
   @Step("[UI] Verify logout redirects to login page")
   public void checkUserLogout() {
     loginButton.shouldHave(visible);
-    header.profile().shouldHave(text("Регистрация"));
+    header.verifySignupLinkVisible();
   }
 
 }

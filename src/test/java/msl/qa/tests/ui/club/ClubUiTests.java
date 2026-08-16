@@ -6,11 +6,9 @@ import io.qameta.allure.Feature;
 import io.qameta.allure.Owner;
 import io.qameta.allure.Severity;
 import io.qameta.allure.SeverityLevel;
-import msl.qa.helper.TestDataBuilder;
 import msl.qa.models.clubs.CreateClubRespModel;
 import msl.qa.models.localstorage.LocalStorageAuthReqModel;
 import msl.qa.models.login.LoginRespModel;
-import msl.qa.models.register.RegisterReqModel;
 import msl.qa.models.register.RegisterRespModel;
 import msl.qa.tests.TestBase;
 import org.junit.jupiter.api.Disabled;
@@ -117,7 +115,7 @@ public class ClubUiTests extends TestBase {
     step("Authorized app launch with API token from localStorage", () -> {
       //register user
       RegisterRespModel user = step("[API] Register user", () ->
-              api.users.register(new RegisterReqModel(td.username(), td.password())));
+              api.users.register(td.registrationData()));
 
       //login user
       LoginRespModel loginResp = step("[API] Authorisation and get token", () ->
@@ -134,7 +132,7 @@ public class ClubUiTests extends TestBase {
               new LocalStorageAuthReqModel(user, loginResp.access(), loginResp.refresh(), true).toJson());
 
       step("[UI] Open app with API token in localStorage and verify user is authorized", () -> {
-        clubsPage.openWithAuth(localStorageAuthBody);
+        clubsPage.openFaviconAndSetLocalStorageAndMainPage("book_club_auth", localStorageAuthBody);
         clubsPage.authorisedUserOnMainPage();
       });
     });

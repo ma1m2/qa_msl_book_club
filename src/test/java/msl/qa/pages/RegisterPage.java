@@ -11,21 +11,6 @@ public class RegisterPage {
   private final SelenideElement confirmPassword = $("[data-testid=confirm-password-input]");
   private final SelenideElement signupBtn = $("[data-testid=signup-button]");
 
-  @Step("Fill username field with '{0}'")
-  public void fillUsername(String name) {
-    username.setValue(name);
-  }
-
-  @Step("Fill password field with '{0}'")
-  public void fillPassword(String secret) {
-    password.setValue(secret);
-  }
-
-  @Step("Fill confirmPassword field with '{0}'")
-  public void fillConfirmPassword(String secret) {
-    confirmPassword.setValue(secret);
-  }
-
   @Step("Fill Register Form with name '{name}' and password '{secret}'")
   public RegisterPage fillRegisterForm(String name, String secret) {
     username.setValue(name);
