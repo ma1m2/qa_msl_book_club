@@ -3,6 +3,10 @@ name: Test
 on: [push]
   # workflow_dispatch
 
+permissions:
+  contents: write
+  pages: write
+
 jobs:
   test:
     # Where run
@@ -44,7 +48,7 @@ jobs:
       - uses: peaceiris/actions-gh-pages@v3
         if: always()
         with:
-          github_token: ${{ secrets.PERSONAL_TOKEN }}  # используем PERSONAL_TOKEN вместо GITHUB_TOKEN
+          github_token: ${{ secrets.GITHUB_TOKEN }}  # используем PERSONAL_TOKEN вместо GITHUB_TOKEN
           publish_branch: gh-pages
           publish_dir: allure-history
           force_orphan: true
