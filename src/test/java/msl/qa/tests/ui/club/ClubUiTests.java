@@ -33,6 +33,7 @@ public class ClubUiTests extends TestBase {
 
   @Test
   @Tag("ui")
+  @Tag("smoke")
   @Description("Register, login, creating club by API, imitate session by localStorage, navigate on Club Page." +
           "Verify fields on ClubPage")
   @DisplayName("Create club by API and verify by UI")
