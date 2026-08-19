@@ -1,0 +1,49 @@
+name: Test
+
+on: workflow_dispatch
+  # [push]
+
+jobs:
+  test:
+    # Where run
+    runs-on: ubuntu-latest
+    # What to do
+    steps:
+      # check out your repository onto the runner
+      - uses: actions/checkout@v5
+      # setup java
+      - uses: actions/setup-java@v5
+        with:
+          distribution: 'zulu' # See 'Supported distributions' for available options
+          java-version: '21'
+      - name: Fix gradlew permissions
+        run: |
+          chmod +x gradlew
+          sed -i 's/\r$//' gradlew
+      - name: Start selenoid
+        uses: Xotabu4/selenoid-github-action@v2
+
+      # run tests
+      - run: ./gradlew clean test "-Dselenide.remote=http://localhost:4444/wd/hub"
+      # Download test history
+      - uses: actions/checkout@v2
+        if: always()
+        continue-on-error: true
+        with:
+          ref: gh-pages
+          path: gh-pages
+      # generate report
+      - uses: simple-elf/allure-report-action@master
+        if: always()
+        with:
+          gh_pages: gh-pages
+          allure_results: build/allure-results
+          allure_report: allure-report
+          allure_history: allure-history
+      # publish report
+      - uses: peaceiris/actions-gh-pages@v2
+        if: always()
+        env:
+          PERSONAL_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          PUBLISH_BRANCH: gh-pages
+          PUBLISH_DIR: allure-history
