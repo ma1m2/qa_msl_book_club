@@ -77,7 +77,7 @@ public class TestBase {
 
       // Проверяем, что в remote
       String env = WEB_CONFIG.env();
-      if ("remote".equalsIgnoreCase(env) || "ci".equalsIgnoreCase(env)) {
+      if ("ci".equalsIgnoreCase(env) || "remote".equalsIgnoreCase(env)) {
         Attach.addVideo(WEB_CONFIG);
       }
 

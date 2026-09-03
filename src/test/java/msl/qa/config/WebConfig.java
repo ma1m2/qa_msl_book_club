@@ -29,7 +29,7 @@ public interface WebConfig extends Config {
     //@DefaultValue("https://user1:1234@selenoid.autotests.cloud/wd/hub")
   String remoteUrl();
 
-  @Key("remoteUrl")
+  @Key("videoUrl")
   String videoUrl();
 
   @Key("browser")
