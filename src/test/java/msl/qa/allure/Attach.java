@@ -52,21 +52,24 @@ public class Attach {
 
   @Attachment(value = "Video", type = "video/mp4", fileExtension = ".mp4")
   public static byte[] addVideo(WebConfig webConfig, String sessionId) {
-    String videoUrl = webConfig.videoUrl() + sessionId + ".mp4";
+    URL url = getVideoUrl(webConfig, sessionId);
+    if (url == null) {
+      return new byte[0];
+    }
+
     HttpClient client = HttpClient.newBuilder()
             .connectTimeout(Duration.ofSeconds(5))
             .followRedirects(HttpClient.Redirect.NORMAL)
             .build();
-    HttpRequest request = HttpRequest.newBuilder(URI.create(videoUrl))
-            .timeout(Duration.ofSeconds(10))
-            .GET()
-            .build();
 
     for (int i = 0; i < 20; i++) {
       try {
+        HttpRequest request = HttpRequest.newBuilder(url.toURI())
+                .timeout(Duration.ofSeconds(10))
+                .GET()
+                .build();
         HttpResponse<byte[]> response = client.send(request, HttpResponse.BodyHandlers.ofByteArray());
         byte[] body = response.body();
-        // Selenoid сначала отдаёт 404, потом маленький файл, пока ffmpeg дописывает mp4
         if (response.statusCode() == 200 && body != null && body.length > 1024) {
           return body;
         }
@@ -87,9 +90,13 @@ public class Attach {
   }
 
   private static URL getVideoUrl(WebConfig webConfig) {
-    String videoUrl = webConfig.videoUrl() + sessionId() + ".mp4";
+    return getVideoUrl(webConfig, sessionId().toString());
+  }
+
+  private static URL getVideoUrl(WebConfig webConfig, String sessionId) {
+    String videoUrl = webConfig.videoUrl() + sessionId + ".mp4";
     try {
-      return new URL(videoUrl);
+      return URI.create(videoUrl).toURL();
     } catch (MalformedURLException e) {
       e.printStackTrace();
     }

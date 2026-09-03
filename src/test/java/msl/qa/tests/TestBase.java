@@ -1,7 +1,6 @@
 package msl.qa.tests;
 
 import com.codeborne.selenide.Configuration;
-import com.codeborne.selenide.Selenide;
 import com.codeborne.selenide.logevents.SelenideLogger;
 import io.qameta.allure.Step;
 import io.qameta.allure.selenide.AllureSelenide;
@@ -77,8 +76,9 @@ public class TestBase {
       Attach.pageSource();
       Attach.browserConsoleLogs();
 
-      // Проверяем, что в remote
       String env = WEB_CONFIG.env();
+      String videoSessionId = "ci".equalsIgnoreCase(env) ? String.valueOf(sessionId()) : null;
+
       if ("remote".equalsIgnoreCase(env)) {
         Attach.addVideo(WEB_CONFIG);
       }
@@ -86,7 +86,7 @@ public class TestBase {
       closeWebDriver();
 
       if ("ci".equalsIgnoreCase(env)) {
-        Attach.addVideo(WEB_CONFIG, String.valueOf(Selenide.sessionId()));
+        Attach.addVideo(WEB_CONFIG, videoSessionId);
       }
     }
   }
