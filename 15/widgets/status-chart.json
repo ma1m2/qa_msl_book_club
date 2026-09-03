@@ -1,0 +1,1 @@
+[{"uid":"984ad7590e8fe61d","name":"Create club by API and verify by UI","time":{"start":1788455699795,"stop":1788455711750,"duration":11955},"status":"broken","severity":"critical"},{"uid":"ff5e0ce2b3237446","name":"[UI] Successful Login","time":{"start":1788455711842,"stop":1788455717606,"duration":5764},"status":"broken","severity":"normal"}]
