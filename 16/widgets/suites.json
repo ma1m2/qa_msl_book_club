@@ -1,0 +1,1 @@
+{"total":2,"items":[{"uid":"421a6054e0a3c0dab57defac54f655ac","name":"msl.qa.tests.ui.club.ClubUiTests","statistic":{"failed":0,"broken":0,"skipped":0,"passed":1,"unknown":0,"total":1}},{"uid":"1f27fc79ae2bffe07e7993a49edc1062","name":"msl.qa.tests.ui.login.LoginUiTests","statistic":{"failed":0,"broken":0,"skipped":0,"passed":1,"unknown":0,"total":1}}]}
