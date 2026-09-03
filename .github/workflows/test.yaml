@@ -28,7 +28,8 @@ jobs:
         uses: Xotabu4/selenoid-github-action@v2
 
       # run only smoke tests
-      - run: ./gradlew clean test "-Dtags=smoke" "-Dselenide.remote=http://localhost:4444/wd/hub"
+      - run: ./gradlew clean test "-Dtags=smoke" "-Denv=ci"
+      # "-Dselenide.remote=http://localhost:4444/wd/hub"
       # Download test history
       - uses: actions/checkout@v2
         if: always()
@@ -48,7 +49,7 @@ jobs:
       - uses: peaceiris/actions-gh-pages@v3
         if: always()
         with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}  # используем PERSONAL_TOKEN вместо GITHUB_TOKEN
+          github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_branch: gh-pages
           publish_dir: allure-history
           force_orphan: true

@@ -2,6 +2,7 @@ package msl.qa.allure;
 
 import com.codeborne.selenide.Selenide;
 import io.qameta.allure.Attachment;
+import msl.qa.config.WebConfig;
 import org.openqa.selenium.OutputType;
 import org.openqa.selenium.TakesScreenshot;
 
@@ -14,6 +15,7 @@ import static com.codeborne.selenide.Selenide.sessionId;
 import static org.openqa.selenium.logging.LogType.BROWSER;
 
 public class Attach {
+
   @Attachment(value = "{attachName}", type = "image/png")
   public static byte[] screenshotAs(String attachName) {
     return ((TakesScreenshot) getWebDriver()).getScreenshotAs(OutputType.BYTES);
@@ -37,14 +39,15 @@ public class Attach {
   }
 
   @Attachment(value = "Video", type = "text/html", fileExtension = ".html")
-  public static String addVideo() {
+  public static String addVideo(WebConfig webConfig) {
     return "<html><body><video width='100%' height='100%' controls autoplay><source src='"
-            + getVideoUrl()
+            + getVideoUrl(webConfig)
             + "' type='video/mp4'></video></body></html>";
   }
 
-  private static URL getVideoUrl() {
-    String videoUrl = "https://selenoid.autotests.cloud/video/" + sessionId() + ".mp4";
+  private static URL getVideoUrl(WebConfig webConfig) {
+    //String videoUrl = "https://selenoid.autotests.cloud/video/" + sessionId() + ".mp4";
+    String videoUrl = webConfig.videoUrl() + sessionId() + ".mp4";
     try {
       return new URL(videoUrl);
     } catch (MalformedURLException e) {
