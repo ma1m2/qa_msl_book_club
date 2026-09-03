@@ -2,21 +2,19 @@ package msl.qa.allure;
 
 import com.codeborne.selenide.Selenide;
 import io.qameta.allure.Attachment;
+import io.restassured.response.Response;
 import msl.qa.config.WebConfig;
 import org.openqa.selenium.OutputType;
 import org.openqa.selenium.TakesScreenshot;
 
-import java.net.URI;
-import java.net.http.HttpClient;
-import java.net.http.HttpRequest;
-import java.net.http.HttpResponse;
-import java.time.Duration;
-import java.nio.charset.StandardCharsets;
 import java.net.MalformedURLException;
+import java.net.URI;
 import java.net.URL;
+import java.nio.charset.StandardCharsets;
 
-import static com.codeborne.selenide.WebDriverRunner.getWebDriver;
 import static com.codeborne.selenide.Selenide.sessionId;
+import static com.codeborne.selenide.WebDriverRunner.getWebDriver;
+import static io.restassured.RestAssured.given;
 import static org.openqa.selenium.logging.LogType.BROWSER;
 
 public class Attach {
@@ -57,19 +55,13 @@ public class Attach {
       return new byte[0];
     }
 
-    HttpClient client = HttpClient.newBuilder()
-            .connectTimeout(Duration.ofSeconds(5))
-            .followRedirects(HttpClient.Redirect.NORMAL)
-            .build();
-
     for (int i = 0; i < 20; i++) {
       try {
-        HttpRequest request = HttpRequest.newBuilder(url.toURI())
-                .timeout(Duration.ofSeconds(10))
-                .GET()
-                .build();
-        HttpResponse<byte[]> response = client.send(request, HttpResponse.BodyHandlers.ofByteArray());
-        byte[] body = response.body();
+        Response response = given()
+                .basePath("")
+                .when()
+                .get(url.toString());
+        byte[] body = response.asByteArray();
         if (response.statusCode() == 200 && body != null && body.length > 1024) {
           return body;
         }
