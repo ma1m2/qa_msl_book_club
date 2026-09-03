@@ -46,7 +46,6 @@ public class Attach {
   }
 
   private static URL getVideoUrl(WebConfig webConfig) {
-    //String videoUrl = "https://selenoid.autotests.cloud/video/" + sessionId() + ".mp4";
     String videoUrl = webConfig.videoUrl() + sessionId() + ".mp4";
     try {
       return new URL(videoUrl);

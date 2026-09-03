@@ -29,7 +29,6 @@ jobs:
 
       # run only smoke tests
       - run: ./gradlew clean test "-Dtags=smoke" "-Denv=ci"
-      # "-Dselenide.remote=http://localhost:4444/wd/hub"
       # Download test history
       - uses: actions/checkout@v2
         if: always()
@@ -38,7 +37,7 @@ jobs:
           ref: gh-pages
           path: gh-pages
       # generate report
-      - uses: simple-elf/allure-report-action@master
+      - uses: simple-elf/allure-report-action@@v1.15
         if: always()
         with:
           gh_pages: gh-pages
@@ -46,7 +45,7 @@ jobs:
           allure_report: allure-report
           allure_history: allure-history
       # publish report
-      - uses: peaceiris/actions-gh-pages@v3
+      - uses: peaceiris/actions-gh-pages@v4.1.0
         if: always()
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
