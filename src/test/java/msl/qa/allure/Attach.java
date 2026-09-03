@@ -6,6 +6,11 @@ import msl.qa.config.WebConfig;
 import org.openqa.selenium.OutputType;
 import org.openqa.selenium.TakesScreenshot;
 
+import java.net.URI;
+import java.net.http.HttpClient;
+import java.net.http.HttpRequest;
+import java.net.http.HttpResponse;
+import java.time.Duration;
 import java.nio.charset.StandardCharsets;
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -43,6 +48,42 @@ public class Attach {
     return "<html><body><video width='100%' height='100%' controls autoplay><source src='"
             + getVideoUrl(webConfig)
             + "' type='video/mp4'></video></body></html>";
+  }
+
+  @Attachment(value = "Video", type = "video/mp4", fileExtension = ".mp4")
+  public static byte[] addVideo(WebConfig webConfig, String sessionId) {
+    String videoUrl = webConfig.videoUrl() + sessionId + ".mp4";
+    HttpClient client = HttpClient.newBuilder()
+            .connectTimeout(Duration.ofSeconds(5))
+            .followRedirects(HttpClient.Redirect.NORMAL)
+            .build();
+    HttpRequest request = HttpRequest.newBuilder(URI.create(videoUrl))
+            .timeout(Duration.ofSeconds(10))
+            .GET()
+            .build();
+
+    for (int i = 0; i < 20; i++) {
+      try {
+        HttpResponse<byte[]> response = client.send(request, HttpResponse.BodyHandlers.ofByteArray());
+        byte[] body = response.body();
+        // Selenoid сначала отдаёт 404, потом маленький файл, пока ffmpeg дописывает mp4
+        if (response.statusCode() == 200 && body != null && body.length > 1024) {
+          return body;
+        }
+        Thread.sleep(1000);
+      } catch (InterruptedException e) {
+        Thread.currentThread().interrupt();
+        break;
+      } catch (Exception ignored) {
+        try {
+          Thread.sleep(1000);
+        } catch (InterruptedException ie) {
+          Thread.currentThread().interrupt();
+          break;
+        }
+      }
+    }
+    return new byte[0];
   }
 
   private static URL getVideoUrl(WebConfig webConfig) {
